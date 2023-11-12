@@ -4,7 +4,7 @@
  * This generated file contains a sample Java project to get you started.
  * For more details take a look at the Java Quickstart chapter in the Gradle
  * User Manual available at https://docs.gradle.org/7.4.2/userguide/getting_started.html
- * The dataset is downloaded automatically. Alternatively, you can comment out 'dependsOn buildConf' 
+ * The dataset is downloaded automatically. Alternatively, you can comment out 'dependsOn downloadAndUnzip' 
  * in this file, then download the dataset manually from https://www.itu.dk/~mahv/data/datafiles.zip 
  */
 
