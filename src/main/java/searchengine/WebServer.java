@@ -19,10 +19,10 @@ public class WebServer {
   static final int BACKLOG = 0;
   static final Charset CHARSET = StandardCharsets.UTF_8;
 
-  List<List<String>> pages = new ArrayList<>();
+  List<List<String>> pages = new ArrayList<>(); //Information about pages stored here
   HttpServer server;
 
-  WebServer(int port, String filename) throws IOException {
+  WebServer(int port, String filename) throws IOException { //The server reads the information from files and adds them?
     try {
       List<String> lines = Files.readAllLines(Paths.get(filename));
       var lastIndex = lines.size();
@@ -63,7 +63,7 @@ public class WebServer {
     respond(io, 200, "application/json", bytes);
   }
 
-  List<List<String>> search(String searchTerm) {
+  List<List<String>> search(String searchTerm) { //Iterates through the stored pages and try to find one where the word exists? Probably fallibel by now?
     var result = new ArrayList<List<String>>();
     for (var page : pages) {
       if (page.contains(searchTerm)) {
