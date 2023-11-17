@@ -1,0 +1,30 @@
+# Notes
+
+This document is for all kinds of notes. 
+We will see if we end up needing a more structured approach
+
+## TODO
+
+### Task 1
+
+- [ ] Read and understand the code
+- [ ] Create new class diagram
+- [ ] Ensure test coverage (jacoco)
+
+- [ ] Refactor code
+- [ ] Write documentation
+- [ ] Update tests (and pass!)
+
+- [ ] Write report
+- [ ] Review process (git commits)
+
+## Things to remember from the assignment description
+
+> If a web page entry contains less than two lines after the “*PAGE” line, i.e., it has either no title or no words, the entry should be omitted. (We have to assume that the entry for this web page is erroneous.)
+
+**General recipe to answer a query**
+
+1. Check the query. (“Does the query make sense?”)
+2. Retrieve the list of web pages that match the query.
+3. Rank the list of matching web pages according to their importance with regard to the query.
+4. Return the list of ranked web pages.
