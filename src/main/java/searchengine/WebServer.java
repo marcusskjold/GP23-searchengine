@@ -1,6 +1,5 @@
 package searchengine;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
@@ -8,8 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
@@ -23,9 +20,18 @@ public class WebServer {
   HttpServer server;
 
   public WebServer(int port, QueryHandler queryHandler) throws IOException {
+    setupServer(port);
+    printServerAdress(port);
+  }
 
+  private void printServerAdress(int port) {
+    String msg = " WebServer running on http://localhost:" + port + " ";
+    System.out.println("╭"+"─".repeat(msg.length())+"╮");
+    System.out.println("│"+msg+"│");
+    System.out.println("╰"+"─".repeat(msg.length())+"╯");
+  }
 
-    // start server. Calls respond and seach 
+  private void setupServer(int port) throws IOException {
     server = HttpServer.create(new InetSocketAddress(port), BACKLOG);
     server.createContext("/", io -> respond(io, 200, "text/html", getFile("web/index.html")));
     server.createContext("/search", io -> search(io));
@@ -36,34 +42,31 @@ public class WebServer {
     server.createContext(
         "/style.css", io -> respond(io, 200, "text/css", getFile("web/style.css")));
     server.start();
-
-    // Inform user of server
-    String msg = " WebServer running on http://localhost:" + port + " ";
-    System.out.println("╭"+"─".repeat(msg.length())+"╮");
-    System.out.println("│"+msg+"│");
-    System.out.println("╰"+"─".repeat(msg.length())+"╯");
   }
   
-  void search(HttpExchange io) {
+  /**
+   * Converts the io into a searchTerm. 
+   * Sends the searchTerm to the queryHandler.
+   * Generates a response containing formatted links from the returned PageList.
+   * @param io the HttpExchange to generate a searchTerm from
+   */
+  public void search(HttpExchange io) {
     String searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
-    var response;
-    for (Page p : queryHandler.search(searchTerm)) {
+    var response = new ArrayList<String>();
+    PageList pages = null;
+
+    try {
+      pages = queryHandler.search(searchTerm);
+    } catch (QueryStringException e) {
+      // TODO: handle exception
+    }
+    for (Page p : pages) {
       response.add(String.format("{\"url\": \"%s\", \"title\": \"%s\"}",
-        page.get(0).substring(6), page.get(1)));
+        p.getURL(), p.getTitle()));
     }
     var bytes = response.toString().getBytes(CHARSET);
     respond(io, 200, "application/json", bytes);
   }
-
-  // List<List<String>> search(String searchTerm) { //Iterates through the stored pages and try to find one where the word exists? Probably fallibel by now?
-  //   var result = new ArrayList<List<String>>();
-  //   for (var page : pages) {
-  //     if (page.contains(searchTerm)) {
-  //       result.add(page);
-  //     }
-  //   }
-  //   return result;
-  // }
 
   byte[] getFile(String filename) {
     try {

@@ -16,11 +16,18 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 
 @TestInstance(Lifecycle.PER_CLASS)
 class WebServerTest {
     WebServer server = null;
     QueryHandler queryHandler;
+    Database database;
 
     @BeforeAll
     void setUp() {
@@ -28,7 +35,9 @@ class WebServerTest {
             var rnd = new Random();
             while (server == null) {
                 try {
-                    queryHandler = new QueryHandler();
+                    var filename = Files.readString(Paths.get("config.txt")).strip();
+                    database = new Database(filename);
+                    queryHandler = new QueryHandler(database);
                     server = new WebServer(rnd.nextInt(60000) + 1024, queryHandler);
                 } catch (BindException e) {
                     // port in use. Try again

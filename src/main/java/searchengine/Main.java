@@ -10,9 +10,9 @@ public class Main {
     public static void main(final String... args) throws IOException {
         var filename = Files.readString(Paths.get("config.txt")).strip();
 
-        Database db = new Database();
-        QueryHandler qh = new QueryHandler();
-        WebServer ws = new WebServer(PORT, qh);
+        Database db = new Database(filename);
+        QueryHandler qh = new QueryHandler(db);
+        new WebServer(PORT, qh);
       }
     
 }

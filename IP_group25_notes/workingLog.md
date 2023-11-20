@@ -1,7 +1,3 @@
----
-title: "Marcus' log"
-...
-
 [202311201338] Produced initial class diagram
 
 Marcus, Andreas & Sean discussed and drew an initial class diagram for task 1. 
