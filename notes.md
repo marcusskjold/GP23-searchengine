@@ -7,7 +7,7 @@ We will see if we end up needing a more structured approach
 
 ### Task 1
 
-- [ ] Read and understand the code
+- [x] Read and understand the code
 - [ ] Create new class diagram
 
 - [ ] Refactor code
@@ -31,4 +31,7 @@ We will see if we end up needing a more structured approach
 4. Return the list of ranked web pages.
 
 
-Navneord & verbum. Til legen. 
+## Questions for Poul:
+1. Look at our class diagram
+2. How are we doing? 
+3. 
