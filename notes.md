@@ -9,7 +9,6 @@ We will see if we end up needing a more structured approach
 
 - [ ] Read and understand the code
 - [ ] Create new class diagram
-- [ ] Ensure test coverage (jacoco)
 
 - [ ] Refactor code
 - [ ] Write documentation
@@ -17,6 +16,8 @@ We will see if we end up needing a more structured approach
 
 - [ ] Write report
 - [ ] Review process (git commits)
+
+<!-- - [ ] Ensure test coverage (jacoco) -->
 
 ## Things to remember from the assignment description
 
@@ -28,3 +29,6 @@ We will see if we end up needing a more structured approach
 2. Retrieve the list of web pages that match the query.
 3. Rank the list of matching web pages according to their importance with regard to the query.
 4. Return the list of ranked web pages.
+
+
+Navneord & verbum. Til legen. 

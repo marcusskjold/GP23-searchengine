@@ -23,6 +23,8 @@ public class WebServer {
   HttpServer server;
 
   WebServer(int port, String filename) throws IOException { //The server reads the information from files and adds them?
+    
+    // constructs pages list
     try {
       List<String> lines = Files.readAllLines(Paths.get(filename));
       var lastIndex = lines.size();
@@ -36,6 +38,8 @@ public class WebServer {
       e.printStackTrace();
     }
     Collections.reverse(pages);
+
+    // start server. Calls respond and seach 
     server = HttpServer.create(new InetSocketAddress(port), BACKLOG);
     server.createContext("/", io -> respond(io, 200, "text/html", getFile("web/index.html")));
     server.createContext("/search", io -> search(io));
@@ -46,6 +50,8 @@ public class WebServer {
     server.createContext(
         "/style.css", io -> respond(io, 200, "text/css", getFile("web/style.css")));
     server.start();
+
+    // Inform user of server
     String msg = " WebServer running on http://localhost:" + port + " ";
     System.out.println("╭"+"─".repeat(msg.length())+"╮");
     System.out.println("│"+msg+"│");
