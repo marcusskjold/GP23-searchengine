@@ -18,26 +18,12 @@ public class WebServer {
   
   static final int BACKLOG = 0;
   static final Charset CHARSET = StandardCharsets.UTF_8;
+  private QueryHandler queryHandler;
 
-  List<List<String>> pages = new ArrayList<>(); //Information about pages stored here
   HttpServer server;
 
-  WebServer(int port, String filename) throws IOException { //The server reads the information from files and adds them?
-    
-    // constructs pages list
-    try {
-      List<String> lines = Files.readAllLines(Paths.get(filename));
-      var lastIndex = lines.size();
-      for (var i = lines.size() - 1; i >= 0; --i) {
-        if (lines.get(i).startsWith("*PAGE")) {
-          pages.add(lines.subList(i, lastIndex));
-          lastIndex = i;
-        }
-      }
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    }
-    Collections.reverse(pages);
+  public WebServer(int port, QueryHandler queryHandler) throws IOException {
+
 
     // start server. Calls respond and seach 
     server = HttpServer.create(new InetSocketAddress(port), BACKLOG);
@@ -59,9 +45,9 @@ public class WebServer {
   }
   
   void search(HttpExchange io) {
-    var searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
-    var response = new ArrayList<String>();
-    for (var page : search(searchTerm)) {
+    String searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
+    var response;
+    for (Page p : queryHandler.search(searchTerm)) {
       response.add(String.format("{\"url\": \"%s\", \"title\": \"%s\"}",
         page.get(0).substring(6), page.get(1)));
     }
@@ -69,15 +55,15 @@ public class WebServer {
     respond(io, 200, "application/json", bytes);
   }
 
-  List<List<String>> search(String searchTerm) { //Iterates through the stored pages and try to find one where the word exists? Probably fallibel by now?
-    var result = new ArrayList<List<String>>();
-    for (var page : pages) {
-      if (page.contains(searchTerm)) {
-        result.add(page);
-      }
-    }
-    return result;
-  }
+  // List<List<String>> search(String searchTerm) { //Iterates through the stored pages and try to find one where the word exists? Probably fallibel by now?
+  //   var result = new ArrayList<List<String>>();
+  //   for (var page : pages) {
+  //     if (page.contains(searchTerm)) {
+  //       result.add(page);
+  //     }
+  //   }
+  //   return result;
+  // }
 
   byte[] getFile(String filename) {
     try {

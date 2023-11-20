@@ -24,7 +24,7 @@ We will see if we end up needing a more structured approach
 - [x] QueryStringException
 
 - [ ] Database (Andreas)
-- [ ] Webserver (Marcus)
+- [ ] WebServer (Marcus)
 - [ ] QueryHandler (Sean)
 
 - [ ] Query (Sean)

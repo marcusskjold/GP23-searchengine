@@ -20,6 +20,7 @@ import org.junit.jupiter.api.TestInstance;
 @TestInstance(Lifecycle.PER_CLASS)
 class WebServerTest {
     WebServer server = null;
+    QueryHandler queryHandler;
 
     @BeforeAll
     void setUp() {
@@ -27,7 +28,8 @@ class WebServerTest {
             var rnd = new Random();
             while (server == null) {
                 try {
-                    server = new WebServer(rnd.nextInt(60000) + 1024, "data/test-file.txt");
+                    queryHandler = new QueryHandler();
+                    server = new WebServer(rnd.nextInt(60000) + 1024, queryHandler);
                 } catch (BindException e) {
                     // port in use. Try again
                 }

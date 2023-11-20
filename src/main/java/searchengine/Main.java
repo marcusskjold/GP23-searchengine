@@ -12,7 +12,7 @@ public class Main {
 
         Database db = new Database();
         QueryHandler qh = new QueryHandler();
-        WebServer ws = new WebServer(PORT, filename);
+        WebServer ws = new WebServer(PORT, qh);
       }
     
 }
