@@ -8,7 +8,8 @@ We will see if we end up needing a more structured approach
 ### Task 1
 
 - [x] Read and understand the code
-- [ ] Create new class diagram
+- [x] Define new class diagram
+- [ ] Draw new class diagram
 
 - [ ] Refactor code
 - [ ] Write documentation
@@ -16,6 +17,20 @@ We will see if we end up needing a more structured approach
 
 - [ ] Write report
 - [ ] Review process (git commits)
+
+**Classes**
+
+- [ ] Main (Marcus)
+- [x] QueryStringException
+
+- [ ] Database (Andreas)
+- [ ] Webserver (Marcus)
+- [ ] QueryHandler (Sean)
+
+- [ ] Query (Sean)
+- [ ] Page (Marcus)
+- [ ] PageList (Andreas)
+
 
 <!-- - [ ] Ensure test coverage (jacoco) -->
 
