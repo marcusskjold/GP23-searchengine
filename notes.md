@@ -7,7 +7,7 @@ We will see if we end up needing a more structured approach
 
 ### Task 1
 
-- [ ] Read and understand the code
+- [x] Read and understand the code
 - [ ] Create new class diagram
 - [ ] Ensure test coverage (jacoco)
 
@@ -28,3 +28,9 @@ We will see if we end up needing a more structured approach
 2. Retrieve the list of web pages that match the query.
 3. Rank the list of matching web pages according to their importance with regard to the query.
 4. Return the list of ranked web pages.
+
+
+## Questions for Poul:
+1. Look at our class diagram
+2. How are we doing? 
+3. 
