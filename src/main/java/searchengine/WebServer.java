@@ -16,7 +16,6 @@ import com.sun.net.httpserver.HttpServer;
 
 public class WebServer {
   
-  static final int PORT = 8080;
   static final int BACKLOG = 0;
   static final Charset CHARSET = StandardCharsets.UTF_8;
 
@@ -99,10 +98,5 @@ public class WebServer {
     } finally {
       io.close();
     }
-  }
-
-  public static void main(final String... args) throws IOException {
-    var filename = Files.readString(Paths.get("config.txt")).strip();
-    new WebServer(PORT, filename);
   }
 }
