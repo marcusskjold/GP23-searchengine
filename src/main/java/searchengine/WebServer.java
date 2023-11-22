@@ -19,7 +19,8 @@ public class WebServer {
 
   HttpServer server;
 
-  public WebServer(int port, QueryHandler queryHandler) throws IOException {
+  public WebServer(int port, String filename) throws IOException {
+    queryHandler = new QueryHandler(filename);
     setupServer(port);
     printServerAdress(port);
   }
@@ -52,15 +53,17 @@ public class WebServer {
    */
   public void search(HttpExchange io) {
     String searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
+    //System.out.println("Search Term: " + searchTerm); debugging statement
     var response = new ArrayList<String>();
-    PageList pages = null;
+    PageList pages = null; //Edit
 
     try {
       pages = queryHandler.search(searchTerm);
     } catch (QueryStringException e) {
+      e.printStackTrace();
       // TODO: handle exception
     }
-    for (Page p : pages) {
+    for (Page p : pages.getPageList()) {
       response.add(String.format("{\"url\": \"%s\", \"title\": \"%s\"}",
         p.getURL(), p.getTitle()));
     }

@@ -36,9 +36,9 @@ class WebServerTest {
             while (server == null) {
                 try {
                     var filename = Files.readString(Paths.get("config.txt")).strip();
-                    database = new Database(filename);
-                    queryHandler = new QueryHandler(database);
-                    server = new WebServer(rnd.nextInt(60000) + 1024, queryHandler);
+                    //database = new Database(filename);
+                    //queryHandler = new QueryHandler(database);
+                    server = new WebServer(rnd.nextInt(60000) + 1024, filename);
                 } catch (BindException e) {
                     // port in use. Try again
                 }
