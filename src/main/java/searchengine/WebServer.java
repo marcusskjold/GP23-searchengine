@@ -19,6 +19,7 @@ public class WebServer {
 
   HttpServer server;
 
+  //The Webserver initially initializes a Queryhandler-object, which in turn initializes a Database-object
   public WebServer(int port, String filename) throws IOException {
     queryHandler = new QueryHandler(filename);
     setupServer(port);
@@ -53,9 +54,8 @@ public class WebServer {
    */
   public void search(HttpExchange io) {
     String searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
-    //System.out.println("Search Term: " + searchTerm); debugging statement
     var response = new ArrayList<String>();
-    PageList pages = null; //Edit
+    PageList pages = null; 
 
     try {
       pages = queryHandler.search(searchTerm);

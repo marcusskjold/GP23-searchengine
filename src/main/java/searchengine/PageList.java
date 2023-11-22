@@ -15,6 +15,7 @@ public class PageList {
         return pageList;
     }
 
+    //A method that adds a page to the pagelist field of the PageList
     public void addPage (Page page) {
         pageList.add(page);
     }
