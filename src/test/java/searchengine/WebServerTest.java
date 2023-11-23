@@ -50,13 +50,13 @@ class WebServerTest {
 
     @AfterAll
     void tearDown() {
-        server.server.stop(0);
+        server.stopServer();;
         server = null;
     }
 
     @Test
     void lookupWebServer() {
-        String baseURL = String.format("http://localhost:%d/search?q=", server.server.getAddress().getPort());
+        String baseURL = String.format("http://localhost:%d/search?q=", server.getAddress());
         assertEquals("[{\"url\": \"http://page1.com\", \"title\": \"title1\"}, {\"url\": \"http://page2.com\", \"title\": \"title2\"}]", 
             httpGet(baseURL + "word1"));
         assertEquals("[{\"url\": \"http://page1.com\", \"title\": \"title1\"}]",
