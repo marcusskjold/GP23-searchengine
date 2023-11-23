@@ -25,7 +25,7 @@ The minor classes:
 - **QueryHandler**: Handles Query objects.
     - Transforms input (String) into a Query.
     - Keeps a reference to the Database.
-    - Throws an SearchTermError if input strings is nonsense.
+    - Throws a SearchTermError if input strings is nonsense.
     - Sends Query to Database. Receives a PageList as a response.
     - Returns the PageList.
 - **Database**: Keeps all data, and responds to Queries.
