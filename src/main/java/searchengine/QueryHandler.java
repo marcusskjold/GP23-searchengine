@@ -17,4 +17,9 @@ public class QueryHandler{
     public PageList search(String searchTerm) throws QueryStringException {
         return database.search(searchTerm);
     }
+
+    /*Make a method which receives a query from the webserver and sends it to the database. */ 
+
+
+
 }
