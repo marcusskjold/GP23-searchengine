@@ -43,4 +43,12 @@ public class PageList {
         pageList.add(page);
     }
 
+    /**
+     * Returns the number of pages in the Pagelist
+     * @return the number of Page-objects in the pagelist field of the PageList
+     */
+    public int getSize() {
+        return pageList.size();
+    }
+
 }
