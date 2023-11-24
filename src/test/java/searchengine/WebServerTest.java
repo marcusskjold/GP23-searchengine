@@ -35,10 +35,10 @@ class WebServerTest {
             var rnd = new Random();
             while (server == null) {
                 try {
-                    var filename = Files.readString(Paths.get("config.txt")).strip();
+                    //var filename = Files.readString(Paths.get("config.txt")).strip();
                     //database = new Database(filename);
                     //queryHandler = new QueryHandler(database);
-                    server = new WebServer(rnd.nextInt(60000) + 1024, filename);
+                    server = new WebServer(rnd.nextInt(60000) + 1024, "data/test-file.txt");
                 } catch (BindException e) {
                     // port in use. Try again
                 }
