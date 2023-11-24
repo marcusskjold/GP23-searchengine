@@ -17,16 +17,16 @@ public class WebServer {
   static final Charset CHARSET = StandardCharsets.UTF_8;
   private QueryHandler queryHandler;
 
-  HttpServer server;
+  private HttpServer server;
 
   //The Webserver initially initializes a Queryhandler-object, which in turn initializes a Database-object
   public WebServer(int port, String filename) throws IOException {
     queryHandler = new QueryHandler(filename);
     setupServer(port);
-    printServerAdress(port);
+    printServerAddress(port);
   }
 
-  private void printServerAdress(int port) {
+  private void printServerAddress(int port) {
     String msg = " WebServer running on http://localhost:" + port + " ";
     System.out.println("╭"+"─".repeat(msg.length())+"╮");
     System.out.println("│"+msg+"│");
@@ -52,7 +52,7 @@ public class WebServer {
    * Generates a response containing formatted links from the returned PageList.
    * @param io the HttpExchange to generate a searchTerm from
    */
-  public void search(HttpExchange io) {
+  private void search(HttpExchange io) {
     String searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
     var response = new ArrayList<String>();
     PageList pages = null; 
@@ -71,7 +71,7 @@ public class WebServer {
     respond(io, 200, "application/json", bytes);
   }
 
-  byte[] getFile(String filename) {
+  private byte[] getFile(String filename) {
     try {
       return Files.readAllBytes(Paths.get(filename));
     } catch (IOException e) {
@@ -80,7 +80,7 @@ public class WebServer {
     }
   }
 
-  void respond(HttpExchange io, int code, String mime, byte[] response) {
+  private void respond(HttpExchange io, int code, String mime, byte[] response) {
     try {
       io.getResponseHeaders()
           .set("Content-Type", String.format("%s; charset=%s", mime, CHARSET.name()));
@@ -90,5 +90,13 @@ public class WebServer {
     } finally {
       io.close();
     }
+  }
+
+  public void stopServer(){
+    server.stop(0);
+  }
+
+  public int getAddress() {
+    return server.getAddress().getPort();
   }
 }
