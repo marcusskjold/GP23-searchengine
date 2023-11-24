@@ -35,10 +35,10 @@ class WebServerTest {
             var rnd = new Random();
             while (server == null) {
                 try {
-                    var filename = Files.readString(Paths.get("config.txt")).strip();
+                    //var filename = Files.readString(Paths.get("config.txt")).strip();
                     //database = new Database(filename);
                     //queryHandler = new QueryHandler(database);
-                    server = new WebServer(rnd.nextInt(60000) + 1024, filename);
+                    server = new WebServer(rnd.nextInt(60000) + 1024, "new_data/test-file-errors2.txt");
                 } catch (BindException e) {
                     // port in use. Try again
                 }
@@ -65,6 +65,26 @@ class WebServerTest {
             httpGet(baseURL + "word3"));
         assertEquals("[]", 
             httpGet(baseURL + "word4"));
+    }
+
+    @Test
+    void avoidEmptyPagesInWebSearch() {
+        String baseURL = String.format("http://localhost:%d/search?q=", server.getAddress());
+        assertEquals("[]", 
+            httpGet(baseURL + "titleword1"));
+        assertEquals("[]", 
+            httpGet(baseURL + "titleword2"));
+        assertEquals("[]", 
+            httpGet(baseURL + "word5"));
+    }
+
+    @Test
+    void database_inputWithErroneousPages_StoreOnlyCorrectPages() {
+        try {Database databaseUnderTest = new Database("new_data/test-file-errors2.txt");
+            assertEquals(2, databaseUnderTest.getNumberOfPages());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private String httpGet(String url) {

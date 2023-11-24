@@ -60,4 +60,12 @@ public class Database {
       }
         return result;
       }
+
+    /**
+     * Returns the number of Page-objects in the page-field of the Database
+     * @return the number of Page-objects in the pages field of the PageList
+     */
+      public int getNumberOfPages() {
+        return pages.getSize();
+      }
 }
