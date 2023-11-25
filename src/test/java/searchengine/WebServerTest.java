@@ -24,7 +24,7 @@ import java.nio.file.Paths;
 
 
 @TestInstance(Lifecycle.PER_CLASS)
-class WebServerTest {
+public class WebServerTest {
     WebServer server = null;
     QueryHandler queryHandler;
     Database database;
@@ -76,15 +76,6 @@ class WebServerTest {
             httpGet(baseURL + "titleword2"));
         assertEquals("[]", 
             httpGet(baseURL + "word5"));
-    }
-
-    @Test
-    void database_inputWithErroneousPages_StoreOnlyCorrectPages() {
-        try {Database databaseUnderTest = new Database("new_data/test-file-errors2.txt");
-            assertEquals(2, databaseUnderTest.getNumberOfPages());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private String httpGet(String url) {

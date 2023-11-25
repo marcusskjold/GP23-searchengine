@@ -34,6 +34,7 @@ public class Database {
                         Page page = new Page(lines.subList(i, lastIndex).get(1) , 
                                              lines.subList(i, lastIndex).get(0).substring(6), 
                                              lines.subList(i, lastIndex));
+                        //Page page = convertToPage(lines, i, lastIndex);
                         pages.add(page);
                     }
                 lastIndex = i;
@@ -45,7 +46,23 @@ public class Database {
         Collections.reverse(pages);
     }
 
-    
+    /** Converts part of a list of String-objects to a Page-object, 
+     * starting from a given first index (inclusive) and ending at a given index (exclusive).
+     * The file must be formatted correctly as a flat text file with each page separated by "*PAGE:"
+     * the URL on the line immediatly succeeding, 
+     * the title as the next line and each word of the content of the webpages as a separate line.
+     * @param lines the List of String-objects to convert from.
+     * @param firstIndex the index (inclusive) from where the conversion starts.
+     * @param lastIndex the index (exclusive) where the converion ends.
+     * @return a Page-object corresponding to the lines read.
+     */
+    public static Page convertToPage(List<String> lines, int firstIndex, int lastIndex) {
+      String title = lines.subList(firstIndex, lastIndex).get(1);
+      String URL = lines.subList(firstIndex, lastIndex).get(0).substring(6);
+      List<String> content = lines.subList(firstIndex, lastIndex);
+      Page page = new Page(title, URL, content);
+      return page;
+    }
 
     /** Matches the main database of web pages with the search term
      * @param searchTerm the query to be answered. TODO: change to a Query type
