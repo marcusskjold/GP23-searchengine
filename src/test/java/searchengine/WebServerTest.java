@@ -32,10 +32,10 @@ class WebServerTest {
     @BeforeAll
     void setUp() {
         try {
-            var rnd = new Random();
+            Random rnd = new Random();
             while (server == null) {
                 try {
-                    //var filename = Files.readString(Paths.get("config.txt")).strip();
+                    //String filename = Files.readString(Paths.get("config.txt")).strip();
                     //database = new Database(filename);
                     //queryHandler = new QueryHandler(database);
                     server = new WebServer(rnd.nextInt(60000) + 1024, "new_data/test-file-errors2.txt");
@@ -88,9 +88,9 @@ class WebServerTest {
     }
 
     private String httpGet(String url) {
-        var uri = URI.create(url);
-        var client = HttpClient.newHttpClient();
-        var request = HttpRequest.newBuilder().uri(uri).GET().build();
+        URI uri = URI.create(url);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
         try {
             return client.send(request, BodyHandlers.ofString()).body();
         } catch (IOException | InterruptedException e) {
