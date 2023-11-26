@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
@@ -49,13 +50,13 @@ public class WebServer {
   /**
    * Converts the io into a searchTerm. 
    * Sends the searchTerm to the queryHandler.
-   * Generates a response containing formatted links from the returned PageList.
+   * Generates a response containing formatted links from the returned list of pages.
    * @param io the HttpExchange to generate a searchTerm from
    */
   private void search(HttpExchange io) {
     String searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
-    var response = new ArrayList<String>();
-    PageList pages = null; 
+    List<String> response = new ArrayList<String>();
+    List<Page> pages = null; 
 
     try {
       pages = queryHandler.search(searchTerm);
@@ -63,11 +64,11 @@ public class WebServer {
       e.printStackTrace();
       // TODO: handle exception
     }
-    for (Page p : pages.getPageList()) {
+    for (Page p : pages) {
       response.add(String.format("{\"url\": \"%s\", \"title\": \"%s\"}",
         p.getURL(), p.getTitle()));
     }
-    var bytes = response.toString().getBytes(CHARSET);
+    byte[] bytes = response.toString().getBytes(CHARSET);
     respond(io, 200, "application/json", bytes);
   }
 

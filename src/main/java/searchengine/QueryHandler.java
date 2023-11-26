@@ -16,7 +16,7 @@ public class QueryHandler{
     }
     /*The initial search-method makes the database do the search. Other features can be added here */
 
-    public PageList search(String searchTerm) throws QueryStringException {
+    public List<Page> search(String searchTerm) throws QueryStringException {
         return database.search(searchTerm);
     }
 

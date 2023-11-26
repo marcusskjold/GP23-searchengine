@@ -36,4 +36,38 @@ public class Page {
     public String getURL() {
         return URL;
     }
+
+    //Compares the title and URL fields when using the equals-method, as of now. (Doesn't include the content-fields, since they are objects themselves)
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((title == null) ? 0 : title.hashCode());
+        result = prime * result + ((URL == null) ? 0 : URL.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Page other = (Page) obj;
+        if (title == null) {
+            if (other.title != null)
+                return false;
+        } else if (!title.equals(other.title))
+            return false;
+        if (URL == null) {
+            if (other.URL != null)
+                return false;
+        } else if (!URL.equals(other.URL))
+            return false;
+        return true;
+    }
+
+    
 }

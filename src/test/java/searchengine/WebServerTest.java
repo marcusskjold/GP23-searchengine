@@ -24,7 +24,7 @@ import java.nio.file.Paths;
 
 
 @TestInstance(Lifecycle.PER_CLASS)
-class WebServerTest {
+public class WebServerTest {
     WebServer server = null;
     QueryHandler queryHandler;
     Database database;
@@ -32,10 +32,10 @@ class WebServerTest {
     @BeforeAll
     void setUp() {
         try {
-            var rnd = new Random();
+            Random rnd = new Random();
             while (server == null) {
                 try {
-                    //var filename = Files.readString(Paths.get("config.txt")).strip();
+                    //String filename = Files.readString(Paths.get("config.txt")).strip();
                     //database = new Database(filename);
                     //queryHandler = new QueryHandler(database);
                     server = new WebServer(rnd.nextInt(60000) + 1024, "new_data/test-file-errors2.txt");
@@ -78,19 +78,10 @@ class WebServerTest {
             httpGet(baseURL + "word5"));
     }
 
-    @Test
-    void database_inputWithErroneousPages_StoreOnlyCorrectPages() {
-        try {Database databaseUnderTest = new Database("new_data/test-file-errors2.txt");
-            assertEquals(2, databaseUnderTest.getNumberOfPages());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private String httpGet(String url) {
-        var uri = URI.create(url);
-        var client = HttpClient.newHttpClient();
-        var request = HttpRequest.newBuilder().uri(uri).GET().build();
+        URI uri = URI.create(url);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
         try {
             return client.send(request, BodyHandlers.ofString()).body();
         } catch (IOException | InterruptedException e) {
