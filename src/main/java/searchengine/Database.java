@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @version 0.1
  */
 public class Database {
-    private PageList pages;
+    private List<Page> pages;
     private Map<String, List<Page>> invertedIndex;
   
     /** Creates a new database, generating a main list of web pages from the specified file.
@@ -27,7 +27,7 @@ public class Database {
      * @throws IOException
      */
     public Database(String filename) throws IOException {
-        pages = new PageList();
+        pages = new ArrayList<>();
         invertedIndex = new HashMap<>();
         try {
             List<String> lines = Files.readAllLines(Paths.get(filename)); 
@@ -74,7 +74,7 @@ public class Database {
      */
      public void invertedIndex() {
 
-      for (Page page : pages.getPageList()) { // This is a "for-each" loop that iterates over a collection of Page objects.
+      for (Page page : pages) { // This is a "for-each" loop that iterates over a collection of Page objects.
           for (String line : page.getContent()) { // page.getContent() returns a List<String>. 
               String[] words = line.split("\\W+"); // Split the line into words. 
               for (String word : words) {
@@ -87,14 +87,12 @@ public class Database {
       }
   }
   
-    public PageList search(String searchTerm) { //Iterates through the stored pages and try to find one where the word exists
-      PageList result = new PageList();
+    public List<Page> search(String searchTerm) { //Iterates through the stored pages and try to find one where the word exists
+      List<Page> result = new ArrayList<>();
 
       if(pages!=null) { //Checks that pages are not empty. Probably not necessary
-        for (Page page : pages.getPageList()) {
-          if (page.getContent().contains(searchTerm)) {
-            result.addPage(page);
-          }
+        for (Page page : pages) {
+          if (page.getContent().contains(searchTerm)) result.add(page);
         }
       }
         return result;
