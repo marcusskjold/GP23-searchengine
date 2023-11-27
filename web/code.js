@@ -14,6 +14,7 @@ document.getElementById('searchbutton').onclick = () => {
         } else {
             document.getElementById("responsesize").innerHTML = 
             "<p>No web page contains the query word.</p>";
+            document.getElementById("urllist").innerHTML = "";
         }
     });
 };
