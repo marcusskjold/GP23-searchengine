@@ -19,5 +19,5 @@
 # Friday 08/12/23 - 
 * We want to be done with the report
 
-# Monday 11/12/23 - missing deadline 
+# Monday 11/12/23 - 12:00
 * Submission date 

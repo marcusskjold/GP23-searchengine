@@ -28,6 +28,8 @@ The minor classes:
     - Throws a SearchTermError if input strings is nonsense.
     - Sends Query to Database. Receives a PageList as a response.
     - Returns the PageList.
+    - If we delete pagelist we need to change the wording in the methods. 
+    - build inverted index in queryhandler either by manipulating the constructor in the database, build a method or create a new class. 
 - **Database**: Keeps all data, and responds to Queries.
     - Constructs a PageList from the data file with all pages.
     - Receives a Query and returns a new PageList with the results.

@@ -2,6 +2,7 @@ package searchengine;
 
 public class Query {
 
+   
     private String searchTerm;
 
     public Query(String searchTerm) {
