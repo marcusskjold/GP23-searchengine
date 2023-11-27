@@ -4,9 +4,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ArrayList;
 
 /** Represents the database for the search engine.
  * Keeps all the web pages, and is able to return a sublist of those pages in response to a query
@@ -14,7 +16,8 @@ import java.util.List;
  * @version 0.1
  */
 public class Database {
-    private List<Page> pages;
+    private PageList pages;
+    private Map<String, List<Page>> invertedIndex;
   
     /** Creates a new database, generating a main list of web pages from the specified file.
      * The file must be formatted correctly as a flat text file with each page separated by "*PAGE:"
@@ -24,7 +27,8 @@ public class Database {
      * @throws IOException
      */
     public Database(String filename) throws IOException {
-        pages = new ArrayList<>();
+        pages = new PageList();
+        invertedIndex = new HashMap<>();
         try {
             List<String> lines = Files.readAllLines(Paths.get(filename)); 
             int lastIndex = lines.size();
@@ -68,21 +72,39 @@ public class Database {
      * @param searchTerm the query to be answered. TODO: change to a Query type
      * @return a List<Page> containing the matching pages
      */
-    public List<Page> search(String searchTerm) { //Iterates through the stored pages and try to find one where the word exists
-      List<Page> result = new ArrayList<>();
+     public void invertedIndex() {
+
+      for (Page page : pages.getPageList()) { // This is a "for-each" loop that iterates over a collection of Page objects.
+          for (String line : page.getContent()) { // page.getContent() returns a List<String>. 
+              String[] words = line.split("\\W+"); // Split the line into words. 
+              for (String word : words) {
+                  word = word.toLowerCase(); // Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word.
+                  if (!word.isEmpty()) { // Check if the word is not empty after splitting. 
+                      invertedIndex.computeIfAbsent(word, k -> new ArrayList<>()).add(page);
+                  }
+              }
+          }
+      }
+  }
+  
+    public PageList search(String searchTerm) { //Iterates through the stored pages and try to find one where the word exists
+      PageList result = new PageList();
+
       if(pages!=null) { //Checks that pages are not empty. Probably not necessary
-        for (Page page : pages) {
-          if (page.getContent().contains(searchTerm)) result.add(page);
+        for (Page page : pages.getPageList()) {
+          if (page.getContent().contains(searchTerm)) {
+            result.addPage(page);
+          }
         }
       }
-      return result;
-    }
+        return result;
+      }
 
     /**
      * Returns the number of Page-objects in the page-field of the Database
      * @return the number of Page-objects in the pages field
      */
-    public int getNumberOfPages() {
+      public int getNumberOfPages() {
       return pages.size();
-    }
+      }
 }
