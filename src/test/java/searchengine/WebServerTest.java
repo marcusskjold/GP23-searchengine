@@ -50,7 +50,7 @@ public class WebServerTest {
 
     @AfterAll
     void tearDown() {
-        server.stopServer();;
+        server.stopServer();
         server = null;
     }
 

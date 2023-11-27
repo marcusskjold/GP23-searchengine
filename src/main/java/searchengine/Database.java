@@ -37,7 +37,7 @@ public class Database {
                     if(lines.subList(i, lastIndex).size()>2) { // Only add pages with content
                         Page page = new Page(lines.subList(i, lastIndex).get(1) , 
                                              lines.subList(i, lastIndex).get(0).substring(6), 
-                                             lines.subList(i, lastIndex));
+                                             lines.subList(i+2, lastIndex));
                         //Page page = convertToPage(lines, i, lastIndex);
                         pages.add(page);
                     }
@@ -48,6 +48,7 @@ public class Database {
             e.printStackTrace();
         }
         Collections.reverse(pages);
+        invertedIndex();
     }
 
     /** Converts part of a list of String-objects to a Page-object, 
@@ -63,7 +64,7 @@ public class Database {
     public static Page convertToPage(List<String> lines, int firstIndex, int lastIndex) {
       String title = lines.subList(firstIndex, lastIndex).get(1);
       String URL = lines.subList(firstIndex, lastIndex).get(0).substring(6);
-      List<String> content = lines.subList(firstIndex, lastIndex);
+      List<String> content = lines.subList(firstIndex+2, lastIndex);
       Page page = new Page(title, URL, content);
       return page;
     }
@@ -78,25 +79,35 @@ public class Database {
           for (String line : page.getContent()) { // page.getContent() returns a List<String>. 
               String[] words = line.split("\\W+"); // Split the line into words. 
               for (String word : words) {
-                  word = word.toLowerCase(); // Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word.
+                  word = word.toLowerCase(); // Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word. TO-DO-check if we want that kind of case-insensitivity?
                   if (!word.isEmpty()) { // Check if the word is not empty after splitting. 
                       invertedIndex.computeIfAbsent(word, k -> new ArrayList<>()).add(page);
                   }
               }
           }
       }
-  }
+    }
   
     public List<Page> search(String searchTerm) { //Iterates through the stored pages and try to find one where the word exists
       List<Page> result = new ArrayList<>();
+      String word = searchTerm.toLowerCase();
 
-      if(pages!=null) { //Checks that pages are not empty. Probably not necessary
-        for (Page page : pages) {
-          if (page.getContent().contains(searchTerm)) result.add(page);
-        }
+      //The previous implementation
+      //if(pages!=null) {
+      //  for (Page page : pages) {
+      //    if (page.getContent().contains(searchTerm)) result.add(page);
+      //  }
+      //}
+      //  return result;
+      //}
+      if(invertedIndex.containsKey(word)) {
+          for (Page page : invertedIndex.get(word)) {
+            if(!result.contains(page)) result.add(page);
+          }
       }
-        return result;
+        return result;  
       }
+    
 
     /**
      * Returns the number of Page-objects in the page-field of the Database
