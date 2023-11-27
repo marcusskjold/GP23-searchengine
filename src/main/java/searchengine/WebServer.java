@@ -64,11 +64,16 @@ public class WebServer {
       e.printStackTrace();
       // TODO: handle exception
     }
-    for (Page p : pages) {
-      response.add(String.format("{\"url\": \"%s\", \"title\": \"%s\"}",
-        p.getURL(), p.getTitle()));
+    
+    if (pages.size() == 0) System.out.println("No web page contains the query word.");
+    else{
+      for (Page p : pages) {
+        response.add(String.format("{\"url\": \"%s\", \"title\": \"%s\"}",
+          p.getURL(), p.getTitle()));
+      }
     }
-    byte[] bytes = response.toString().getBytes(CHARSET);
+
+    var bytes = response.toString().getBytes(CHARSET);
     respond(io, 200, "application/json", bytes);
   }
 

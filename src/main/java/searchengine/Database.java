@@ -33,8 +33,7 @@ public class Database {
                     if(lines.subList(i, lastIndex).size()>2) { // Only add pages with content
                         Page page = new Page(lines.subList(i, lastIndex).get(1) , 
                                              lines.subList(i, lastIndex).get(0).substring(6), 
-                                             lines.subList(i, lastIndex));
-                        //Page page = convertToPage(lines, i, lastIndex);
+                                             lines.subList(i+2, lastIndex));
                         pages.add(page);
                     }
                 lastIndex = i;
