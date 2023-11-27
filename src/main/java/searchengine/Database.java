@@ -81,7 +81,7 @@ public class Database {
               for (String word : words) {
                   word = word.toLowerCase(); // Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word. TO-DO-check if we want that kind of case-insensitivity?
                   if (!word.isEmpty()) { // Check if the word is not empty after splitting. 
-                      invertedIndex.computeIfAbsent(word, k -> new ArrayList<>()).add(page);
+                      invertedIndex.computeIfAbsent(word, k -> new ArrayList<>()).add(page); //Returns the value associated with the key 'word' (computes the value as a new, empty ArrayList, if key is not already present) and then adds the page to that value (List).
                   }
               }
           }
