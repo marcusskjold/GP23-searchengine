@@ -3,6 +3,7 @@ package searchengine;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 public class QueryHandler{
     //Initially assigned it a database as a field
@@ -16,8 +17,9 @@ public class QueryHandler{
     }
     /*The initial search-method makes the database do the search. Other features can be added here */
 
-    public List<Page> search(String searchTerm) throws QueryStringException {
-        return database.search(searchTerm);
+    public Set<Page> search(String searchTerm) throws QueryStringException {
+        Query q = new Query(searchTerm);
+        return database.matchQuery(q);
     }
 
     /*Make a method which receives a query from the webserver and sends it to the database. */ 

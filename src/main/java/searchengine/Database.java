@@ -7,7 +7,9 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.ArrayList;
 
 /** Represents the database for the search engine.
@@ -17,7 +19,7 @@ import java.util.ArrayList;
  */
 public class Database {
     private List<Page> pages;
-    private Map<String, List<Page>> invertedIndex;
+    private Map<String, Set<Page>> invertedIndex;
   
     /** Creates a new database, generating a main list of web pages from the specified file.
      * The file must be formatted correctly as a flat text file with each page separated by "*PAGE:"
@@ -76,25 +78,39 @@ public class Database {
     }
   
     /** Matches the main database of web pages with the search term
-     * @param searchTerm the query to be answered. TODO: change to a Query type
-     * @return a List<Page> containing the matching pages
+     * @param word the query to be answered. TODO: change to a Query type
+     * @return a Set<Page> containing the matching pages
      */
-    public List<Page> search(String searchTerm) {
-      List<Page> result = new ArrayList<>();
-      String word = searchTerm.toLowerCase();
-
-      if(invertedIndex.containsKey(word)) {
-          for (Page page : invertedIndex.get(word)) {
-            if(!result.contains(page)) result.add(page);
-          }
-      } return result;  
+    private Set<Page> matchWord(String word) {
+      Set<Page> match = invertedIndex.get(word);
+      return match == null ? new HashSet<>() : match;
     }
     
     /**
      * Returns the number of Page-objects in the page-field of the Database
      * @return the number of Page-objects in the pages field
      */
-      public int getNumberOfPages() {
-      return pages.size();
-      }
+    public int getNumberOfPages() {
+        return pages.size();
+    }
+
+    public Set<Page> matchQuery(Query q){
+        Set<Page> results = new HashSet<>();
+        for (Set<String> ANDSet : q.getORSet()){
+            results.addAll(matchANDSet(ANDSet));
+        }
+        return results;
+    }
+
+    private Set<Page> matchANDSet(Set<String> ANDSet) {
+        Set<Page> result = new HashSet<>();
+        boolean firstWord = true;
+        for (String word : ANDSet){
+            if (firstWord == true) result = matchWord(word);
+            else result.retainAll(matchWord(word));
+            if ((result.isEmpty() )) break;
+            firstWord = false;
+        }
+        return result;
+    }
 }

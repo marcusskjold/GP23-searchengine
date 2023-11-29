@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
@@ -56,7 +57,7 @@ public class WebServer {
   private void search(HttpExchange io) {
     String searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
     List<String> response = new ArrayList<String>();
-    List<Page> pages = null; 
+    Set<Page> pages = null; 
 
     try {
       pages = queryHandler.search(searchTerm);
