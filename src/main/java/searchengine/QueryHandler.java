@@ -1,16 +1,11 @@
 package searchengine;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import java.util.StringTokenizer;
-
 import java.util.HashSet;
-import java.util.Arrays;
-import java.util.ArrayList; 
+import java.util.Scanner;
 
 public class QueryHandler{
     private Database database;

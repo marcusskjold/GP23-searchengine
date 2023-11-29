@@ -38,13 +38,10 @@ public class Database {
     }
 
     /** Converts part of a list of String-objects to a Page-object, 
-     * starting from a given first index (inclusive) and ending at a given index (exclusive).
-     * The file must be formatted correctly as a flat text file with each page separated by "*PAGE:"
-     * the URL on the line immediatly succeeding, 
-     * the title as the next line and each word of the content of the webpages as a separate line.
+     * the URL must be at the first line, preceded by "*PAGE:"
+     * the title as the next line 
+     * and each word of the content of the webpages as a separate line.
      * @param lines the List of String-objects to convert from.
-     * @param firstIndex the index (inclusive) from where the conversion starts.
-     * @param lastIndex the index (exclusive) where the converion ends.
      * @return a Page-object corresponding to the lines read.
      */
     public static Page convertToPage(List<String> lines) {
