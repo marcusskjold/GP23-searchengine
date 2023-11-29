@@ -31,6 +31,6 @@ public class InvertedIndex {
     }
 
     public Set<Page> getPages(String key) {
-        return invertedIndex.get(key);
+        return new HashSet<Page>(invertedIndex.get(key));
     }
 }

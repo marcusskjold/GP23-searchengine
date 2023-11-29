@@ -77,4 +77,9 @@ public class Database {
         }
         return result;
     }
+
+    private Set<Page> matchWord(String word) {
+      Set<Page> match = invertedIndex.getPages(word);
+      return match == null ? new HashSet<>() : match;
+    }
 }
