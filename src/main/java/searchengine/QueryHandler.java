@@ -2,10 +2,8 @@ package searchengine;
 
 import java.io.IOException;
 import java.util.Set;
-import java.util.StringTokenizer;
-
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.Scanner;
 
 public class QueryHandler{
     private Database database;
@@ -21,22 +19,20 @@ public class QueryHandler{
 
     public Set<Set<String>> splitSearchString(String searchString) {
         Set<Set<String>> returnSets = new HashSet<>();
-        Scanner sc = new Scanner(searchString);
-        sc.useDelimiter("%20OR%20");
 
-        while (sc.hasNext()){
-            returnSets.add(splitString(sc.next()));
+        String[] s = searchString.split("^OR%20|%20OR%20|%20OR$");
+        for (String string : s) {
+            returnSets.add(splitString(string));
         }
+
         return returnSets;
     }
 
-    public Set<String> splitString(String searchString) { 
-        StringTokenizer tk = new StringTokenizer(searchString,"%20");
-        Set<String> returnSet = new HashSet<>(); 
-        while (tk.hasMoreTokens()){
-            returnSet.add(tk.nextToken().toLowerCase());
-        }
-        return returnSet;
+    public Set<String> splitString(String searchString) {
+        searchString = searchString.toLowerCase(); 
+        Set<String> returnSets = new HashSet<>();
+        Collections.addAll(returnSets, searchString.split("%20"));
+        return returnSets;
     }
 
     
