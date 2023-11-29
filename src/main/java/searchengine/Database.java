@@ -18,7 +18,6 @@ import java.util.ArrayList;
  * @version 0.1
  */
 public class Database {
-    private List<Page> pages;
     private Map<String, Set<Page>> invertedIndex;
   
     /** Creates a new database, generating a main list of web pages from the specified file.
@@ -34,19 +33,16 @@ public class Database {
             List<String> lines = Files.readAllLines(Paths.get(filename)); 
             int firstIndex = 0;
             for (int i = 0; i < lines.size(); ++i) {
-                if (lines.get(i).startsWith("*PAGE")|| i==lines.size()-1) {
-                    if(firstIndex!=0 && lines.subList(firstIndex, i).size()>2) { // Only add pages with content
-                        Page page = convertToPage(lines.subList(firstIndex, i));
-                        for (String word : page.getContent()) { // page.getContent() returns a List<String>. 
-                            invertedIndex.computeIfAbsent(word.toLowerCase(), k -> new HashSet<>()).add(page); //Returns the value associated with the key 'word' (computes the value as a new, empty ArrayList, if key is not already present) and then adds the page to that value (List). Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word. TO-DO-check if we want that kind of case-insensitivity?
-                        }
-                        firstIndex = i;
-                    } else {
-                        firstIndex = i;
+                if ((lines.get(i).startsWith("*PAGE") || i==lines.size()-1) && firstIndex!=0) { //If it reaches a page or the end of the list. And if it is not the first entry of the list.
+                    if(lines.subList(firstIndex, i).size()>2) { // If not erroneous page
+                        Page page = convertToPage(lines.subList(firstIndex, i)); //Convert part of list to a page
+                        addToInvertedIndex(page); //Add to inverted index.
                     }
+                    firstIndex = i;
                 }
             }
-        } catch (FileNotFoundException e) {
+        } 
+        catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -69,11 +65,9 @@ public class Database {
       return page;
     }
 
-    public void invertedIndex() {
-        for (Page page : pages) { // This is a "for-each" loop that iterates over a collection of Page objects.
-            for (String word : page.getContent()) { // page.getContent() returns a List<String>. 
-                        invertedIndex.computeIfAbsent(word.toLowerCase(), k -> new HashSet<>()).add(page); //Returns the value associated with the key 'word' (computes the value as a new, empty ArrayList, if key is not already present) and then adds the page to that value (List). Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word. TO-DO-check if we want that kind of case-insensitivity?
-            }
+    public void addToInvertedIndex(Page page) {
+        for (String word : page.getContent()) { // page.getContent() returns a List<String>. 
+                            invertedIndex.computeIfAbsent(word.toLowerCase(), k -> new HashSet<>()).add(page); //Returns the value associated with the key 'word' (computes the value as a new, empty ArrayList, if key is not already present) and then adds the page to that value (List). Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word. TO-DO-check if we want that kind of case-insensitivity
         }
     }
   
@@ -90,9 +84,9 @@ public class Database {
      * Returns the number of Page-objects in the page-field of the Database
      * @return the number of Page-objects in the pages field
      */
-    public int getNumberOfPages() {
-        return pages.size();
-    }
+    //public int getNumberOfPages() {
+    //    return pages.size();
+    //}
 
     public Set<Page> matchQuery(Query q){
         Set<Page> results = new HashSet<>();
