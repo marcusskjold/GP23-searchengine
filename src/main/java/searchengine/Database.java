@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * @version 0.1
  */
 public class Database {
-    private Map<String, Set<Page>> invertedIndex;
+    private InvertedIndex invertedIndex;
   
     /** Creates a new database, generating a main list of web pages from the specified file.
      * The file must be formatted correctly as a flat text file with each page separated by "*PAGE:"
@@ -28,19 +28,9 @@ public class Database {
      * @throws IOException
      */
     public Database(String filename) throws IOException {
-        invertedIndex = new HashMap<>();
         try {
             List<String> lines = Files.readAllLines(Paths.get(filename)); 
-            int firstIndex = 0;
-            for (int i = 0; i < lines.size(); ++i) {
-                if ((lines.get(i).startsWith("*PAGE") || i==lines.size()-1) && firstIndex!=0) { //If it reaches a page or the end of the list. And if it is not the first entry of the list.
-                    if(lines.subList(firstIndex, i).size()>2) { // If not erroneous page
-                        Page page = convertToPage(lines.subList(firstIndex, i)); //Convert part of list to a page
-                        addToInvertedIndex(page); //Add to inverted index.
-                    }
-                    firstIndex = i;
-                }
-            }
+            invertedIndex = new InvertedIndex(lines);
         } 
         catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -64,19 +54,13 @@ public class Database {
       Page page = new Page(title, URL, content);
       return page;
     }
-
-    public void addToInvertedIndex(Page page) {
-        for (String word : page.getContent()) { // page.getContent() returns a List<String>. 
-                            invertedIndex.computeIfAbsent(word.toLowerCase(), k -> new HashSet<>()).add(page); //Returns the value associated with the key 'word' (computes the value as a new, empty ArrayList, if key is not already present) and then adds the page to that value (List). Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word. TO-DO-check if we want that kind of case-insensitivity
-        }
-    }
   
     /** Matches the main database of web pages with the search term
      * @param word the query to be answered. TODO: change to a Query type
      * @return a Set<Page> containing the matching pages
      */
     private Set<Page> matchWord(String word) {
-      Set<Page> match = invertedIndex.get(word);
+      Set<Page> match = invertedIndex.getPages(word);
       return match == null ? new HashSet<>() : match;
     }
     
