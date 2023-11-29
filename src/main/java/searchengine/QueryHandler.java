@@ -26,10 +26,11 @@ public class QueryHandler{
 
     public Set<Set<String>> splitSearchString(String searchString) {
         Set<Set<String>> returnSets = new HashSet<>();
-        StringTokenizer tk = new StringTokenizer(searchString,"OR");
-        System.out.println(tk.countTokens());
-        while (tk.hasMoreTokens()){
-            returnSets.add(splitString(tk.nextToken()));
+        Scanner sc = new Scanner(searchString);
+        sc.useDelimiter("%20OR%20");
+
+        while (sc.hasNext()){
+            returnSets.add(splitString(sc.next()));
         }
         return returnSets;
     }
