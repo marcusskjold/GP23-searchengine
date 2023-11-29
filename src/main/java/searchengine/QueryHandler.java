@@ -22,7 +22,7 @@ public class QueryHandler{
     }
     /*The initial search-method makes the database do the search. Other features can be added here */
 
-    public Set<String> getAndSet(String searchTerm) throws QueryStringException {
+    public Set<String> getAndSet(String searchTerm) { //throws QueryStringException
 
         String[] words = searchTerm.split("\\s+"); // Split the search term into individual words
         Set<String> andSet = new HashSet<>(); // Create a set to store the individual words
@@ -36,6 +36,21 @@ public class QueryHandler{
         //Query q = new Query(searchTerm);
         return andSet;
         //return database.matchQuery(q);
+    }
+
+    public Set<Set<String>> splitOR(String searchString) {
+        Set<Set<String>> andSets = new HashSet<>();
+        String[] orStrings = searchString.split("OR");
+        for (String string : orStrings) {
+            andSets.add(getAndSet(string));
+        }
+        return andSets;
+    }
+
+    public Set<Page> search(String searchString) {
+        Query q = new Query(splitOR(searchString));
+        return database.matchQuery(q);
+        
     }
 
     // Needs to split search String(Searchterm) into sets so each word is an element in the set
