@@ -38,7 +38,7 @@ public class Database {
                     if(firstIndex!=0 && lines.subList(firstIndex, i).size()>2) { // Only add pages with content
                         Page page = convertToPage(lines.subList(firstIndex, i));
                         for (String word : page.getContent()) { // page.getContent() returns a List<String>. 
-                            invertedIndex.computeIfAbsent(word.toLowerCase(), k -> new ArrayList<>()).add(page); //Returns the value associated with the key 'word' (computes the value as a new, empty ArrayList, if key is not already present) and then adds the page to that value (List). Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word. TO-DO-check if we want that kind of case-insensitivity?
+                            invertedIndex.computeIfAbsent(word.toLowerCase(), k -> new HashSet<>()).add(page); //Returns the value associated with the key 'word' (computes the value as a new, empty ArrayList, if key is not already present) and then adds the page to that value (List). Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word. TO-DO-check if we want that kind of case-insensitivity?
                         }
                         firstIndex = i;
                     } else {
@@ -72,7 +72,7 @@ public class Database {
     public void invertedIndex() {
         for (Page page : pages) { // This is a "for-each" loop that iterates over a collection of Page objects.
             for (String word : page.getContent()) { // page.getContent() returns a List<String>. 
-                        invertedIndex.computeIfAbsent(word.toLowerCase(), k -> new ArrayList<>()).add(page); //Returns the value associated with the key 'word' (computes the value as a new, empty ArrayList, if key is not already present) and then adds the page to that value (List). Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word. TO-DO-check if we want that kind of case-insensitivity?
+                        invertedIndex.computeIfAbsent(word.toLowerCase(), k -> new HashSet<>()).add(page); //Returns the value associated with the key 'word' (computes the value as a new, empty ArrayList, if key is not already present) and then adds the page to that value (List). Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word. TO-DO-check if we want that kind of case-insensitivity?
             }
         }
     }
