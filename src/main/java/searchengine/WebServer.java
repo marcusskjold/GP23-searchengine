@@ -59,12 +59,12 @@ public class WebServer {
     List<String> response = new ArrayList<String>();
     Set<Page> pages = null; 
 
-    try {
+    //try {
       pages = queryHandler.search(searchTerm);
-    } catch (QueryStringException e) {
-      e.printStackTrace();
-      // TODO: handle exception
-    }
+    //} catch (QueryStringException e) {
+    //  e.printStackTrace();
+    //  // TODO: handle exception
+    //}
     
     if (pages.size() == 0) System.out.println("No web page contains the query word.");
     else{
