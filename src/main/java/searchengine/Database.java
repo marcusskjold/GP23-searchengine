@@ -27,25 +27,26 @@ public class Database {
      * @throws IOException
      */
     public Database(String filename) throws IOException {
-        pages = new ArrayList<>();
         invertedIndex = new HashMap<>();
         try {
             List<String> lines = Files.readAllLines(Paths.get(filename)); 
-            int lastIndex = lines.size();
-            for (int i = lines.size() - 1; i >= 0; --i) {
-                if (lines.get(i).startsWith("*PAGE")) {
-                    if(lines.subList(i, lastIndex).size()>2) { // Only add pages with content
-                        List<String> pageSubList = lines.subList(i, lastIndex);
-                        pages.add(convertToPage(pageSubList));
+            int firstIndex = 0;
+            for (int i = 0; i < lines.size(); ++i) {
+                if (lines.get(i).startsWith("*PAGE")|| i==lines.size()-1) {
+                    if(firstIndex!=0 && lines.subList(firstIndex, i).size()>2) { // Only add pages with content
+                        Page page = convertToPage(lines.subList(firstIndex, i));
+                        for (String word : page.getContent()) { // page.getContent() returns a List<String>. 
+                            invertedIndex.computeIfAbsent(word.toLowerCase(), k -> new ArrayList<>()).add(page); //Returns the value associated with the key 'word' (computes the value as a new, empty ArrayList, if key is not already present) and then adds the page to that value (List). Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word. TO-DO-check if we want that kind of case-insensitivity?
+                        }
+                        firstIndex = i;
+                    } else {
+                        firstIndex = i;
                     }
-                lastIndex = i;
                 }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        Collections.reverse(pages);
-        invertedIndex();
     }
 
     /** Converts part of a list of String-objects to a Page-object, 
@@ -68,14 +69,8 @@ public class Database {
 
     public void invertedIndex() {
         for (Page page : pages) { // This is a "for-each" loop that iterates over a collection of Page objects.
-            for (String line : page.getContent()) { // page.getContent() returns a List<String>. 
-                String[] words = line.split("\\W+"); // Split the line into words. 
-                for (String word : words) {
-                    word = word.toLowerCase(); // Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word. TO-DO-check if we want that kind of case-insensitivity?
-                    if (!word.isEmpty()) { // Check if the word is not empty after splitting. 
-                        invertedIndex.computeIfAbsent(word, k -> new ArrayList<>()).add(page); //Returns the value associated with the key 'word' (computes the value as a new, empty ArrayList, if key is not already present) and then adds the page to that value (List).
-                    }
-                }
+            for (String word : page.getContent()) { // page.getContent() returns a List<String>. 
+                        invertedIndex.computeIfAbsent(word.toLowerCase(), k -> new ArrayList<>()).add(page); //Returns the value associated with the key 'word' (computes the value as a new, empty ArrayList, if key is not already present) and then adds the page to that value (List). Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word. TO-DO-check if we want that kind of case-insensitivity?
             }
         }
     }
