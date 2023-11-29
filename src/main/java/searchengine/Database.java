@@ -54,30 +54,13 @@ public class Database {
       Page page = new Page(title, URL, content);
       return page;
     }
-  
-    /** Matches the main database of web pages with the search term
-     * @param word the query to be answered. TODO: change to a Query type
-     * @return a Set<Page> containing the matching pages
-     */
-    private Set<Page> matchWord(String word) {
-      Set<Page> match = invertedIndex.getPages(word);
-      return match == null ? new HashSet<>() : match;
-    }
     
-    /**
-     * Returns the number of Page-objects in the page-field of the Database
-     * @return the number of Page-objects in the pages field
-     */
-    //public int getNumberOfPages() {
-    //    return pages.size();
-    //}
-
     public Set<Page> matchQuery(Query q){
         Set<Page> results = new HashSet<>();
         for (Set<String> ANDSet : q.getORSet()){
             results.addAll(matchANDSet(ANDSet));
         }
-        if (q.getURLFilter() != null){
+        if (q.getURLFilter() != ""){
             results.removeIf(n -> !n.getURL().contains(q.getURLFilter()));
         }
         return results;
