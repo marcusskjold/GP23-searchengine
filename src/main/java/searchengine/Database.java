@@ -99,6 +99,9 @@ public class Database {
         for (Set<String> ANDSet : q.getORSet()){
             results.addAll(matchANDSet(ANDSet));
         }
+        if (q.getURLFilter() != null){
+            results.removeIf(n -> !n.getURL().contains(q.getURLFilter()));
+        }
         return results;
     }
 
