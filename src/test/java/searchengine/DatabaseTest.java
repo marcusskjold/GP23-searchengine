@@ -37,8 +37,7 @@ public class DatabaseTest {
         Set<String> andSET = new HashSet<String>();
         andSET.add(word);
         orSET.add(andSET);
-        Query q = new Query(word);
-        q.TESTaddQuery(orSET);
+        Query q = new Query(orSET);
         return q;
     }
 

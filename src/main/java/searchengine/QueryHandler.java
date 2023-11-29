@@ -68,7 +68,7 @@ public class QueryHandler{
     //  * 
 
     
-   
+    
 
     // public  getMatchingWebPages(String query){
 
