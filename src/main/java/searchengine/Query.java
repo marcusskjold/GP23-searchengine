@@ -7,10 +7,12 @@ public class Query {
    
     private String searchTerm;
     private Set<Set<String>> orSet;
+    private String URLFilter;
 
     public Query(String searchTerm) {
         this.searchTerm = searchTerm;
         Set<String> andSet = new HashSet<String>();
+        URLFilter = "";
     }
 
     public String getSearchTerm() {
@@ -25,4 +27,13 @@ public class Query {
     public Set<Set<String>> getORSet(){
         return orSet;
     }
+
+    public String getURLFilter() {
+        return null;
+    }
+
+    public void addURLFilter(String URLsegment){
+        URLFilter = URLsegment;
+    }
+
 }
