@@ -13,6 +13,8 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,9 +30,17 @@ import java.nio.file.Paths;
 @TestInstance(Lifecycle.PER_CLASS)
 public class DatabaseTest {
     private Database databaseUnderTest;
-    private List<Page> results;
+    private HashSet<Page> results;
     
-    
+    public Query makeOneWordQuery(String word){
+        Set<Set<String>> orSET = new HashSet<Set<String>>();
+        Set<String> andSET = new HashSet<String>();
+        andSET.add(word);
+        orSET.add(andSET);
+        Query q = new Query(word);
+        q.TESTaddQuery(orSET);
+        return q;
+    }
 
     @BeforeEach //Used BeforeEach so that results will be empty at the start of each test.
     void setUp() {
@@ -38,10 +48,9 @@ public class DatabaseTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        results = new ArrayList<>();
+        results = new HashSet<>();
     }
 
-    
     @Test
     void database_inputWithErroneousPages_StoreOnlyCorrectPagesAtInitialization() {
             assertEquals(2, databaseUnderTest.getNumberOfPages());
@@ -49,7 +58,8 @@ public class DatabaseTest {
 
     @Test
     void search_queryWordNotContainedInPages_returnEmptyList() {
-        assertEquals(results, databaseUnderTest.search("bobobo"));
+        Query q = makeOneWordQuery("bobobo");
+        assertEquals(results, databaseUnderTest.matchQuery(q));
     }
 
     //Reads lines to convert them to a page and adds them to the result list. Compares with the list returned by the search-method
@@ -59,8 +69,8 @@ public class DatabaseTest {
         List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt"));
         Page page = Database.convertToPage(lines.subList(0, 4));
         results.add(page);
-        //assertTrue(results.get(0).equals(databaseUnderTest.search("word2").get(0)));
-        assertEquals(results, databaseUnderTest.search("word2"));
+        // assertTrue(results.get(0).equals(databaseUnderTest.search("word2").get(0)));
+        assertEquals(results, databaseUnderTest.matchQuery(makeOneWordQuery("word2")));
         } catch (Exception e) {
             e.printStackTrace();
         } 
@@ -75,7 +85,7 @@ public class DatabaseTest {
         results.add(page1);
         results.add(page2);
         //assertTrue(results.get(0).equals(databaseUnderTest.search("word2").get(0)));
-        assertEquals(results, databaseUnderTest.search("word1"));
+        assertEquals(results, databaseUnderTest.matchQuery(makeOneWordQuery("word1")));
         } catch (Exception e) {
             e.printStackTrace();
         } 
