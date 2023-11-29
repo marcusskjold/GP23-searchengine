@@ -30,9 +30,9 @@ import java.nio.file.Paths;
 @TestInstance(Lifecycle.PER_CLASS)
 public class DatabaseTest {
     private Database databaseUnderTest;
-    private HashSet<Page> results;
+    private HashSet<Page> expectedResults;
     
-    public Query makeOneWordQuery(String word){
+    Query makeOneWordQuery(String word){
         Set<Set<String>> orSET = new HashSet<Set<String>>();
         Set<String> andSET = new HashSet<String>();
         andSET.add(word);
@@ -42,58 +42,51 @@ public class DatabaseTest {
         return q;
     }
 
-    @BeforeEach //Used BeforeEach so that results will be empty at the start of each test.
-    void setUp() {
-        try {databaseUnderTest = new Database("new_data/test-file-errors2.txt");
+    void setUpDatabase(String filePath){
+        try {databaseUnderTest = new Database(filePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        results = new HashSet<>();
     }
 
-    
-    //@Test
-    //void database_inputWithErroneousPages_StoreOnlyCorrectPagesAtInitialization() {
-    //        assertEquals(2, databaseUnderTest.getNumberOfPages());
-    //}
+    void addExpectedResult(String URL){
+        Page page = new Page("expectedResult", URL, null);
+        expectedResults.add(page);
+    }
 
-    @Test
-    void search_queryWordNotContainedInPages_returnEmptyList() {
+    @BeforeEach
+    void setUp() {
+        databaseUnderTest = null;
+        expectedResults = new HashSet<>();
+    }
+
+    @Test void matchQuery_queryWordNotContainedInPages_returnEmptySet() {
+        setUpDatabase("new_data/test-file-errors2.txt");
         Query q = makeOneWordQuery("bobobo");
-        assertEquals(results, databaseUnderTest.matchQuery(q));
+        Set<Page> actualResult = databaseUnderTest.matchQuery(q);
+        assertEquals(expectedResults, actualResult);
     }
 
-    //Reads lines to convert them to a page and adds them to the result list. Compares with the list returned by the search-method
-    @Test
-    void search_queryWordContainedInOnePage_returnListWithPage() {
-        try {
-        List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt"));
-        Page page = Database.convertToPage(lines.subList(0, 4));
-        results.add(page);
-        // assertTrue(results.get(0).equals(databaseUnderTest.search("word2").get(0)));
-        assertEquals(results, databaseUnderTest.matchQuery(makeOneWordQuery("word2")));
-        } catch (Exception e) {
-            e.printStackTrace();
-        } 
+    @Test void matchQuery_queryWordContainedInOnePage_returnsPage() {
+        setUpDatabase("new_data/test-file-errors2.txt");
+        addExpectedResult("http://page1.com");
+        Query q = makeOneWordQuery("word2");
+
+        Set<Page> actualResults = databaseUnderTest.matchQuery(q);
+        assertEquals(expectedResults, actualResults);
     }
 
-    @Test
-    void search_queryWordContainedInMorePages_returnListWithAllPagesInCorrectOrder() {
-        try {
-        List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-errors2.txt"));
-        Page page1 = Database.convertToPage(lines.subList(2, 6));
-        Page page2 = Database.convertToPage(lines.subList(11, 15));
-        results.add(page1);
-        results.add(page2);
-        //assertTrue(results.get(0).equals(databaseUnderTest.search("word2").get(0)));
-        assertEquals(results, databaseUnderTest.matchQuery(makeOneWordQuery("word1")));
-        } catch (Exception e) {
-            e.printStackTrace();
-        } 
+    @Test void matchQuery_queryWordContainedInMorePages_returnsAllPages() {
+        setUpDatabase("new_data/test-file-errors2.txt");
+        addExpectedResult("http://page1.com");
+        addExpectedResult("http://page2.com");
+        Query q = makeOneWordQuery("word1");
+
+        Set<Page> actualResults = databaseUnderTest.matchQuery(q);
+        assertEquals(expectedResults, actualResults);
     }
 
-    @Test
-    void convertToPage_ConvertibleList_createsCorrectPageObject() {
+    @Test void convertToPage_ConvertibleList_createsCorrectPageObject() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt"));
             Page page = Database.convertToPage(lines.subList(0, 4));
@@ -104,8 +97,7 @@ public class DatabaseTest {
     }
 
     //Test to check for equality in the content-field of the pages, since they are not compared with equals-method
-    @Test
-    void convertToPage_ConvertibleList_createsCorrectContent() {
+    @Test void convertToPage_ConvertibleList_createsCorrectContent() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt"));
             Page page = Database.convertToPage(lines.subList(0, 4));
@@ -114,10 +106,5 @@ public class DatabaseTest {
             e.printStackTrace();
         } 
     }
-
-//     @Test
-//     void testInvertedIndex(){
-
-//     }
 
 }

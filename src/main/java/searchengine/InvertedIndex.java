@@ -1,5 +1,6 @@
 package searchengine;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ public class InvertedIndex {
     private Map<String, Set<Page>> invertedIndex;
 
     public InvertedIndex(List<String> lines) {
+        invertedIndex = new HashMap<>();
         int firstIndex = 0;
         for (int i = 0; i < lines.size(); ++i) {
                 if ((lines.get(i).startsWith("*PAGE") || i==lines.size()-1) && firstIndex!=0) { //If it reaches a page or the end of the list. And if it is not the first entry of the list.
