@@ -37,3 +37,13 @@ The minor classes:
 - **Main**: Sets up the environment.
     - Creates the Database, the QueryHandler and the WebServer.
     - Informs the QueryHandler of the Database and the WebServer of the QueryHandler.
+
+
+
+
+    @Test void matchQuery_queryContainsURLFilter_filtersResults() {
+        setUpDatabase("new_data/test-file-errors2.txt");
+        Query q = makeOneWordQuery("word1");
+        q.addURLFilter("MATCH");
+
+    }

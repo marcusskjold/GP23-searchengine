@@ -42,7 +42,7 @@ public class Page {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((title == null) ? 0 : title.hashCode());
+        // result = prime * result + ((title == null) ? 0 : title.hashCode());
         result = prime * result + ((URL == null) ? 0 : URL.hashCode());
         return result;
     }
@@ -56,11 +56,6 @@ public class Page {
         if (getClass() != obj.getClass())
             return false;
         Page other = (Page) obj;
-        if (title == null) {
-            if (other.title != null)
-                return false;
-        } else if (!title.equals(other.title))
-            return false;
         if (URL == null) {
             if (other.URL != null)
                 return false;
