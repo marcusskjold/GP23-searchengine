@@ -1,8 +1,8 @@
 ## Schedule for our project
 
 # Monday 27/11/23 - 12:00 - 16:00
-* We want to be done with task 2 []
-* We want to be done with task 3 []
+* We want to be done with task 2 [x]
+* We want to be done with task 3 [x]
 
 # Wednesday 29/11/23 - 09:00 - XX:XX
 * Focus work on task 4 or 5 
