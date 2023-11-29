@@ -1,10 +1,8 @@
 package searchengine;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class Query {
-
     private Set<Set<String>> orSet;
     private String URLFilter;
 

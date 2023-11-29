@@ -25,24 +25,16 @@ public class Page {
         this.content = content;
     }
 
-    public List<String> getContent() {
-        return content;
-    }
+    public List<String> getContent() { return content;}
 
-    public String getTitle() {
-        return title;
-    }
+    public String getTitle() { return title; }
     
-    public String getURL() {
-        return URL;
-    }
+    public String getURL() { return URL; }
 
-    //Compares the title and URL fields when using the equals-method, as of now. (Doesn't include the content-fields, since they are objects themselves)
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        // result = prime * result + ((title == null) ? 0 : title.hashCode());
         result = prime * result + ((URL == null) ? 0 : URL.hashCode());
         return result;
     }

@@ -19,12 +19,8 @@ public class QueryHandler{
 
     public Set<Set<String>> splitSearchString(String searchString) {
         Set<Set<String>> returnSets = new HashSet<>();
-
         String[] s = searchString.split("^OR%20|%20OR%20|%20OR$");
-        for (String string : s) {
-            returnSets.add(splitString(string));
-        }
-
+        for (String string : s) returnSets.add(splitString(string));
         return returnSets;
     }
 
