@@ -57,7 +57,7 @@ public class DatabaseTest {
     void search_queryWordContainedInOnePage_returnListWithPage() {
         try {
         List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt"));
-        Page page = Database.convertToPage(lines, 0, 4);
+        Page page = Database.convertToPage(lines.subList(0, 4));
         results.add(page);
         //assertTrue(results.get(0).equals(databaseUnderTest.search("word2").get(0)));
         assertEquals(results, databaseUnderTest.search("word2"));
@@ -70,8 +70,8 @@ public class DatabaseTest {
     void search_queryWordContainedInMorePages_returnListWithAllPagesInCorrectOrder() {
         try {
         List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-errors2.txt"));
-        Page page1 = Database.convertToPage(lines, 2, 6);
-        Page page2 = Database.convertToPage(lines, 11, 15);
+        Page page1 = Database.convertToPage(lines.subList(2, 6));
+        Page page2 = Database.convertToPage(lines.subList(11, 15));
         results.add(page1);
         results.add(page2);
         //assertTrue(results.get(0).equals(databaseUnderTest.search("word2").get(0)));
@@ -85,7 +85,7 @@ public class DatabaseTest {
     void convertToPage_ConvertibleList_createsCorrectPageObject() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt"));
-            Page page = Database.convertToPage(lines, 0, 4);
+            Page page = Database.convertToPage(lines.subList(0, 4));
             assertEquals(new Page("title1", "http://page1.com", lines), page);
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,8 +97,8 @@ public class DatabaseTest {
     void convertToPage_ConvertibleList_createsCorrectContent() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt"));
-            Page page = Database.convertToPage(lines, 0, 4);
-            assertEquals(new Page("title1", "http://page1.com", lines).getContent(), page.getContent());
+            Page page = Database.convertToPage(lines.subList(0, 4));
+            assertEquals(new Page("title1", "http://page1.com", lines.subList(2, 4)).getContent(), page.getContent());
         } catch (Exception e) {
             e.printStackTrace();
         } 

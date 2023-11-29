@@ -35,11 +35,8 @@ public class Database {
             for (int i = lines.size() - 1; i >= 0; --i) {
                 if (lines.get(i).startsWith("*PAGE")) {
                     if(lines.subList(i, lastIndex).size()>2) { // Only add pages with content
-                        Page page = new Page(lines.subList(i, lastIndex).get(1) , 
-                                             lines.subList(i, lastIndex).get(0).substring(6), 
-                                             lines.subList(i+2, lastIndex));
-                        //Page page = convertToPage(lines, i, lastIndex);
-                        pages.add(page);
+                        List<String> pageSubList = lines.subList(i, lastIndex);
+                        pages.add(convertToPage(pageSubList));
                     }
                 lastIndex = i;
                 }
@@ -61,54 +58,43 @@ public class Database {
      * @param lastIndex the index (exclusive) where the converion ends.
      * @return a Page-object corresponding to the lines read.
      */
-    public static Page convertToPage(List<String> lines, int firstIndex, int lastIndex) {
-      String title = lines.subList(firstIndex, lastIndex).get(1);
-      String URL = lines.subList(firstIndex, lastIndex).get(0).substring(6);
-      List<String> content = lines.subList(firstIndex+2, lastIndex);
+    public static Page convertToPage(List<String> lines) {
+      String title = lines.get(1);
+      String URL = lines.get(0).substring(6);
+      List<String> content = lines.subList(2,lines.size());
       Page page = new Page(title, URL, content);
       return page;
     }
 
+    public void invertedIndex() {
+        for (Page page : pages) { // This is a "for-each" loop that iterates over a collection of Page objects.
+            for (String line : page.getContent()) { // page.getContent() returns a List<String>. 
+                String[] words = line.split("\\W+"); // Split the line into words. 
+                for (String word : words) {
+                    word = word.toLowerCase(); // Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word. TO-DO-check if we want that kind of case-insensitivity?
+                    if (!word.isEmpty()) { // Check if the word is not empty after splitting. 
+                        invertedIndex.computeIfAbsent(word, k -> new ArrayList<>()).add(page); //Returns the value associated with the key 'word' (computes the value as a new, empty ArrayList, if key is not already present) and then adds the page to that value (List).
+                    }
+                }
+            }
+        }
+    }
+  
     /** Matches the main database of web pages with the search term
      * @param searchTerm the query to be answered. TODO: change to a Query type
      * @return a List<Page> containing the matching pages
      */
-     public void invertedIndex() {
-
-      for (Page page : pages) { // This is a "for-each" loop that iterates over a collection of Page objects.
-          for (String line : page.getContent()) { // page.getContent() returns a List<String>. 
-              String[] words = line.split("\\W+"); // Split the line into words. 
-              for (String word : words) {
-                  word = word.toLowerCase(); // Normalize to lowercase. Ensures that the search is case-insensitive: 'Word' and 'word' will be treated as the same word. TO-DO-check if we want that kind of case-insensitivity?
-                  if (!word.isEmpty()) { // Check if the word is not empty after splitting. 
-                      invertedIndex.computeIfAbsent(word, k -> new ArrayList<>()).add(page); //Returns the value associated with the key 'word' (computes the value as a new, empty ArrayList, if key is not already present) and then adds the page to that value (List).
-                  }
-              }
-          }
-      }
-    }
-  
-    public List<Page> search(String searchTerm) { //Iterates through the stored pages and try to find one where the word exists
+    public List<Page> search(String searchTerm) {
       List<Page> result = new ArrayList<>();
       String word = searchTerm.toLowerCase();
 
-      //The previous implementation
-      //if(pages!=null) {
-      //  for (Page page : pages) {
-      //    if (page.getContent().contains(searchTerm)) result.add(page);
-      //  }
-      //}
-      //  return result;
-      //}
       if(invertedIndex.containsKey(word)) {
           for (Page page : invertedIndex.get(word)) {
             if(!result.contains(page)) result.add(page);
           }
-      }
-        return result;  
-      }
+      } return result;  
+    }
     
-
     /**
      * Returns the number of Page-objects in the page-field of the Database
      * @return the number of Page-objects in the pages field
