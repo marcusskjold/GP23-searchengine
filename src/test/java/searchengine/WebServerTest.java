@@ -2,7 +2,6 @@
 package searchengine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import java.io.IOException;
 import java.net.BindException;
@@ -17,11 +16,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class WebServerTest {
