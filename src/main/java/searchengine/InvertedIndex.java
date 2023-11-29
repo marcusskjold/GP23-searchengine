@@ -13,12 +13,12 @@ public class InvertedIndex {
         invertedIndex = new HashMap<>();
         int firstIndex = 0;
         for (int i = 0; i < lines.size(); ++i) {
-                if ((lines.get(i).startsWith("*PAGE") || i==lines.size()-1) && firstIndex!=0) { //If it reaches a page or the end of the list. And if it is not the first entry of the list.
-                    if(lines.subList(firstIndex, i).size()>2) { // If not erroneous page
+                if ((lines.get(i).startsWith("*PAGE") || i==lines.size()-1) ) { //If it reaches a page or the end of the list. And if it is not the first entry of the list.
+                    if(lines.subList(firstIndex, i).size()>2 && firstIndex!=0) { // If not erroneous page
                         Page page = Database.convertToPage(lines.subList(firstIndex, i)); //Convert part of list to a page
                         addToInvertedIndex(page); //Add to inverted index.
                     }
-                firstIndex = i;
+                    firstIndex = i;
             }
         }
     }
