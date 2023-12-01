@@ -11,14 +11,14 @@ public class InvertedIndex {
 
     public InvertedIndex(List<String> lines) {
         invertedIndex = new HashMap<>();
-        int firstIndex = 0;
-        for (int i = 0; i < lines.size(); ++i) {
-                if ((lines.get(i).startsWith("*PAGE") || i==lines.size()-1) ) { //If it reaches a page or the end of the list. And if it is not the first entry of the list.
-                    if(lines.subList(firstIndex, i).size()>2 && firstIndex!=0) { // If not erroneous page
+        int firstIndex = lines.indexOf(lines.stream().filter(w -> w.startsWith("*PAGE")).findFirst().orElse(null)); //Set first index equal to first instance of *PAGE. Returns index -1 if no instance
+        for (int i = firstIndex+1; i < lines.size(); ++i) { //Starting from the index succeeding first index of page till the end of the list.
+                if ((lines.get(i).startsWith("*PAGE") || i==lines.size()-1) ) { //If it reaches a page or the end of the list.
+                    if(lines.subList(firstIndex, i).size()>2) { // If not erroneous page
                         Page page = Database.convertToPage(lines.subList(firstIndex, i)); //Convert part of list to a page
                         addToInvertedIndex(page); //Add to inverted index.
                     }
-                    firstIndex = i;
+                    firstIndex = i; //First index for conversion now at next instance of *PAGE.
             }
         }
     }
