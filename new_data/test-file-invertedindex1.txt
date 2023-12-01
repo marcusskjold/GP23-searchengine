@@ -1,0 +1,8 @@
+word1
+word2
+word3
+*PAGEhttp:www.page1.com
+title
+*PAGEhttp:www.page2.com
+word1
+*PAGEhttp:www.page3.com

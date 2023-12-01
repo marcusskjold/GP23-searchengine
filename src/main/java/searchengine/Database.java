@@ -46,7 +46,7 @@ public class Database {
      */
     public static Page convertToPage(List<String> lines) {
       String title = lines.get(1);
-      String URL = lines.get(0).substring(6);
+      String URL = lines.get(0).substring(6); //Will throw error if no URL is listed after Page as of right now?
       List<String> content = lines.subList(2,lines.size());
       Page page = new Page(title, URL, content);
       return page;

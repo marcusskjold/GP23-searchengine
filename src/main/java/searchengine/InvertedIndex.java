@@ -35,4 +35,8 @@ public class InvertedIndex {
             new HashSet<Page>() : 
             new HashSet<Page>(invertedIndex.get(key));
     }
+
+    public Map<String, Set<Page>> getInvertedIndex() {
+        return invertedIndex;
+    }
 }
