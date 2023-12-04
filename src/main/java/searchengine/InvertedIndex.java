@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class InvertedIndex {
     private Map<String, Set<Page>> invertedIndex;
+    private int pageNumber;
 
     public InvertedIndex(List<String> lines) {
         invertedIndex = new HashMap<>();
@@ -16,6 +17,7 @@ public class InvertedIndex {
                 if ((lines.get(i).startsWith("*PAGE") || i==lines.size()-1) ) { //If it reaches a page or the end of the list.
                     if(lines.subList(firstIndex, i).size()>2) { // If not erroneous page
                         Page page = Database.convertToPage(lines.subList(firstIndex, i)); //Convert part of list to a page
+                        pageNumber++;
                         addToInvertedIndex(page); //Add to inverted index.
                     }
                     firstIndex = i; //First index for conversion now at next instance of *PAGE.
@@ -46,5 +48,9 @@ public class InvertedIndex {
 
     public Map<String, Set<Page>> getInvertedIndex() {
         return invertedIndex;
+    }
+
+    public int getPageNumber () {
+        return pageNumber;
     }
 }
