@@ -31,6 +31,9 @@ public class Database {
         catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /** Converts part of a list of String-objects to a Page-object, 

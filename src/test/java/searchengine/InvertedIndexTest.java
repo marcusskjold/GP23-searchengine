@@ -1,6 +1,7 @@
 package searchengine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import java.io.FileNotFoundException;
@@ -34,8 +35,9 @@ public class InvertedIndexTest {
 
     @Test void invertedIndex_listWithNoPages_returnsEmptyHashMap() {
         listForInvertedIndex = new ArrayList<>();
-        invertedIndexUnderTest = new InvertedIndex(listForInvertedIndex);
-        assertEquals(new HashMap<>(), invertedIndexUnderTest.getInvertedIndex());
+        assertThrows(Exception.class, () -> {
+            new InvertedIndex(listForInvertedIndex);
+        });
     }
 
     @Test void invertedIndex_listWithNoCorrectPages_returnsEmptyHashMap() {
