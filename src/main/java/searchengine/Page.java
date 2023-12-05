@@ -25,7 +25,7 @@ public class Page {
         this.content = content;
     }
 
-    public List<String> getContent() { return content;}
+    public List<String> getContent() { return content; }
 
     public String getTitle() { return title; }
     
