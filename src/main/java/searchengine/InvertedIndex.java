@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class InvertedIndex {
     private Map<String, Set<Page>> invertedIndex;
+    private int pageNumber;
 
     public InvertedIndex(List<String> lines) throws Exception {
         invertedIndex = new HashMap<>();
@@ -22,6 +23,7 @@ public class InvertedIndex {
                         // If not erroneous page
                         Page page = Database.convertToPage(lines.subList(firstIndex, i)); 
                         //Convert part of list to a page
+                        pageNumber++;
                         addToInvertedIndex(page); 
                         //Add to inverted index.
                     }
@@ -49,5 +51,9 @@ public class InvertedIndex {
 
     public Map<String, Set<Page>> getInvertedIndex() {
         return invertedIndex;
+    }
+
+    public int getPageNumber () {
+        return pageNumber;
     }
 }

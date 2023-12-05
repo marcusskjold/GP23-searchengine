@@ -74,8 +74,12 @@ public class Database {
         return result;
     }
 
-    private Set<Page> matchWord(String word) {
+    public Set<Page> matchWord(String word) { //Made public for invertedIndex
       Set<Page> match = invertedIndex.getPages(word);
       return match == null ? new HashSet<>() : match;
+    }
+
+    public int pagesInDataBase () {
+      return invertedIndex.getPageNumber();
     }
 }
