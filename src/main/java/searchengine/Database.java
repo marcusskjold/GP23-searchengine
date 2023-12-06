@@ -51,6 +51,8 @@ public class Database {
       return page;
     }
     
+
+    //Can probably rank here!
     public Set<Page> matchQuery(Query q){
         Set<Page> results = new HashSet<>();
         for (Set<String> ANDSet : q.getORSet()){

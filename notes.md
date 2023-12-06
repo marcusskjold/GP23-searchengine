@@ -49,4 +49,4 @@ We will see if we end up needing a more structured approach
 ## Questions for Poul:
 1. Look at our class diagram
 2. How are we doing? 
-3. 
+3. What should we count as the entire corpus in our page-ranker, when computing IDF.
