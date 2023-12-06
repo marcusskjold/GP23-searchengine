@@ -37,18 +37,22 @@ public class InvertedIndex {
         pageNumber++;
     }
 
-    public void addToInvertedIndex(Page page) {
+    private void addToInvertedIndex(Page page) {
         for (String word : page.getContent()) { 
             // page.getContent() returns a List<String>. 
             invertedIndex.computeIfAbsent(
                 word.toLowerCase(), k -> new HashSet<>()).add(page);
-                /* Returns the value associated with the key 'word' 
-                * (computes the value as a new, empty ArrayList, if key is not already present) 
-                * and then adds the page to that value (List).
-                */
         }
     }
 
+
+    /** Returns a Set from the inverted index associated with a given key String. 
+     *  If that index is null, it just returns an empty Set, to avoid a NullPointerException
+     *  from creating set with 'null'. Creates new Set to avoid altering the entries
+     *  of the inverted index.
+     *  @param key the key to fetch the mapping for.
+     *  @return a Set<Page> corresponding to the mapping of the key.
+     */
     public Set<Page> getPages(String key) {
         return invertedIndex.get(key)==null ? 
             new HashSet<Page>() : new HashSet<Page>(invertedIndex.get(key));

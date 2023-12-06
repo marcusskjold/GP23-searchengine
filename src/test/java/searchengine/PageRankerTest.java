@@ -30,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class PageRankerTest {
+
     private Database database;
     private InvertedIndex index;
     private Set<Page> pagesUnderTest;
