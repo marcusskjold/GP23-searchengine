@@ -38,13 +38,13 @@ public class PageRanker {
             //Computation of IDF
     }
 
-    public static double computeTFIDF (Page page, String term, Database database) { 
+    public static double computeTFIDF (Page page, String term) { 
             //computes the TF-IDF value for the given page in a given database, for the given search term
         return (computeIDF(database, term))*computeTF(term, page);
     }
 
 
-    public static double rankPageFromQuery (Query query, Page page, Database database) {
+    public static double rankPage (Page page, Query query) {
         //Creates list for ranks of each OR-sequence
         List<Integer> orRanks = new ArrayList<>();
         //For each AND-set
@@ -54,7 +54,7 @@ public class PageRanker {
             //And then for each word in the andset
             for (String word : ANDSet) {
                 //Compute its TFIDF and add it to the rank
-                queryRank += PageRanker.computeTFIDF(page, word, database);
+                queryRank += PageRanker.computeTFIDF(page, word);
             }
             //And add that rank to the list of ranks
             orRanks.add(queryRank);
