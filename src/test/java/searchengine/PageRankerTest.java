@@ -2,6 +2,8 @@ package searchengine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.TestInstance.Lifecycle;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -66,6 +68,34 @@ public class PageRankerTest {
             e.printStackTrace();
         } 
     }
+
+    // Test created to check for non existing terms in TF method
+    @Test void computeTF_NonExistentTerm_returnZero() {
+        try {
+             List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt")); 
+             Page page = Database.convertToPage(lines.subList(0,4)); 
+             double pageRankUnderTest = PageRanker.computeTF("nonWord1", page);
+             assertEquals(0, pageRankUnderTest);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Test to check for Term in Compute-IDF method which does not exist in the database
+
+    @Test void computeIDF_NonExistentTerm_returnCorrectvalue(){
+        try {
+            Database databaseUnderTest = new Database("new_data/test-file-database1.txt"); 
+            double pageRankUnderTest = PageRanker.computeIDF(databaseUnderTest, "nonWord1"); 
+            assertTrue (Double.isInfinite(pageRankUnderTest)); 
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     @Test void rankPages_SetOfCorrectPages_returnCorrectSortedList() {
         setUpDatabase("new_data/test-file-pageRanker1.txt");
