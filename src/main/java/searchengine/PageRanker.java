@@ -46,7 +46,7 @@ public class PageRanker {
 
     public static double rankPage (Page page, Query query) {
         //Creates list for ranks of each OR-sequence
-        List<Integer> orRanks = new ArrayList<>();
+        List<Integer> orRanks = new ArrayList<>(); //Okay that it is not double?
         //For each AND-set
         for (Set<String> ANDSet : query.getORSet()){
             //Creates variable for its rank
