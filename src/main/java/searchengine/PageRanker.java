@@ -40,7 +40,7 @@ public class PageRanker {
 
     public static double computeTFIDF (Page page, String term) { 
             //computes the TF-IDF value for the given page in a given database, for the given search term
-        return (computeIDF(term))*computeTF(term, page);
+        return (1+computeIDF(term))*computeTF(term, page);
     }
 
 
