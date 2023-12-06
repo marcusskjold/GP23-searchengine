@@ -11,13 +11,12 @@ public class QueryHandler{
 
     public QueryHandler(String filename) throws IOException{
         this.database = new Database(filename); 
-        PageRanker.setDatabase(database);
     }
 
     public List<Page> search(String searchString) {
         Query q = new Query(splitSearchString(searchString));
         Set<Page> result = database.matchQuery(q);
-        return PageRanker.rankPages(result, q, database);
+        return PageRanker.rankPages(result, q);
     }
 
     public Set<Set<String>> splitSearchString(String searchString) {

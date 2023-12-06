@@ -7,17 +7,17 @@ import java.util.Set;
 import java.util.Comparator;
 
 public class PageRanker {
-    private static Database database;
+    private static InvertedIndex invertedIndex;
 
-    public static List<Page> rankPages(Set<Page> pages, Query q, Database db){
+    public static List<Page> rankPages(Set<Page> pages, Query q){
         return pages.stream()
                     .sorted(Comparator.comparing(p -> rankPage(p, q)))
                     .toList();
 
     }
 
-    public static void setDatabase(Database db){
-        database = db;
+    public static void setInvertedIndex(InvertedIndex index){
+        invertedIndex = index;
     }
         
     public static double computeTF (String term, Page page){
@@ -29,10 +29,10 @@ public class PageRanker {
             //Used double to avoid casting and avoiding int division
     }
 
-    public static double computeIDF (Database database, String term){
-        double totalDocs = database.pagesInDataBase(); 
+    public static double computeIDF (String term){
+        double totalDocs = invertedIndex.getPageNumber(); 
             //Total number of documents in database
-        double docsWithTerm = database.matchWord(term).size(); 
+        double docsWithTerm = invertedIndex.getPages(term).size(); 
             //Total number of documents in database with searchterm
         return Math.log(totalDocs/docsWithTerm); 
             //Computation of IDF
@@ -40,7 +40,7 @@ public class PageRanker {
 
     public static double computeTFIDF (Page page, String term) { 
             //computes the TF-IDF value for the given page in a given database, for the given search term
-        return (computeIDF(database, term))*computeTF(term, page);
+        return (computeIDF(term))*computeTF(term, page);
     }
 
 

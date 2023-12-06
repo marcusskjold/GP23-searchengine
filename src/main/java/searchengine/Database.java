@@ -27,6 +27,7 @@ public class Database {
         try {
             List<String> lines = Files.readAllLines(Paths.get(filename)); 
             invertedIndex = new InvertedIndex(lines);
+            PageRanker.setInvertedIndex(invertedIndex);
         } 
         catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -34,21 +35,6 @@ public class Database {
         catch (Exception e){
             e.printStackTrace();
         }
-    }
-
-    /** Converts part of a list of String-objects to a Page-object, 
-     * the URL must be at the first line, preceded by "*PAGE:"
-     * the title as the next line 
-     * and each word of the content of the webpages as a separate line.
-     * @param lines the List of String-objects to convert from.
-     * @return a Page-object corresponding to the lines read.
-     */
-    public static Page convertToPage(List<String> lines) {
-      String title = lines.get(1);
-      String URL = lines.get(0).substring(6); //Will throw error if no URL is listed after Page as of right now?
-      List<String> content = lines.subList(2,lines.size());
-      Page page = new Page(title, URL, content);
-      return page;
     }
     
 
@@ -76,7 +62,7 @@ public class Database {
         return result;
     }
 
-    public Set<Page> matchWord(String word) { //Made public for invertedIndex
+    public Set<Page> matchWord(String word) { // Made public for invertedIndex
         Set<Page> match = invertedIndex.getPages(word);
         return match == null ? new HashSet<>() : match;
     }

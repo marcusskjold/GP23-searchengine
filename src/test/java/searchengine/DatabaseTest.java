@@ -80,7 +80,7 @@ public class DatabaseTest {
     @Test void convertToPage_ConvertibleList_createsCorrectPageObject() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt"));
-            Page page = Database.convertToPage(lines.subList(0, 4));
+            Page page = InvertedIndex.convertToPage(lines.subList(0, 4));
             assertEquals(new Page("title1", "http://page1.com", lines), page);
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,7 +91,7 @@ public class DatabaseTest {
     @Test void convertToPage_ConvertibleList_createsCorrectContent() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt"));
-            Page page = Database.convertToPage(lines.subList(0, 4));
+            Page page = InvertedIndex.convertToPage(lines.subList(0, 4));
             Page expectedPage = new Page("title1",
                                            "http://page1.com", 
                                                lines.subList(2, 4));
