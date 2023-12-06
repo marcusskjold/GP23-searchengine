@@ -61,7 +61,7 @@ public class Database {
         return result;
     }
 
-    public Set<Page> matchWord(String word) { //Made public for invertedIndex
+    public Set<Page> matchWord(String word) { // Made public for invertedIndex
         Set<Page> match = invertedIndex.getPages(word);
         return match == null ? new HashSet<>() : match;
     }

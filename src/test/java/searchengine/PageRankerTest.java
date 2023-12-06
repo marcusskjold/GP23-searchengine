@@ -59,12 +59,17 @@ public class PageRankerTest {
 
     @Test void computeIDF_PageWithWords_returnCorrectValue() {
         try {
-            Database databaseUnderTest = new Database("new_data/test-file-database1.txt");
-            double pageRankUnderTest = PageRanker.computeIDF(databaseUnderTest, "word1");
+            PageRanker.setDatabase(new Database("new_data/test-file-database1.txt"));
+            double pageRankUnderTest = PageRanker.computeIDF("word1");
             assertEquals(0, pageRankUnderTest);
         } catch (Exception e) {
             e.printStackTrace();
         } 
+    }
+
+    @Test void rankPages_SetOfCorrectPages_returnCorrectSortedList() {
+        setUpDatabase("new_data/test-file-pageRanker1.txt");
+        
     }
 
 
