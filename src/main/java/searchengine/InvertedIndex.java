@@ -49,11 +49,7 @@ public class InvertedIndex {
             new HashSet<Page>() : new HashSet<Page>(invertedIndex.get(key));
     }
 
-    public Map<String, Set<Page>> getInvertedIndex() {
-        return invertedIndex;
-    }
+    public Map<String, Set<Page>> getInvertedIndex() { return invertedIndex; }
 
-    public int getPageNumber () {
-        return pageNumber;
-    }
+    public int getPageNumber () { return pageNumber; }
 }
