@@ -34,16 +34,23 @@ public class PageRankerTest {
     private Database database;
     private InvertedIndex index;
     private Set<Page> pagesUnderTest;
+    private List<Page> expectedResult;
 
     void setUpDatabase(String filePath){
         try {database = new Database(filePath);} 
         catch (IOException e) { e.printStackTrace(); }
     }
 
+    void addTestPage(String URL){
+        Page page = new Page("expectedResult", URL, null);
+        expectedResult.add(page);
+    }
+
     void setUpIndex(String filename) {
         try {
             List<String> lines = Files.readAllLines(Paths.get(filename)); 
             index = new InvertedIndex(lines);
+            PageRanker.setInvertedIndex(index);
         } 
         catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -56,6 +63,7 @@ public class PageRankerTest {
     @BeforeEach void initializeDatabase(){ 
         database = null; 
         pagesUnderTest = null;
+        expectedResult = new ArrayList<>();
     }
     
     @Test void computeTF_PageWithWords_returnCorrectValue() {
@@ -100,8 +108,18 @@ public class PageRankerTest {
     }
 
     @Test void rankPages_SetOfCorrectPages_returnCorrectSortedList() {
+        addTestPage("http://page1.com");
+        addTestPage("http://page2.com");
+        addTestPage("http://page3.com");
+        addTestPage("http://page4.com");
+        addTestPage("http://page5.com");
+
         setUpIndex("new_data/test-file-pageRanker1.txt");
-        
+        Set<Page> pages = index.getPages("word1");
+        Query q = new Query("word2");
+        List<Page> results = PageRanker.rankPages(pages, q);
+
+        assertEquals(expectedResult, results);
         
     }
 
