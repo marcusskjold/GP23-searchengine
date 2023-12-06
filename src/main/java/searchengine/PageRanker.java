@@ -1,5 +1,10 @@
 package searchengine;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 public class PageRanker {
     
    public static double computeTF (String term, Page page){
@@ -18,4 +23,23 @@ public class PageRanker {
         return (computeIDF(database, term))*computeTF(term, page);
     }
 
+
+    public static double rankPageFromQuery (Query query, Page page, Database database) {
+        //Creates list for ranks of each OR-sequence
+        List<Integer> orRanks = new ArrayList<>();
+        //For each AND-set
+        for (Set<String> ANDSet : query.getORSet()){
+            //Creates variable for its rank
+            int queryRank = 0;
+            //And then for each word in the andset
+            for (String word : ANDSet) {
+                //Compute its TFIDF and add it to the rank
+                queryRank += PageRanker.computeTFIDF(page, word, database);
+            }
+            //And add that rank to the list of ranks
+            orRanks.add(queryRank);
+        }
+        //Lastly return the highest of those ranks
+        return Collections.max(orRanks);
+    }
 }
