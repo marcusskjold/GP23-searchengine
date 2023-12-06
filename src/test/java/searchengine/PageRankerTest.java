@@ -31,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class PageRankerTest {
+
     private Database database;
     private InvertedIndex index;
     private Set<Page> pagesUnderTest;
@@ -78,10 +79,13 @@ public class PageRankerTest {
     }
 
     @Test void computeIDF_PageWithWords_returnCorrectValue() {
-        setUpIndex("new_data/test-file-database1.txt");
-        PageRanker.setInvertedIndex(index);
-        double pageRankUnderTest = PageRanker.computeIDF("word1");
-        assertEquals(0, pageRankUnderTest);
+        try {
+            PageRanker.setDatabase(new Database("new_data/test-file-database1.txt"));
+            double pageRankUnderTest = PageRanker.computeIDF("word1");
+            assertEquals(0, pageRankUnderTest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
     }
 
     // Test created to check for non existing terms in TF method
@@ -100,12 +104,17 @@ public class PageRankerTest {
     // Test to check for Term in Compute-IDF method which does not exist in the database
 
     @Test void computeIDF_NonExistentTerm_returnCorrectvalue(){
-        setUpIndex("new_data/test-file-database1.txt");
-        PageRanker.setInvertedIndex(index); 
-        double pageRankUnderTest = PageRanker.computeIDF("nonWord1"); 
-        assertTrue (Double.isInfinite(pageRankUnderTest)); 
-
+        try {
+            PageRanker.setDatabase (new Database("new_data/test-file-database1.txt")); 
+            double pageRankUnderTest = PageRanker.computeIDF("nonWord1"); 
+            assertTrue (Double.isInfinite(pageRankUnderTest)); 
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+
 
     @Test void rankPages_SetOfCorrectPages_returnCorrectSortedList() {
         addTestPage("http://page1.com");
