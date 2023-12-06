@@ -29,13 +29,27 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class PageRankerTest {
+    private Database database;
+    private Set<Page> pagesUnderTest;
+
+    void setUpDatabase(String filePath){
+        try {database = new Database(filePath);} 
+        catch (IOException e) { e.printStackTrace(); }
+    }
+
+    void setUpPageSet(){
+
+    }
+
+    @BeforeEach void initializeDatabase(){ 
+        database = null; 
+        pagesUnderTest = null;
+    }
     
-
-
     @Test void computeTF_PageWithWords_returnCorrectValue() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt"));
-            Page page = Database.convertToPage(lines.subList(0, 4));
+            Page page = InvertedIndex.convertToPage(lines.subList(0, 4));
             double pageRankUnderTest = PageRanker.computeTF("word1", page);
             assertEquals(0.5, pageRankUnderTest);
         } catch (Exception e) {
