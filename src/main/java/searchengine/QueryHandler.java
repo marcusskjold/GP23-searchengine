@@ -4,17 +4,20 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 public class QueryHandler{
     private Database database;
 
     public QueryHandler(String filename) throws IOException{
         this.database = new Database(filename); 
+        PageRanker.setDatabase(database);
     }
 
-    public Set<Page> search(String searchString) {
+    public List<Page> search(String searchString) {
         Query q = new Query(splitSearchString(searchString));
-        return database.matchQuery(q);
+        Set<Page> result = database.matchQuery(q);
+        return PageRanker.rankPages(result, q, database);
     }
 
     public Set<Set<String>> splitSearchString(String searchString) {

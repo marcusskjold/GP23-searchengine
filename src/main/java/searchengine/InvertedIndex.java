@@ -12,6 +12,7 @@ public class InvertedIndex {
 
     public InvertedIndex(List<String> lines) throws Exception {
         invertedIndex = new HashMap<>();
+        pageNumber = 0;
         int firstIndex = lines.indexOf(lines.stream().filter(w -> w.startsWith("*PAGE")).findFirst().orElse(null)); 
         if (firstIndex == -1) throw new Exception("Faulty data file, no pages correctly marked as ”*PAGE”");
         //Set first index equal to first instance of *PAGE. Returns index -1 if no instance
@@ -49,11 +50,7 @@ public class InvertedIndex {
             new HashSet<Page>() : new HashSet<Page>(invertedIndex.get(key));
     }
 
-    public Map<String, Set<Page>> getInvertedIndex() {
-        return invertedIndex;
-    }
+    public Map<String, Set<Page>> getInvertedIndex() { return invertedIndex; }
 
-    public int getPageNumber () {
-        return pageNumber;
-    }
+    public int getPageNumber () { return pageNumber; }
 }

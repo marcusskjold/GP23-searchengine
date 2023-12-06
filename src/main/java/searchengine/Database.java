@@ -51,6 +51,8 @@ public class Database {
       return page;
     }
     
+
+    //Can probably rank here!
     public Set<Page> matchQuery(Query q){
         Set<Page> results = new HashSet<>();
         for (Set<String> ANDSet : q.getORSet()){
@@ -75,8 +77,8 @@ public class Database {
     }
 
     public Set<Page> matchWord(String word) { //Made public for invertedIndex
-      Set<Page> match = invertedIndex.getPages(word);
-      return match == null ? new HashSet<>() : match;
+        Set<Page> match = invertedIndex.getPages(word);
+        return match == null ? new HashSet<>() : match;
     }
 
     public int pagesInDataBase () {

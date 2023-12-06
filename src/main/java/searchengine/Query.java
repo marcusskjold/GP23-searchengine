@@ -11,10 +11,10 @@ public class Query {
         URLFilter = "";
     }
 
-    public Set<Set<String>> getORSet(){ return orSet; }
+    public Set<Set<String>> getORSet() { return orSet; }
 
     public String getURLFilter() { return URLFilter; }
 
-    public void setURLFilter(String URLsegment){ URLFilter = URLsegment; }
+    public void setURLFilter(String URLsegment) { URLFilter = URLsegment; }
 
 }
