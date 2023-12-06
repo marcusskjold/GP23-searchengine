@@ -25,6 +25,19 @@ public class Page {
         this.content = content;
     }
 
+    /** Creates a new Page from part of a list of String-objects, 
+     * the URL must be at the first line, preceded by "*PAGE:"
+     * the title as the next line 
+     * and each word of the content of the webpages as a separate line.
+     * @param lines the List of String-objects to convert from.
+     * @return a Page-object corresponding to the lines read.
+     */
+    public Page(List<String> lines) {
+            title = lines.get(1);
+            URL = lines.get(0).substring(6); //Will throw error if no URL is listed after Page as of right now?
+            content = lines.subList(2,lines.size());
+    }
+
     public List<String> getContent() { return content; }
 
     public String getTitle() { return title; }

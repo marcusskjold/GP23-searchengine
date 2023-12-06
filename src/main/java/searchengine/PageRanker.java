@@ -13,7 +13,6 @@ public class PageRanker {
         return pages.stream()
                     .sorted(Comparator.comparing(p -> rankPage(p, q)))
                     .toList();
-
     }
 
     public static void setInvertedIndex(InvertedIndex index){
@@ -40,17 +39,17 @@ public class PageRanker {
 
     public static double computeTFIDF (Page page, String term) { 
             //computes the TF-IDF value for the given page in a given database, for the given search term
-        return (computeIDF(term))*computeTF(term, page);
+        return (1+computeIDF(term))*computeTF(term, page);
     }
 
 
     public static double rankPage (Page page, Query query) {
         //Creates list for ranks of each OR-sequence
-        List<Integer> orRanks = new ArrayList<>(); //Okay that it is not double?
+        List<Double> orRanks = new ArrayList<>();
         //For each AND-set
         for (Set<String> ANDSet : query.getORSet()){
             //Creates variable for its rank
-            int queryRank = 0;
+            double queryRank = 0;
             //And then for each word in the andset
             for (String word : ANDSet) {
                 //Compute its TFIDF and add it to the rank

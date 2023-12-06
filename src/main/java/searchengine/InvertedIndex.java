@@ -22,7 +22,7 @@ public class InvertedIndex {
                     //If it reaches a page or the end of the list.
                     if(lines.subList(firstIndex, i).size()>2) { 
                         // If not erroneous page
-                        Page page = convertToPage(lines.subList(firstIndex, i)); 
+                        Page page = new Page(lines.subList(firstIndex, i)); 
                         //Convert part of list to a page
                         pageNumber++;
                         addToInvertedIndex(page); 
@@ -33,33 +33,22 @@ public class InvertedIndex {
         }
     }
 
-    /** Converts part of a list of String-objects to a Page-object, 
-     * the URL must be at the first line, preceded by "*PAGE:"
-     * the title as the next line 
-     * and each word of the content of the webpages as a separate line.
-     * @param lines the List of String-objects to convert from.
-     * @return a Page-object corresponding to the lines read.
-     */
-    public static Page convertToPage(List<String> lines) {
-        String title = lines.get(1);
-        String URL = lines.get(0).substring(6); //Will throw error if no URL is listed after Page as of right now?
-        List<String> content = lines.subList(2,lines.size());
-        Page page = new Page(title, URL, content);
-        return page;
-      }
-
-    public void addToInvertedIndex(Page page) {
+    private void addToInvertedIndex(Page page) {
         for (String word : page.getContent()) { 
             // page.getContent() returns a List<String>. 
             invertedIndex.computeIfAbsent(
                 word.toLowerCase(), k -> new HashSet<>()).add(page);
-                /* Returns the value associated with the key 'word' 
-                * (computes the value as a new, empty ArrayList, if key is not already present) 
-                * and then adds the page to that value (List).
-                */
         }
     }
-    
+
+
+    /** Returns a Set from the inverted index associated with a given key String. 
+     *  If that index is null, it just returns an empty Set, to avoid a NullPointerException
+     *  from creating set with 'null'. Creates new Set to avoid altering the entries
+     *  of the inverted index.
+     *  @param key the key to fetch the mapping for.
+     *  @return a Set<Page> corresponding to the mapping of the key.
+     */
     public Set<Page> getPages(String key) {
         return invertedIndex.get(key)==null ? 
             new HashSet<Page>() : new HashSet<Page>(invertedIndex.get(key));

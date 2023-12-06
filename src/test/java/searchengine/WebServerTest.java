@@ -28,7 +28,7 @@ public class WebServerTest {
             Random rnd = new Random();
             while (server == null) {
                 try {
-                    server = new WebServer(rnd.nextInt(60000) + 1024, "new_data/test-file-errors2.txt");
+                    server = new WebServer(rnd.nextInt(60000) + 1024, "new_data/test-file-errors1.txt");
                 } catch (BindException e) {}
             }
         } catch (IOException e) {
