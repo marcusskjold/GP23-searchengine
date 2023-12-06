@@ -73,7 +73,7 @@ public class PageRankerTest {
     @Test void computeTF_NonExistentTerm_returnZero() {
         try {
              List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt")); 
-             Page page = Database.convertToPage(lines.subList(0,4)); 
+             Page page = InvertedIndex.convertToPage(lines.subList(0,4)); 
              double pageRankUnderTest = PageRanker.computeTF("nonWord1", page);
              assertEquals(0, pageRankUnderTest);
             
@@ -86,8 +86,8 @@ public class PageRankerTest {
 
     @Test void computeIDF_NonExistentTerm_returnCorrectvalue(){
         try {
-            Database databaseUnderTest = new Database("new_data/test-file-database1.txt"); 
-            double pageRankUnderTest = PageRanker.computeIDF(databaseUnderTest, "nonWord1"); 
+            PageRanker.setDatabase(new Database("new_data/test-file-database1.txt")); 
+            double pageRankUnderTest = PageRanker.computeIDF("nonWord1"); 
             assertTrue (Double.isInfinite(pageRankUnderTest)); 
             
         } catch (Exception e) {
