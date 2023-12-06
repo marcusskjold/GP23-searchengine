@@ -54,6 +54,7 @@ public class PageRankerTest {
         } 
         catch (FileNotFoundException e) {
             e.printStackTrace();
+            return;
         }
         catch (Exception e){
             e.printStackTrace();
@@ -92,7 +93,6 @@ public class PageRankerTest {
         List<Double> expectedResult = new ArrayList<>(result);
         expectedResult.sort(null);
         assertEquals(result, expectedResult);
-        
     }
 
     // SetInvertedIndex

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 public class InvertedIndex {
@@ -11,6 +12,7 @@ public class InvertedIndex {
     private int pageNumber;
 
     public InvertedIndex(List<String> lines) throws Exception {
+        if (lines.isEmpty()) throw new Exception("Lines are empty");
         invertedIndex = new HashMap<>();
         pageNumber = 0;
         int firstIndex = lines.indexOf(lines.stream().filter(w -> w.startsWith("*PAGE")).findFirst().orElse(null)); 

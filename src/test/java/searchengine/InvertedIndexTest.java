@@ -48,6 +48,14 @@ public class InvertedIndexTest {
         });
     }
 
+    @Test void constructer_dataFileWithNoLines_throwsException() {
+        assertThrows(Exception.class, () -> {
+            List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-emptyDatabase.txt")); 
+            new InvertedIndex(lines);
+            
+        });
+    }
+
     @Test void invertedIndex_listWithNoCorrectPages_returnsEmptyHashMap() {
         try {
             listForInvertedIndex = Files.readAllLines(Paths.get("new_data/test-file-invertedindex1.txt"));
