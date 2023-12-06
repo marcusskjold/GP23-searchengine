@@ -3,7 +3,6 @@ package searchengine;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -11,14 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-
-
-// import org.junit.jupiter.params.ParameterizedTest;
-// import org.junit.jupiter.params.provider.MethodSource;
-// import org.junit.jupiter.params.provider.Arguments;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class DatabaseTest {

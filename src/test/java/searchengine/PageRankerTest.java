@@ -1,47 +1,26 @@
 package searchengine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.TestInstance.Lifecycle;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.BindException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
-import java.util.HashSet;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class PageRankerTest {
 
-    private Database database;
     private InvertedIndex index;
-    private Set<Page> pagesUnderTest;
     private List<Page> expectedResult;
 
     // Helper methods
 
-    void setUpDatabase(String filePath){
-        try {database = new Database(filePath);} 
-        catch (IOException e) { e.printStackTrace(); }
-    }
 
     void addTestPage(String URL){
         expectedResult.add(new Page("expectedResult", URL, null));
@@ -63,8 +42,6 @@ public class PageRankerTest {
     }
 
     @BeforeEach void initializeDatabase(){ 
-        database = null; 
-        pagesUnderTest = null;
         expectedResult = new ArrayList<>();
     }
 
@@ -84,17 +61,6 @@ public class PageRankerTest {
 
     //     assertEquals(expectedResult, results);
     // }
-
-    @Test void rankPages_setOfCorrectPages_ranksAccordingToPageRankValue(){
-        setUpIndex("new_data/test-file-pageRanker1.txt");
-        Set<Page> pages = index.getPages("word1");
-        Query q = new Query("word2");
-        List<Page> rankedPages = PageRanker.rankPages(pages, q);
-        List<Double> result = rankedPages.stream().map(p -> PageRanker.rankPage(p, q)).toList();
-        List<Double> expectedResult = new ArrayList<>(result);
-        expectedResult.sort(null);
-        assertEquals(result, expectedResult);
-    }
 
     // SetInvertedIndex
     // TODO
@@ -149,7 +115,6 @@ public class PageRankerTest {
     // Not tested as it is a private method
 
     // rankPage
-    // TODO
 
     @Test void rankPage_givenPage_returnsCorrectValue(){
         setUpIndex("new_data/test-file-pageRanker1.txt");
@@ -166,6 +131,18 @@ public class PageRankerTest {
         // assertTrue(result1 == 0.978515);
         double result3 = PageRanker.rankPage(testPage3, q); // gives 0.917358
         double result4 = PageRanker.rankPage(testPage4, q); // gives 0.815429
+        assert (result2 > result3);
+        assert (result3 > result4);
     }
 
+    @Test void rankPages_setOfCorrectPages_ranksAccordingToPageRankValue(){
+        setUpIndex("new_data/test-file-pageRanker1.txt");
+        Set<Page> pages = index.getPages("word1");
+        Query q = new Query("word2");
+        List<Page> rankedPages = PageRanker.rankPages(pages, q);
+        List<Double> result = rankedPages.stream().map(p -> PageRanker.rankPage(p, q)).toList();
+        List<Double> expectedResult = new ArrayList<>(result);
+        expectedResult.sort(null);
+        assertEquals(result, expectedResult);
+    }
 }
