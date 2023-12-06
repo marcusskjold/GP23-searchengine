@@ -11,7 +11,6 @@ public class QueryHandler{
 
     public QueryHandler(String filename) throws IOException{
         this.database = new Database(filename); 
-        PageRanker.setDatabase(database);
     }
 
     public List<Page> search(String searchString) {

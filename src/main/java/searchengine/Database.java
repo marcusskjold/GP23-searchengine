@@ -27,6 +27,7 @@ public class Database {
         try {
             List<String> lines = Files.readAllLines(Paths.get(filename)); 
             invertedIndex = new InvertedIndex(lines);
+            PageRanker.setInvertedIndex(invertedIndex);
         } 
         catch (FileNotFoundException e) {
             e.printStackTrace();

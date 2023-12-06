@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 
 public class PageRankerTest {
     private Database database;
+    private InvertedIndex index;
     private Set<Page> pagesUnderTest;
 
     void setUpDatabase(String filePath){
@@ -39,8 +40,17 @@ public class PageRankerTest {
         catch (IOException e) { e.printStackTrace(); }
     }
 
-    void setUpPageSet(){
-
+    void setUpIndex(String filename) {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(filename)); 
+            index = new InvertedIndex(lines);
+        } 
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @BeforeEach void initializeDatabase(){ 
@@ -60,13 +70,10 @@ public class PageRankerTest {
     }
 
     @Test void computeIDF_PageWithWords_returnCorrectValue() {
-        try {
-            PageRanker.setDatabase(new Database("new_data/test-file-database1.txt"));
-            double pageRankUnderTest = PageRanker.computeIDF("word1");
-            assertEquals(0, pageRankUnderTest);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } 
+        setUpIndex("new_data/test-file-database1.txt");
+        PageRanker.setInvertedIndex(index);
+        double pageRankUnderTest = PageRanker.computeIDF("word1");
+        assertEquals(0, pageRankUnderTest);
     }
 
     // Test created to check for non existing terms in TF method
@@ -85,20 +92,16 @@ public class PageRankerTest {
     // Test to check for Term in Compute-IDF method which does not exist in the database
 
     @Test void computeIDF_NonExistentTerm_returnCorrectvalue(){
-        try {
-            PageRanker.setDatabase(new Database("new_data/test-file-database1.txt")); 
-            double pageRankUnderTest = PageRanker.computeIDF("nonWord1"); 
-            assertTrue (Double.isInfinite(pageRankUnderTest)); 
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        setUpIndex("new_data/test-file-database1.txt");
+        PageRanker.setInvertedIndex(index); 
+        double pageRankUnderTest = PageRanker.computeIDF("nonWord1"); 
+        assertTrue (Double.isInfinite(pageRankUnderTest)); 
+
     }
 
-
-
     @Test void rankPages_SetOfCorrectPages_returnCorrectSortedList() {
-        setUpDatabase("new_data/test-file-pageRanker1.txt");
+        setUpIndex("new_data/test-file-pageRanker1.txt");
+        
         
     }
 

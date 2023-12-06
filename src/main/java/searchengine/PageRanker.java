@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.Comparator;
 
 public class PageRanker {
-    private static Database database;
+    private static InvertedIndex invertedIndex;
 
     public static List<Page> rankPages(Set<Page> pages, Query q){
         return pages.stream()
@@ -16,8 +16,8 @@ public class PageRanker {
 
     }
 
-    public static void setDatabase(Database db){
-        database = db;
+    public static void setInvertedIndex(InvertedIndex index){
+        invertedIndex = index;
     }
         
     public static double computeTF (String term, Page page){
@@ -30,9 +30,9 @@ public class PageRanker {
     }
 
     public static double computeIDF (String term){
-        double totalDocs = database.pagesInDataBase(); 
+        double totalDocs = invertedIndex.getPageNumber(); 
             //Total number of documents in database
-        double docsWithTerm = database.matchWord(term).size(); 
+        double docsWithTerm = invertedIndex.getPages(term).size(); 
             //Total number of documents in database with searchterm
         return Math.log(totalDocs/docsWithTerm); 
             //Computation of IDF
