@@ -9,7 +9,7 @@ import java.util.Comparator;
 public class PageRanker {
     private static Database database;
 
-    public static List<Page> rankPages(Set<Page> pages, Query q, Database db){
+    public static List<Page> rankPages(Set<Page> pages, Query q){
         return pages.stream()
                     .sorted(Comparator.comparing(p -> rankPage(p, q)))
                     .toList();
@@ -29,7 +29,7 @@ public class PageRanker {
             //Used double to avoid casting and avoiding int division
     }
 
-    public static double computeIDF (Database database, String term){
+    public static double computeIDF (String term){
         double totalDocs = database.pagesInDataBase(); 
             //Total number of documents in database
         double docsWithTerm = database.matchWord(term).size(); 
@@ -40,7 +40,7 @@ public class PageRanker {
 
     public static double computeTFIDF (Page page, String term) { 
             //computes the TF-IDF value for the given page in a given database, for the given search term
-        return (computeIDF(database, term))*computeTF(term, page);
+        return (computeIDF(term))*computeTF(term, page);
     }
 
 
