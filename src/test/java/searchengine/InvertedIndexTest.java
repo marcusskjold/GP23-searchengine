@@ -63,8 +63,8 @@ public class InvertedIndexTest {
         try {
             listForInvertedIndex = Files.readAllLines(Paths.get("new_data/test-file-errors2.txt"));
             invertedIndexUnderTest = new InvertedIndex(listForInvertedIndex); 
-            Page page1 = new Page("title1", "*http://page1.com", null);
-            Page page2 = new Page("title2", "http://page2.com", null);
+            Page page1 = new Page(listForInvertedIndex.subList(3, 8));
+            Page page2 = new Page(listForInvertedIndex.subList(13, 17));
             expectedMap.put("word1", new HashSet<>(Set.of(page1, page2)));
             expectedMap.put("word2", new HashSet<>(Set.of(page1)));
             expectedMap.put("word3", new HashSet<>(Set.of(page2)));
@@ -75,5 +75,28 @@ public class InvertedIndexTest {
         }
     }
 
+    @Test void getPages_keyWithNoMapping_returnsEmptySet() {
+        try {
+        listForInvertedIndex = Files.readAllLines(Paths.get("new_data/test-file-errors2.txt"));
+        invertedIndexUnderTest = new InvertedIndex(listForInvertedIndex);
+        assertEquals(new HashSet<>(), invertedIndexUnderTest.getPages("ockceydockcey"));
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test void getPages_keyWithMappings_returnsSetFromMapping() {
+        try {
+        listForInvertedIndex = Files.readAllLines(Paths.get("new_data/test-file-errors2.txt"));
+        invertedIndexUnderTest = new InvertedIndex(listForInvertedIndex);
+        Page page1 = new Page(listForInvertedIndex.subList(3, 8));
+        Page page2 = new Page(listForInvertedIndex.subList(13, 17));
+        assertEquals(new HashSet<Page>(Set.of(page1, page2)), invertedIndexUnderTest.getPages("word1"));
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
