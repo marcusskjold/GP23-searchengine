@@ -36,6 +36,7 @@ public class Page {
             title = lines.get(1);
             URL = lines.get(0).substring(6); //Will throw error if no URL is listed after Page as of right now?
             content = lines.subList(2,lines.size());
+            content.removeIf(s -> s.isBlank());
     }
 
     public List<String> getContent() { return content; }
