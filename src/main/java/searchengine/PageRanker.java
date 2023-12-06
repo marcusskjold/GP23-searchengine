@@ -19,7 +19,7 @@ public class PageRanker {
         invertedIndex = index;
     }
         
-    public static double computeTF (String term, Page page){
+    private static double computeTF (String term, Page page){
         double termInDoc  = page.getContent().stream().filter(s -> s.equals(term)).count(); 
             //number of times term is in document
         double totalTerms = page.getContent().size();
@@ -28,7 +28,7 @@ public class PageRanker {
             //Used double to avoid casting and avoiding int division
     }
 
-    public static double computeIDF (String term){
+    private static double computeIDF (String term){
         double totalDocs = invertedIndex.getPageNumber(); 
             //Total number of documents in database
         double docsWithTerm = invertedIndex.getPages(term).size(); 
@@ -37,11 +37,10 @@ public class PageRanker {
             //Computation of IDF
     }
 
-    public static double computeTFIDF (Page page, String term) { 
+    private static double computeTFIDF (Page page, String term) { 
             //computes the TF-IDF value for the given page in a given database, for the given search term
         return (1+computeIDF(term))*computeTF(term, page);
     }
-
 
     public static double rankPage (Page page, Query query) {
         //Creates list for ranks of each OR-sequence
