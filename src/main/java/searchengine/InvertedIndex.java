@@ -18,7 +18,7 @@ public class InvertedIndex {
         //Set first index equal to first instance of *PAGE. Returns index -1 if no instance
         for (int i = firstIndex+1; i < lines.size(); ++i) { 
             //Starting from the index succeeding first index of page till the end of the list.
-                if ((lines.get(i).startsWith("*PAGE") || i==lines.size()-1) ) { 
+                if ((lines.get(i).startsWith("*PAGE")) ) { 
                     //If it reaches a page or the end of the list.
                     if(lines.subList(firstIndex, i).size()>2) { 
                         // If not erroneous page
@@ -31,6 +31,8 @@ public class InvertedIndex {
                     firstIndex = i; //First index for conversion now at next instance of *PAGE.
             }
         }
+        addToInvertedIndex(new Page(lines.subList(firstIndex, lines.size())));
+        pageNumber++;
     }
 
     public void addToInvertedIndex(Page page) {

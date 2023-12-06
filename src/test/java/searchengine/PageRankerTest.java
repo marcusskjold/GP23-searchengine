@@ -152,16 +152,19 @@ public class PageRankerTest {
 
     @Test void rankPage_givenPage_returnsCorrectValue(){
         setUpIndex("new_data/test-file-pageRanker1.txt");
-        List<String> content1 = List.of("word1", "word2", "word2", "word2", "word2");
-        Page testPage1 = new Page("expectedResult1", "test1.com", content1);
-        List<String> content2 = List.of("word1", "word2", "word2", "word2");
+        List<String> content2 = List.of("word1", "word2", "word2", "word2", "word2");
         Page testPage2 = new Page("expectedResult2", "test2.com", content2);
+        List<String> content3 = List.of("word1", "word2", "word2", "word2");
+        Page testPage3 = new Page("expectedResult3", "test3.com", content3);
+        List<String> content4 = List.of("word1", "word2", "word2");
+        Page testPage4 = new Page("expectedResult4", "test4.com", content4);
+        
         Query q = new Query("word2");
         // assertEquals(PageRanker.rankPage(testPage1, q), (double) 2.000);
-        double result1 = PageRanker.rankPage(testPage1, q);
+        double result2 = PageRanker.rankPage(testPage2, q); // gives 0.978515
         // assertTrue(result1 == 0.978515);
-        double result2 = PageRanker.rankPage(testPage2, q);
-        double result3 = result1 + result2;
+        double result3 = PageRanker.rankPage(testPage3, q); // gives 0.917358
+        double result4 = PageRanker.rankPage(testPage4, q); // gives 0.815429
     }
 
 }
