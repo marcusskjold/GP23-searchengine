@@ -25,7 +25,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-// import org.junit.platform.engine.discovery.FileSelector;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -36,14 +35,15 @@ public class PageRankerTest {
     private Set<Page> pagesUnderTest;
     private List<Page> expectedResult;
 
+    // Helper methods
+
     void setUpDatabase(String filePath){
         try {database = new Database(filePath);} 
         catch (IOException e) { e.printStackTrace(); }
     }
 
     void addTestPage(String URL){
-        Page page = new Page("expectedResult", URL, null);
-        expectedResult.add(page);
+        expectedResult.add(new Page("expectedResult", URL, null));
     }
 
     void setUpIndex(String filename) {
