@@ -4,8 +4,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.Comparator;
 
 public class PageRanker {
+    private static Database database;
+
+    public static List<Page> rankPages(Set<Page> pages, Query q, Database db){
+        return pages.stream()
+                    .sorted(Comparator.comparing(p -> rankPage(p, q)))
+                    .toList();
+
+    }
+
+    public static void setDatabase(Database db){
+        database = db;
+    }
         
     public static double computeTF (String term, Page page){
         double termInDoc  = page.getContent().stream().filter(s -> s.equals(term)).count(); 
