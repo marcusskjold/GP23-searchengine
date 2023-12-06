@@ -46,11 +46,11 @@ public class PageRanker {
 
     public static double rankPage (Page page, Query query) {
         //Creates list for ranks of each OR-sequence
-        List<Integer> orRanks = new ArrayList<>();
+        List<Double> orRanks = new ArrayList<>();
         //For each AND-set
         for (Set<String> ANDSet : query.getORSet()){
             //Creates variable for its rank
-            int queryRank = 0;
+            double queryRank = 0;
             //And then for each word in the andset
             for (String word : ANDSet) {
                 //Compute its TFIDF and add it to the rank
