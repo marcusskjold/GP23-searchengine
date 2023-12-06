@@ -56,7 +56,7 @@ public class WebServer {
     private void search(HttpExchange io) {
         String searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
         List<String> response = new ArrayList<String>();
-        Set<Page> pages = null; 
+        List<Page> pages = null; 
         pages = queryHandler.search(searchTerm);
         
         if (pages.size() == 0) System.out.println("No web page contains the query word.");
