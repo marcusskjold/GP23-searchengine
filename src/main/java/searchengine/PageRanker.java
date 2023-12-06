@@ -13,7 +13,6 @@ public class PageRanker {
         return pages.stream()
                     .sorted(Comparator.comparing(p -> rankPage(p, q)))
                     .toList();
-
     }
 
     public static void setInvertedIndex(InvertedIndex index){
