@@ -14,6 +14,7 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.HashSet;
@@ -32,6 +33,13 @@ import java.nio.file.Paths;
 public class InvertedIndexTest {
     private InvertedIndex invertedIndexUnderTest;
     private List<String> listForInvertedIndex;
+    private Map<String, Set<Page>> expectedMap;
+
+
+    @BeforeEach void setup() {
+        expectedMap = new HashMap<>();
+    }
+
 
     @Test void invertedIndex_listWithNoPages_returnsEmptyHashMap() {
         listForInvertedIndex = new ArrayList<>();
@@ -45,6 +53,22 @@ public class InvertedIndexTest {
             listForInvertedIndex = Files.readAllLines(Paths.get("new_data/test-file-invertedindex1.txt"));
             invertedIndexUnderTest = new InvertedIndex(listForInvertedIndex); 
             assertEquals(new HashMap<>(), invertedIndexUnderTest.getInvertedIndex());
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test void invertedIndex_listWithSomeCorrectPages_returnsProperHashMap() {
+        try {
+            listForInvertedIndex = Files.readAllLines(Paths.get("new_data/test-file-errors2.txt"));
+            invertedIndexUnderTest = new InvertedIndex(listForInvertedIndex); 
+            Page page1 = new Page("title1", "*http://page1.com", null);
+            Page page2 = new Page("title2", "http://page2.com", null);
+            expectedMap.put("word1", new HashSet<>(Set.of(page1, page2)));
+            expectedMap.put("word2", new HashSet<>(Set.of(page1)));
+            expectedMap.put("word3", new HashSet<>(Set.of(page2)));
+            assertEquals(expectedMap.keySet(), invertedIndexUnderTest.getInvertedIndex().keySet());
         } 
         catch (Exception e) {
             e.printStackTrace();

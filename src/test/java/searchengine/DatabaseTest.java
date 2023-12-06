@@ -77,10 +77,10 @@ public class DatabaseTest {
         assertEquals(expectedResults, actualResults);
     }
 
-    @Test void convertToPage_ConvertibleList_createsCorrectPageObject() {
+    @Test void Page_ConvertibleList_createsCorrectPageObject() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt"));
-            Page page = InvertedIndex.convertToPage(lines.subList(0, 4));
+            Page page = new Page(lines.subList(0, 4));
             assertEquals(new Page("title1", "http://page1.com", lines), page);
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,10 +88,10 @@ public class DatabaseTest {
     }
 
     //Test to check for equality in the content-field of the pages, since they are not compared with equals-method
-    @Test void convertToPage_ConvertibleList_createsCorrectContent() {
+    @Test void Page_ConvertibleList_createsCorrectContent() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt"));
-            Page page = InvertedIndex.convertToPage(lines.subList(0, 4));
+            Page page = new Page(lines.subList(0, 4));
             Page expectedPage = new Page("title1",
                                            "http://page1.com", 
                                                lines.subList(2, 4));

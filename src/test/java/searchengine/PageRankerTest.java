@@ -69,7 +69,7 @@ public class PageRankerTest {
     @Test void computeTF_PageWithWords_returnCorrectValue() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt"));
-            Page page = InvertedIndex.convertToPage(lines.subList(0, 4));
+            Page page = new Page(lines.subList(0, 4));
             double pageRankUnderTest = PageRanker.computeTF("word1", page);
             assertEquals(0.5, pageRankUnderTest);
         } catch (Exception e) {
@@ -88,7 +88,7 @@ public class PageRankerTest {
     @Test void computeTF_NonExistentTerm_returnZero() {
         try {
              List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt")); 
-             Page page = InvertedIndex.convertToPage(lines.subList(0,4)); 
+             Page page = new Page(lines.subList(0,4)); 
              double pageRankUnderTest = PageRanker.computeTF("nonWord1", page);
              assertEquals(0, pageRankUnderTest);
             
