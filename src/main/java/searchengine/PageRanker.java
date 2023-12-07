@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Objects;
 
 public class PageRanker {
@@ -23,13 +24,9 @@ public class PageRanker {
     }
         
     private static double computeTF (String term, Page page){
-        //double termInDoc = page.getFrequency(term);
-        double termInDoc  = page.getContent().stream().filter(s -> s.equals(term)).count(); 
-            //number of times term is in document
-        double totalTerms = page.getContent().size();
-            //Number of terms (repetitions allowed) in document
+        double termInDoc = page.getFrequency(term);
+        double totalTerms = page.getTotalTerms();
         return termInDoc/totalTerms; 
-            //Used double to avoid casting and avoiding int division
     }
 
     private static double computeIDF (String term){
@@ -45,21 +42,14 @@ public class PageRanker {
 
     //Also does something like this when a query is received by a queryhandler. Could this diminish effectivity?
     public static double rankPage (Page page, Query query) {
-        //Creates list for ranks of each OR-sequence
-        List<Double> orRanks = new ArrayList<>();
-        //For each AND-set
+        Set<Double> orRanks = new HashSet<>();
         for (Set<String> ANDSet : query.getORSet()){
-            //Creates variable for its rank
             double queryRank = 0;
-            //And then for each word in the andset
             for (String word : ANDSet) {
-                //Compute its TFIDF and add it to the rank
                 queryRank += PageRanker.computeTFIDF(page, word);
             }
-            //And add that rank to the list of ranks
             orRanks.add(queryRank);
         }
-        //Lastly return the highest of those ranks
         return Collections.max(orRanks);
     }
 }

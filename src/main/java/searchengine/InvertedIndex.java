@@ -40,7 +40,7 @@ public class InvertedIndex {
     }
 
     private void addToInvertedIndex(Page page) {
-        for (String word : page.getContent()) { 
+        for (String word : page.getWordSet()) { 
             // page.getContent() returns a List<String>. 
             invertedIndex.computeIfAbsent(
                 word.toLowerCase(), k -> new HashSet<>()).add(page);
