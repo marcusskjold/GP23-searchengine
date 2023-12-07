@@ -45,6 +45,7 @@ public class PageRanker {
         return (1+computeIDF(term))*computeTF(term, page);
     }
 
+    //Also does something like this when a query is received by a queryhandler. Could this diminish effectivity?
     public static double rankPage (Page page, Query query) {
         //Creates list for ranks of each OR-sequence
         List<Double> orRanks = new ArrayList<>();

@@ -1,1 +1,1 @@
-data/enwiki-small.txt
+data/enwiki-medium.txt

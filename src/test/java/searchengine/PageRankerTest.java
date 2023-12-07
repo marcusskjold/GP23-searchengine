@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -144,5 +145,26 @@ public class PageRankerTest {
         List<Double> expectedResult = new ArrayList<>(result);
         expectedResult.sort(null);
         assertEquals(result, expectedResult);
+    }
+
+
+    @Test void rankPages_setOfPagesContainingSimilarWordFrequency_ranksPages(){ //
+        setUpIndex("new_data/test-file-pageRanker1.txt");
+        try {
+            List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-pageRanker1.txt")); 
+            Set<Page> pages = index.getPages("word2");
+            Query q = new Query("word2");
+            Page page1 = new Page(lines.subList(15, 25));
+            Page page2 = new Page(lines.subList(8, 15));
+            Page page3 = new Page(lines.subList(25, 31));
+            Page page4 = new Page(lines.subList(0, 5));
+            List<Page> expectedResult = new ArrayList<>(List.of(page1, page2, page3, page4));
+            List<Page> rankList = PageRanker.rankPages(pages, q);
+            Collections.reverse(rankList);
+            assertEquals(expectedResult, rankList);
+        } 
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
