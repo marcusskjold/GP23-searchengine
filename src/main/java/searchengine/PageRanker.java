@@ -23,6 +23,7 @@ public class PageRanker {
     }
         
     private static double computeTF (String term, Page page){
+        //double termInDoc = page.getFrequency(term);
         double termInDoc  = page.getContent().stream().filter(s -> s.equals(term)).count(); 
             //number of times term is in document
         double totalTerms = page.getContent().size();
