@@ -32,7 +32,7 @@ public class InvertedIndex {
                     firstIndex = i; //First index for conversion now at next instance of *PAGE.
             }
         }
-        addToInvertedIndex(new Page(lines.subList(firstIndex, lines.size())));
+        if(lines.subList(firstIndex, lines.size()).size()>2) addToInvertedIndex(new Page(lines.subList(firstIndex, lines.size())));
         pageNumber++;
     }
 
