@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class InvertedIndex {
+    
     private Map<String, Set<Page>> invertedIndex;
     private int pageNumber;
 
@@ -43,7 +44,6 @@ public class InvertedIndex {
                 word.toLowerCase(), k -> new HashSet<>()).add(page);
         }
     }
-
 
     /** Returns a Set from the inverted index associated with a given key String. 
      *  If that index is null, it just returns an empty Set, to avoid a NullPointerException

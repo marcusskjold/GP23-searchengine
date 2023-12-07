@@ -72,4 +72,6 @@ public class Database {
     public int pagesInDataBase () {
       return invertedIndex.getPageNumber();
     }
+
+    
 }
