@@ -1,6 +1,9 @@
 package searchengine;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /** Represents a web page
  * Pages have a title, URL and some content
@@ -12,6 +15,7 @@ public class Page implements Comparable<Page> {
     private String URL;
     private List<String> content;
     private double pageRank;
+    //private Map<String, Integer> wordFrequencies;
 
     /**
      * Creates a new Page with the specified information.
@@ -23,6 +27,7 @@ public class Page implements Comparable<Page> {
         this.title = title;
         this.URL = URL;
         this.content = content;
+        //this.wordFrequencies = wordFrequencies;
     }
 
     /** Creates a new Page from part of a list of String-objects, 
@@ -38,6 +43,8 @@ public class Page implements Comparable<Page> {
             URL = lines.get(0).substring(6); //Will throw error if no URL is listed after Page as of right now?
             content = lines.subList(2,lines.size());
             content.removeIf(s -> s.isBlank());
+            //wordFrequencies = lines.subList(2,lines.size()).stream()
+            //.collect(Collectors.groupingBy(Function.identity(),Collectors.summingInt(e -> 1) )); 
     }
 
     public double getPageRank(){
@@ -78,6 +85,10 @@ public class Page implements Comparable<Page> {
             return false;
         return true;
     }
+
+    //public int getFrequency(String word) {
+    //    return wordFrequencies.get(word);
+    //}
 
     public int compareTo(Page o){
         return Double.compare(o.pageRank, this.pageRank);
