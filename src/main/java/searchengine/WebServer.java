@@ -84,6 +84,7 @@ public class WebServer {
         io.sendResponseHeaders(200, response.length);
         io.getResponseBody().write(response);
         } catch (Exception e) {
+            e.printStackTrace();
         } finally {
         io.close();
         }

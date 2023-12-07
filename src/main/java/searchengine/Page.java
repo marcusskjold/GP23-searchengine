@@ -7,11 +7,11 @@ import java.util.List;
  * @author Marcus Skjold, Andreas Riget Bagge, Sean Weston
  * @version 0.1
  */
-
-public class Page {
+public class Page implements Comparable<Page> {
     private String title;
     private String URL;
     private List<String> content;
+    private double pageRank;
 
     /**
      * Creates a new Page with the specified information.
@@ -33,10 +33,19 @@ public class Page {
      * @return a Page-object corresponding to the lines read.
      */
     public Page(List<String> lines) {
+
             title = lines.get(1);
             URL = lines.get(0).substring(6); //Will throw error if no URL is listed after Page as of right now?
             content = lines.subList(2,lines.size());
             content.removeIf(s -> s.isBlank());
+    }
+
+    public double getPageRank(){
+        return pageRank;
+    }
+
+    public void rank(Query q){
+        pageRank = PageRanker.rankPage(this, q);
     }
 
     public List<String> getContent() { return content; }
@@ -70,5 +79,7 @@ public class Page {
         return true;
     }
 
-    
+    public int compareTo(Page o){
+        return Double.compare(o.pageRank, this.pageRank);
+    }
 }
