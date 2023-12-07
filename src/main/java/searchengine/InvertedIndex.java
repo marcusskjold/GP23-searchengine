@@ -9,11 +9,13 @@ import java.util.Set;
 public class InvertedIndex {
     
     private Map<String, Set<Page>> invertedIndex;
+    private Map<String, Double> IDFindex;
     private int pageNumber;
 
     public InvertedIndex(List<String> lines) throws Exception {
         if (lines.isEmpty()) throw new Exception("Lines are empty");
         invertedIndex = new HashMap<>();
+        IDFindex = new HashMap<>();
         pageNumber = 0;
         int firstIndex = lines.indexOf(lines.stream().filter(w -> w.startsWith("*PAGE")).findFirst().orElse(null)); 
         if (firstIndex == -1) throw new Exception("Faulty data file, no pages correctly marked as ”*PAGE”");
@@ -60,4 +62,14 @@ public class InvertedIndex {
     public Map<String, Set<Page>> getInvertedIndex() { return invertedIndex; }
 
     public int getPageNumber () { return pageNumber; }
+
+    public double getIDF (String term){
+        if (IDFindex.containsKey(term)) return IDFindex.get(term);
+        double totalDocs = getPageNumber(); 
+        double docsWithTerm = getPages(term).size(); 
+        double IDF = Math.log(totalDocs/docsWithTerm);
+        IDFindex.put(term, IDF);
+        return IDF;
+    }
+
 }

@@ -33,17 +33,14 @@ public class PageRanker {
     }
 
     private static double computeIDF (String term){
-        double totalDocs = invertedIndex.getPageNumber(); 
-            //Total number of documents in database
-        double docsWithTerm = invertedIndex.getPages(term).size(); 
-            //Total number of documents in database with searchterm
-        return Math.log(totalDocs/docsWithTerm); 
-            //Computation of IDF
+        return invertedIndex.getIDF(term);
+        // double totalDocs = invertedIndex.getPageNumber(); 
+        // double docsWithTerm = invertedIndex.getPages(term).size(); 
+        // return Math.log(totalDocs/docsWithTerm); 
     }
 
-    private static double computeTFIDF (Page page, String term) { 
-            //computes the TF-IDF value for the given page in a given database, for the given search term
-        return (1+computeIDF(term))*computeTF(term, page);
+    public static double computeTFIDF (Page page, String term) { 
+        return (1+computeIDF(term)*computeTF(term, page));
     }
 
     //Also does something like this when a query is received by a queryhandler. Could this diminish effectivity?

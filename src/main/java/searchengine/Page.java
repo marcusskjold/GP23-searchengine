@@ -2,8 +2,10 @@ package searchengine;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.HashMap;
 
 /** Represents a web page
  * Pages have a title, URL and some content

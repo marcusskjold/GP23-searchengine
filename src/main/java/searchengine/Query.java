@@ -2,6 +2,8 @@ package searchengine;
 
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Query {
     private Set<Set<String>> orSet;
@@ -19,6 +21,8 @@ public class Query {
         orSet.add(andSet);
     }
 
+
+    
     public Set<Set<String>> getORSet() { return orSet; }
 
     public String getURLFilter() { return URLFilter; }
