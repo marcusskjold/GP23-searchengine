@@ -69,9 +69,4 @@ public class Database {
         return match == null ? new HashSet<>() : match;
     }
 
-    public int pagesInDataBase () {
-      return invertedIndex.getPageNumber();
-    }
-
-    
 }
