@@ -15,9 +15,10 @@ import java.util.HashMap;
 public class Page implements Comparable<Page> {
     private String title;
     private String URL;
-    private List<String> content;
+    // private List<String> content;
     private double pageRank;
-    //private Map<String, Integer> wordFrequencies;
+    private Map<String, Integer> wordMap;
+    private int totalTerms;
 
     /**
      * Creates a new Page with the specified information.
@@ -110,6 +111,8 @@ public class Page implements Comparable<Page> {
     }
 
     public int compareTo(Page o){
-        return Double.compare(o.pageRank, this.pageRank);
+        int rankComparison = Double.compare(o.pageRank, this.pageRank);
+        if (rankComparison != 0){ return rankComparison;}
+        return Integer.compare(this.hashCode(), o.hashCode());
     }
 }

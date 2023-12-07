@@ -15,12 +15,17 @@ public class QueryHandler{
         this.database = new Database(filename); 
     }
 
-    public List<Page> search(String searchString) {
+    public Set<Page> search(String searchString) {
         Query q = new Query(splitSearchString(searchString));
         Set<Page> result = database.matchQuery(q);
-        List<Page> l = new ArrayList<Page>(result.stream().toList());
-        l.forEach(p -> p.rank(q));
-        Collections.sort(l);
+        // result.forEach(p -> p.rank(q));
+        Set<Page> l = new TreeSet<Page>();
+        for (Page page:result){
+            page.rank(q);
+            l.add(page);
+        }
+        // l.forEach();
+        // Collections.sort(l);
         return l;
         // return result;
         // Set<Page> result = database.matchQuery(q);
