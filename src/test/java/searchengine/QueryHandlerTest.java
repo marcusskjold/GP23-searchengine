@@ -31,14 +31,14 @@ public class QueryHandlerTest {
             e.getMessage(); 
         }
     }
-
-    @Test void TestSplitString(){
-        try {
-            QueryHandler QueryHandlerTest = new QueryHandler("new_data/test-file-database2.txt");
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-    }
+    // Unfinished test commented out as the TestSplitString has its accessmodifier changed from public to private. 
+    // @Test void TestSplitString(){
+    //     try {
+    //         QueryHandler QueryHandlerTest = new QueryHandler("new_data/test-file-database2.txt");
+    //     } catch (Exception e) {
+    //         // TODO: handle exception
+    //     }
+    // }
 
 
 
