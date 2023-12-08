@@ -37,7 +37,7 @@ public class PageRanker {
     }
 
     public static double computeTFIDF (Page page, String term) { 
-        return (1+computeIDF(term)*computeTF(term, page));
+        return ((1+computeIDF(term))*computeTF(term, page));
     }
 
     //Also does something like this when a query is received by a queryhandler. Could this diminish effectivity?

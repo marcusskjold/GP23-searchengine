@@ -101,8 +101,9 @@ public class InvertedIndex {
 
     public double getIDF (String term){
         if (IDFindex.containsKey(term)) return IDFindex.get(term);
-        double totalDocs = getPageNumber(); 
         double docsWithTerm = getPages(term).size(); 
+        if (docsWithTerm == 0) return -1;
+        double totalDocs = getPageNumber(); 
         double IDF = Math.log(totalDocs/docsWithTerm);
         IDFindex.put(term, IDF);
         return IDF;
