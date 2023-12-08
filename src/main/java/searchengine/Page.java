@@ -41,8 +41,8 @@ public class Page implements Comparable<Page> {
      * @param lines the List of String-objects to convert from.
      * @return a Page-object corresponding to the lines read.
      */
-    public Page(List<String> lines) {
-
+    public Page(List<String> lines) throws Exception{
+            if (lines.size()<=2) throw new Exception("Failed Page creation: Entry has no content");
             title = lines.get(1);
             totalTerms = 0;
             wordMap = new HashMap<String,Integer>();
