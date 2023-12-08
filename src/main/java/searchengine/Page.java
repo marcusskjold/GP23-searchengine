@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /** Represents a web page
  * Pages have a title, URL and some content
@@ -19,6 +21,14 @@ public class Page implements Comparable<Page> {
     private double pageRank;
     private Map<String, Integer> wordMap;
     private int totalTerms;
+
+    public static Page newPage(List<String> lines){
+        try{
+            return new Page(lines);
+        }catch (Exception e){
+            return null;
+        }
+    }
 
     /**
      * Creates a new Page with the specified information.
@@ -52,9 +62,10 @@ public class Page implements Comparable<Page> {
             // content.removeIf(s -> s.isBlank());
             List<String> content = lines.subList(2,lines.size());
             for (String word : content){
-                if (word.isBlank()) break;
-                wordMap.putIfAbsent(word, 0);
-                wordMap.put(word, wordMap.get(word)+1);
+                if (word.isBlank()) continue;
+                // wordMap.putIfAbsent(word, 0);
+                // wordMap.put(word, wordMap.get(word)+1);
+                wordMap.merge(word, 1, Integer::sum);
                 totalTerms++;
             }
     }

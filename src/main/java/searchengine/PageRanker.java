@@ -22,8 +22,9 @@ public class PageRanker {
     public static void setInvertedIndex(InvertedIndex index){
         invertedIndex = index;
     }
-        
-    private static double computeTF (String term, Page page){
+       
+
+    private static double computeTF (Page page, String term){
         double termInDoc = page.getFrequency(term);
         double totalTerms = page.getTotalTerms();
         return termInDoc/totalTerms; 
@@ -37,7 +38,7 @@ public class PageRanker {
     }
 
     public static double computeTFIDF (Page page, String term) { 
-        return (computeIDF(term)*computeTF(term, page));
+        return (computeIDF(term)*computeTF(page, term));
     }
 
     //Also does something like this when a query is received by a queryhandler. Could this diminish effectivity?
@@ -46,7 +47,7 @@ public class PageRanker {
         for (Set<String> ANDSet : query.getORSet()){
             double queryRank = 0;
             for (String word : ANDSet) {
-                queryRank += PageRanker.computeTFIDF(page, word);
+                queryRank += PageRanker.computeTFIDF(page, word); // TODO Note how to change in report
             }
             orRanks.add(queryRank);
         }

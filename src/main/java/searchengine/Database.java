@@ -2,13 +2,13 @@ package searchengine;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.TreeSet;
 
 /** Represents the database for the search engine.
@@ -41,7 +41,6 @@ public class Database {
             e.printStackTrace();
         }
     }
-    
 
     //Can probably rank here!
     public Set<Page> matchQuery(Query q){

@@ -61,8 +61,10 @@ public class WebServer {
         
         if (pages.size() == 0) System.out.println("No web page contains the query word.");
         else for (Page p : pages) {
-            response.add(String.format("{\"url\": \"%s\", \"title\": \"%s\"}",
-            p.getURL(), p.getTitle()));
+            // response.add(String.format("{\"url\": \"%s\", \"title\": \"%s \"}",
+            // p.getURL(), p.getTitle()));
+            response.add(String.format("{\"url\": \"%s\", \"title\": \"%s - %f\"}",
+            p.getURL(), p.getTitle(), p.getPageRank()));
         }
 
         var bytes = response.toString().getBytes(CHARSET);

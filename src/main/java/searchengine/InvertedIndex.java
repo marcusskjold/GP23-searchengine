@@ -28,10 +28,7 @@ public class InvertedIndex {
                     try {
                         addToInvertedIndex(new Page(pageLines)); 
                         pageNumber++;
-                    }
-                    catch (Exception e) {
-                        System.out.println(e.getMessage());
-                    }
+                    } catch (Exception e) { System.out.println(e.getMessage()); }
                     pageLines.clear();
                 }
                 pageLines.add(line);
@@ -39,10 +36,7 @@ public class InvertedIndex {
             try {
                 addToInvertedIndex(new Page(pageLines)); 
                 pageNumber++;
-            }
-            catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            } catch (Exception e) { System.out.println(e.getMessage());}
         } catch (Exception e) {
             // TODO: handle exception
         }
