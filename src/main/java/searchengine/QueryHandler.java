@@ -39,7 +39,7 @@ public class QueryHandler{
         return returnSets;
     }
 
-    public Set<String> splitString(String searchString) {
+    private Set<String> splitString(String searchString) {
         searchString = searchString.toLowerCase(); 
         Set<String> returnSets = new HashSet<>();
         Collections.addAll(returnSets, searchString.split("(%20)++"));
