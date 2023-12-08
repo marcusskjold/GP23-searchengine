@@ -2,8 +2,10 @@ package searchengine;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.HashMap;
 
 /** Represents a web page
  * Pages have a title, URL and some content
@@ -13,9 +15,10 @@ import java.util.stream.Collectors;
 public class Page implements Comparable<Page> {
     private String title;
     private String URL;
-    private List<String> content;
+    // private List<String> content;
     private double pageRank;
-    //private Map<String, Integer> wordFrequencies;
+    private Map<String, Integer> wordMap;
+    private int totalTerms;
 
     /**
      * Creates a new Page with the specified information.
@@ -26,8 +29,9 @@ public class Page implements Comparable<Page> {
     public Page(String title, String URL, List<String> content){
         this.title = title;
         this.URL = URL;
-        this.content = content;
-        //this.wordFrequencies = wordFrequencies;
+        // this.content = content;
+        this.wordMap = null; // TODO implement
+        this.totalTerms = content.size(); // TODO remove empty lines
     }
 
     /** Creates a new Page from part of a list of String-objects, 
@@ -37,25 +41,41 @@ public class Page implements Comparable<Page> {
      * @param lines the List of String-objects to convert from.
      * @return a Page-object corresponding to the lines read.
      */
-    public Page(List<String> lines) {
-
+    public Page(List<String> lines) throws Exception{
+            if (lines.size()<=2) throw new Exception("Failed Page creation: Entry has no content");
             title = lines.get(1);
-            URL = lines.get(0).substring(6); //Will throw error if no URL is listed after Page as of right now?
-            content = lines.subList(2,lines.size());
-            content.removeIf(s -> s.isBlank());
-            //wordFrequencies = lines.subList(2,lines.size()).stream()
-            //.collect(Collectors.groupingBy(Function.identity(),Collectors.summingInt(e -> 1) )); 
+            totalTerms = 0;
+            wordMap = new HashMap<String,Integer>();
+            URL = lines.get(0).substring(6); 
+            //Will throw error if no URL is listed after Page as of right now?
+            // content = lines.subList(2,);
+            // content.removeIf(s -> s.isBlank());
+            List<String> content = lines.subList(2,lines.size());
+            for (String word : content){
+                if (word.isBlank()) break;
+                wordMap.putIfAbsent(word, 0);
+                wordMap.put(word, wordMap.get(word)+1);
+                totalTerms++;
+            }
     }
 
     public double getPageRank(){
         return pageRank;
     }
 
+    public int getTotalTerms(){
+        return totalTerms;
+    }
+
+    public Set<String> getWordSet(){
+        return wordMap.keySet();
+    }
+
     public void rank(Query q){
         pageRank = PageRanker.rankPage(this, q);
     }
 
-    public List<String> getContent() { return content; }
+    // public List<String> getContent() { return content; }
 
     public String getTitle() { return title; }
     
@@ -86,11 +106,13 @@ public class Page implements Comparable<Page> {
         return true;
     }
 
-    //public int getFrequency(String word) {
-    //    return wordFrequencies.get(word);
-    //}
+    public int getFrequency(String word) {
+       return wordMap.get(word)==null ? 0 : wordMap.get(word);
+    }
 
     public int compareTo(Page o){
-        return Double.compare(o.pageRank, this.pageRank);
+        int rankComparison = Double.compare(o.pageRank, this.pageRank);
+        if (rankComparison != 0){ return rankComparison;}
+        return Integer.compare(this.hashCode(), o.hashCode());
     }
 }

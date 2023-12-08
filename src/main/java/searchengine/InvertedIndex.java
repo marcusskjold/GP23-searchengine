@@ -1,19 +1,57 @@
 package searchengine;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class InvertedIndex {
     
     private Map<String, Set<Page>> invertedIndex;
+    private Map<String, Double> IDFindex;
     private int pageNumber;
+
+    // https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
+    public InvertedIndex(String fileName) throws Exception {
+        invertedIndex = new HashMap<>();
+        IDFindex = new HashMap<>();
+        pageNumber = 0;
+        List<String> pageLines = new ArrayList<>();
+        try (Stream<String> lines = Files.lines(Paths.get(fileName))) {
+            lines.forEach(line -> {
+                if (line.startsWith("*PAGE")){
+                    try {
+                        addToInvertedIndex(new Page(pageLines)); 
+                        pageNumber++;
+                    }
+                    catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    pageLines.clear();
+                }
+                pageLines.add(line);
+            });
+            try {
+                addToInvertedIndex(new Page(pageLines)); 
+                pageNumber++;
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
 
     public InvertedIndex(List<String> lines) throws Exception {
         if (lines.isEmpty()) throw new Exception("Lines are empty");
         invertedIndex = new HashMap<>();
+        IDFindex = new HashMap<>();
         pageNumber = 0;
         int firstIndex = lines.indexOf(lines.stream().filter(w -> w.startsWith("*PAGE")).findFirst().orElse(null)); 
         if (firstIndex == -1) throw new Exception("Faulty data file, no pages correctly marked as ”*PAGE”");
@@ -38,7 +76,7 @@ public class InvertedIndex {
     }
 
     private void addToInvertedIndex(Page page) {
-        for (String word : page.getContent()) { 
+        for (String word : page.getWordSet()) { 
             // page.getContent() returns a List<String>. 
             invertedIndex.computeIfAbsent(
                 word.toLowerCase(), k -> new HashSet<>()).add(page);
@@ -60,4 +98,15 @@ public class InvertedIndex {
     public Map<String, Set<Page>> getInvertedIndex() { return invertedIndex; }
 
     public int getPageNumber () { return pageNumber; }
+
+    public double getIDF (String term){
+        if (IDFindex.containsKey(term)) return IDFindex.get(term);
+        double docsWithTerm = getPages(term).size(); 
+        if (docsWithTerm == 0) return -1;
+        double totalDocs = getPageNumber(); 
+        double IDF = Math.log(totalDocs/docsWithTerm);
+        IDFindex.put(term, IDF);
+        return IDF;
+    }
+
 }

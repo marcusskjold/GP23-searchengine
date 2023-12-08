@@ -2,6 +2,7 @@ package searchengine;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -27,8 +28,10 @@ public class Database {
      */
     public Database(String filename) throws IOException {
         try {
-            List<String> lines = Files.readAllLines(Paths.get(filename)); 
-            invertedIndex = new InvertedIndex(lines);
+            // List<String> lines = Files.readAllLines(Paths.get(filename)); 
+            // InputStream is = Files.newInputStream(Paths.get(filename));
+            // invertedIndex = new InvertedIndex(lines);
+            invertedIndex = new InvertedIndex(filename);
             PageRanker.setInvertedIndex(invertedIndex);
         } 
         catch (FileNotFoundException e) {
@@ -69,9 +72,4 @@ public class Database {
         return match == null ? new HashSet<>() : match;
     }
 
-    public int pagesInDataBase () {
-      return invertedIndex.getPageNumber();
-    }
-
-    
 }

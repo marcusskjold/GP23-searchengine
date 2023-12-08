@@ -14,7 +14,7 @@ public class QueryHandlerTest {
     @Test void SearchTest(){
         try {
             QueryHandler QueryHandlerTest = new QueryHandler("new_data/test-file-database2.txt"); 
-            List<Page> search = QueryHandlerTest.search("Test");
+            Set<Page> search = QueryHandlerTest.search("Test");
             assertNotNull(search);
         } catch (Exception e) {
             fail("fail" + e.getMessage());
