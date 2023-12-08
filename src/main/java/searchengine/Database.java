@@ -62,8 +62,7 @@ public class Database {
             else result.retainAll(matchWord(word));
             if ((result.isEmpty() )) break;
             firstWord = false;
-        }
-        return result;
+        } return result;
     }
 
     public Set<Page> matchWord(String word) { // Made public for invertedIndex

@@ -40,8 +40,9 @@ public class Page implements Comparable<Page> {
         this.title = title;
         this.URL = URL;
         // this.content = content;
-        this.wordMap = null; // TODO implement
-        this.totalTerms = content.size(); // TODO remove empty lines
+        this.wordMap = new HashMap<>(); // TODO implement
+        totalTerms = setUpWordMap(content);
+        
     }
 
     /** Creates a new Page from part of a list of String-objects, 
@@ -54,20 +55,27 @@ public class Page implements Comparable<Page> {
     public Page(List<String> lines) throws Exception{
             if (lines.size()<=2) throw new Exception("Failed Page creation: Entry has no content");
             title = lines.get(1);
-            totalTerms = 0;
+            
             wordMap = new HashMap<String,Integer>();
             URL = lines.get(0).substring(6); 
             //Will throw error if no URL is listed after Page as of right now?
             // content = lines.subList(2,);
             // content.removeIf(s -> s.isBlank());
             List<String> content = lines.subList(2,lines.size());
-            for (String word : content){
-                if (word.isBlank()) continue;
-                // wordMap.putIfAbsent(word, 0);
-                // wordMap.put(word, wordMap.get(word)+1);
-                wordMap.merge(word, 1, Integer::sum);
-                totalTerms++;
-            }
+            totalTerms = setUpWordMap(content);
+    }
+
+    private int setUpWordMap(List<String> content) {
+        totalTerms = 0;
+        if (content == null) return totalTerms;
+        for (String word : content){
+            if (word.isBlank()) continue;
+            // wordMap.putIfAbsent(word, 0);
+            // wordMap.put(word, wordMap.get(word)+1);
+            wordMap.merge(word, 1, Integer::sum);
+            totalTerms++;
+        }
+        return totalTerms;
     }
 
     public double getPageRank(){
