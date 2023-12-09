@@ -9,7 +9,6 @@ import java.util.HashMap;
  * Pages have a title, URL, a rank, a mapping of word to their frequencies in the page, and a number of terms.
  * Implements the Comparable interface since Page-objects order will be determined by their pagerank.
  * @author Marcus Skjold, Andreas Riget Bagge, Sean Weston
- * @version 0.1
  */
 public class Page implements Comparable<Page> {
     private String title;
