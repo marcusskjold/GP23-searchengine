@@ -19,7 +19,7 @@ public class QueryHandlerTest {
 
     void setUpDatabase(String filepath){
         try{
-        InvertedIndex database = new InvertedIndex(filepath);
+        Database database = new Database(filepath);
         QueryMatcher.setDatabase(database);
         PageRanker.setDatabase(database);
         } catch (Exception e){

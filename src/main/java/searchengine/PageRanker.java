@@ -5,9 +5,9 @@ import java.util.Set;
 import java.util.HashSet;
 
 public final class PageRanker {
-    private static InvertedIndex database;
+    private static Database database;
 
-    public static void setDatabase(InvertedIndex database){
+    public static void setDatabase(Database database){
         PageRanker.database = database;
     }
 

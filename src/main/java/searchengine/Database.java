@@ -10,14 +10,14 @@ import java.util.stream.Stream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class InvertedIndex {
+public class Database {
     
     private Map<String, Set<Page>> invertedIndex;
     private Map<String, Double> IDFindex;
     private int pageNumber;
 
     // https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
-    public InvertedIndex(String fileName) throws Exception {
+    public Database(String fileName) throws Exception {
         invertedIndex = new HashMap<>();
         IDFindex = new HashMap<>();
         pageNumber = 0;
@@ -42,7 +42,7 @@ public class InvertedIndex {
         }
     }
 
-    public InvertedIndex(List<String> lines) throws Exception {
+    public Database(List<String> lines) throws Exception {
         if (lines.isEmpty()) throw new Exception("Lines are empty");
         invertedIndex = new HashMap<>();
         IDFindex = new HashMap<>();

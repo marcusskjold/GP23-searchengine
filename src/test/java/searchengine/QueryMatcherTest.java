@@ -26,7 +26,7 @@ public class QueryMatcherTest {
 
     void setUpDatabase(String filePath){
         try {
-            QueryMatcher.setDatabase(new InvertedIndex(filePath));
+            QueryMatcher.setDatabase(new Database(filePath));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e){ 

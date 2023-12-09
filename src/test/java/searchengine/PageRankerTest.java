@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 
 public class PageRankerTest {
 
-    private InvertedIndex index;
+    private Database index;
     private List<Page> expectedResult;
 
     // Helper methods
@@ -30,7 +30,7 @@ public class PageRankerTest {
     void setUpIndex(String filename) {
         try {
             List<String> lines = Files.readAllLines(Paths.get(filename)); 
-            index = new InvertedIndex(lines);
+            index = new Database(lines);
             PageRanker.setDatabase(index);
         } 
         catch (FileNotFoundException e) {

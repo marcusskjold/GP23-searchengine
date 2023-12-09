@@ -9,9 +9,9 @@ import java.util.Set;
  * @version 0.1
  */
 public class QueryMatcher {
-    private static InvertedIndex database;
+    private static Database database;
 
-    public static void setDatabase(InvertedIndex database){
+    public static void setDatabase(Database database){
         QueryMatcher.database = database;
     }
 
