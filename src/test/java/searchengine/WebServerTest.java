@@ -19,8 +19,6 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 @TestInstance(Lifecycle.PER_CLASS)
 public class WebServerTest {
     WebServer server = null;
-    QueryHandler queryHandler;
-    Database database;
 
     @BeforeAll
     void setUp() {

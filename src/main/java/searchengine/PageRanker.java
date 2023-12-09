@@ -18,17 +18,13 @@ public final class PageRanker {
     }
 
     private static double computeIDF (String term){
-        return invertedIndex.getIDF(term);
-        // double totalDocs = invertedIndex.getPageNumber(); 
-        // double docsWithTerm = invertedIndex.getPages(term).size(); 
-        // return Math.log(totalDocs/docsWithTerm); 
+        return database.getIDF(term);
     }
 
     public static double computeTFIDF (Page page, String term) { 
         return (computeIDF(term)*computeTF(page, term));
     }
 
-    //Also does something like this when a query is received by a queryhandler. Could this diminish effectivity?
     public static double rankPage (Page page, Query query) {
         Set<Double> orRanks = new HashSet<>();
         for (Set<String> ANDSet : query.getORSet()){
