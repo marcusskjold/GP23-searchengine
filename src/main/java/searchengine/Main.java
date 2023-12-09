@@ -15,7 +15,9 @@ public class Main {
             QueryMatcher.setDatabase(database);
             new WebServer(PORT);
         }
-        catch (Exception e) {} // TODO Handle exception
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
     
 }

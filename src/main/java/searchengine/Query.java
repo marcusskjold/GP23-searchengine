@@ -21,8 +21,6 @@ public class Query {
         orSet.add(andSet);
     }
 
-
-    
     public Set<Set<String>> getORSet() { return orSet; }
 
     public String getURLFilter() { return URLFilter; }
