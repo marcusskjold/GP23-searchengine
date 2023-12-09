@@ -12,8 +12,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)
-public class DatabaseTest {
-    private Database databaseUnderTest;
+public class QueryMatcherTest {
     private HashSet<Page> expectedResults;
     
     Query makeOneWordQuery(String word){
@@ -26,9 +25,12 @@ public class DatabaseTest {
     }
 
     void setUpDatabase(String filePath){
-        try {databaseUnderTest = new Database(filePath);
+        try {
+            QueryMatcher.setDatabase(new InvertedIndex(filePath));
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e){ 
+            // TODO handle exception
         }
     }
 
@@ -39,14 +41,14 @@ public class DatabaseTest {
 
     @BeforeEach
     void setUp() {
-        databaseUnderTest = null;
+        QueryMatcher.setDatabase(null);
         expectedResults = new HashSet<>();
     }
 
     @Test void matchQuery_queryWordNotContainedInPages_returnEmptySet() {
         setUpDatabase("new_data/test-file-errors2.txt");
         Query q = makeOneWordQuery("bobobo");
-        Set<Page> actualResult = databaseUnderTest.matchQuery(q);
+        Set<Page> actualResult = QueryMatcher.matchQuery(q);
         assertEquals(expectedResults, actualResult);
     }
 
@@ -55,7 +57,7 @@ public class DatabaseTest {
         addExpectedResult("http://page1.com");
         Query q = makeOneWordQuery("word2");
 
-        Set<Page> actualResults = databaseUnderTest.matchQuery(q);
+        Set<Page> actualResults = QueryMatcher.matchQuery(q);
         assertEquals(expectedResults, actualResults);
     }
 
@@ -65,7 +67,7 @@ public class DatabaseTest {
         addExpectedResult("http://page2.com");
         Query q = makeOneWordQuery("word1");
 
-        Set<Page> actualResults = databaseUnderTest.matchQuery(q);
+        Set<Page> actualResults = QueryMatcher.matchQuery(q);
         assertEquals(expectedResults, actualResults);
     }
 }
