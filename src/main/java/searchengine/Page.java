@@ -10,26 +10,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /** Represents a web page
- * Pages have a title, URL and some content
+ * Pages have a title, URL, a rank, a map of wordfrequenices and a number of terms.
  * @author Marcus Skjold, Andreas Riget Bagge, Sean Weston
  * @version 0.1
  */
 public class Page implements Comparable<Page> {
     private String title;
     private String URL;
-    // private List<String> content;
     private double pageRank;
-    private Map<String, Integer> wordMap;
+    private Map<String, Integer> frequencyMap;
     private int totalTerms;
-
-    public static Page newPage(List<String> lines){
-        try{
-            return new Page(lines);
-        }catch (Exception e){
-            return null;
-        }
-    }
-    
 
     /**
      * Creates a new Page with the specified information.
@@ -40,8 +30,8 @@ public class Page implements Comparable<Page> {
     public Page(String title, String URL, List<String> content){
         this.title = title;
         this.URL = URL;
-        this.wordMap = new HashMap<>();
-        totalTerms = setUpWordMap(content);
+        this.frequencyMap = new HashMap<>();
+        totalTerms = setUpFrequencyMap(content);
         
     }
 
@@ -54,56 +44,44 @@ public class Page implements Comparable<Page> {
      */
     public Page(List<String> lines) throws Exception{
             if (lines.size()<=2) throw new Exception("Failed Page creation: Entry has no content");
+            if (lines.get(0).length()<6) throw new Exception("Failed Page creation: No URL");
             title = lines.get(1);
-            
-            wordMap = new HashMap<String,Integer>();
+            frequencyMap = new HashMap<String,Integer>();
             URL = lines.get(0).substring(6); 
-            //Will throw error if no URL is listed after Page as of right now?
-            // content = lines.subList(2,);
-            // content.removeIf(s -> s.isBlank());
             List<String> content = lines.subList(2,lines.size());
-            totalTerms = setUpWordMap(content);
+            totalTerms = setUpFrequencyMap(content);
     }
 
-    private int setUpWordMap(List<String> content) {
+    private int setUpFrequencyMap(List<String> content) {
         totalTerms = 0;
         if (content == null) return totalTerms;
         for (String word : content){
             if (word.isBlank()) continue;
-            wordMap.merge(word, 1, Integer::sum);
+            frequencyMap.merge(word, 1, Integer::sum);
             totalTerms++;
         }
         return totalTerms;
     }
 
+    public String getTitle() { return title; }
+    
+    public String getURL() { return URL; }
+
+    public double getPageRank(){return pageRank;}
 
     public void setRank(double rank) {
         pageRank = rank;
     }
 
-    //public void rank(Query q){
-    //    pageRank = PageRanker.rankPage(this, q);
-    //}
-
     public int getFrequency(String word) {
-       return wordMap.get(word)==null ? 0 : wordMap.get(word);
-    }
-
-    public double getPageRank(){
-        return pageRank;
-    }
-
-    public int getTotalTerms(){
-        return totalTerms;
+       return frequencyMap.get(word)==null ? 0 : frequencyMap.get(word);
     }
 
     public Set<String> getWordSet(){
-        return wordMap.keySet();
+        return frequencyMap.keySet();
     }
 
-    public String getTitle() { return title; }
-    
-    public String getURL() { return URL; }
+    public int getTotalTerms(){return totalTerms;}
 
     @Override
     public int hashCode() {
