@@ -36,7 +36,6 @@ import java.util.HashSet;
  */
 
 public class QueryHandler{
-    private Database database;
 
     public static Set<Page> search(String searchString) {
         Query q = new Query(splitSearchString(searchString));
