@@ -31,12 +31,14 @@ public class Page implements Comparable<Page> {
         
     }
 
-    /** Creates a new Page from part of a list of String-objects, 
+    /** Creates a new Page object from part of a list of String objects.
+     * <p> 
      * the URL must be at the first line, preceded by "*PAGE:"
      * the title as the next line 
      * and each word of the content of the webpages as a separate line.
      * The Page object then initialize its fields from these lines.
-     * The words of the lines will be stored in a frequency-Map, which maps a given word
+     * <p>
+     * The words of the lines preceding the title and URL will be stored in a frequency-Map, which maps a given word
      * to the number of times, it is present among the lines.
      * @param lines the List of String-objects to convert from.
      * @return a Page-object corresponding to the lines read.
@@ -45,7 +47,7 @@ public class Page implements Comparable<Page> {
      */
     public Page(List<String> lines) throws Exception{
             if (lines.size()<=2) throw new Exception("Failed Page creation: Entry has no content");
-            if (lines.get(0).length()<6) throw new Exception("Failed Page creation: No URL");
+            if (lines.get(0).length()<7) throw new Exception("Failed Page creation: No URL");
             title = lines.get(1);
             frequencyMap = new HashMap<String,Integer>();
             URL = lines.get(0).substring(6); 
