@@ -43,7 +43,7 @@ public class Page implements Comparable<Page> {
      * @param lines the List of String-objects to convert from.
      * @return a Page-object corresponding to the lines read.
      * @throws Exception either if no words and/or title is present in the listed lines, or if
-     * no URL is provided after "*PAGE"
+     * no URL is provided after "*PAGE:"
      */
     public Page(List<String> lines) throws Exception{
             if (lines.size()<=2) throw new Exception("Failed Page creation: Entry has no content");
