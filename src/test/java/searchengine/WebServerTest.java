@@ -19,8 +19,6 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 @TestInstance(Lifecycle.PER_CLASS)
 public class WebServerTest {
     WebServer server = null;
-    QueryHandler queryHandler;
-    Database database;
 
     @BeforeAll
     void setUp() {
@@ -28,8 +26,13 @@ public class WebServerTest {
             Random rnd = new Random();
             while (server == null) {
                 try {
-                    server = new WebServer(rnd.nextInt(60000) + 1024, "new_data/test-file-errors1.txt");
+                    InvertedIndex database = new InvertedIndex("new_data/test-file-errors1.txt");
+                    PageRanker.setDatabase(database);
+                    QueryMatcher.setDatabase(database);
+                    
                 } catch (BindException e) {}
+                catch (Exception e){} //TODO handle exception
+                server = new WebServer(rnd.nextInt(60000) + 1024);
             }
         } catch (IOException e) {
             e.printStackTrace();

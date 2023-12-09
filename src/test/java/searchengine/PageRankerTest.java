@@ -31,7 +31,7 @@ public class PageRankerTest {
         try {
             List<String> lines = Files.readAllLines(Paths.get(filename)); 
             index = new InvertedIndex(lines);
-            PageRanker.setInvertedIndex(index);
+            PageRanker.setDatabase(index);
         } 
         catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -136,35 +136,35 @@ public class PageRankerTest {
         assert (testPage3.getPageRank() > testPage4.getPageRank());
     }
 
-    //@Test void rankPages_setOfCorrectPages_ranksAccordingToPageRankValue(){
-    //setUpIndex("new_data/test-file-pageRanker1.txt");
-    //Set<Page> pages = index.getPages("word1");
-    //Query q = new Query("word2");
-    //List<Page> rankedPages = PageRanker.rankPages(pages, q);
-    //List<Double> result = rankedPages.stream().map(p -> PageRanker.rankPage(p, q)).toList();
-    //List<Double> expectedResult = new ArrayList<>(result);
-    //expectedResult.sort(null);
-    //assertEquals(result, expectedResult);
-    //}
-//
-//
-    //@Test void rankPages_setOfPagesContainingSimilarWordFrequency_ranksPages(){ //
-    //setUpIndex("new_data/test-file-pageRanker1.txt");
-    //try {
-    //List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-pageRanker1.txt")); 
-    //Set<Page> pages = index.getPages("word2");
-    //Query q = new Query("word2");
-    //Page page1 = new Page(lines.subList(15, 25));
-    //Page page2 = new Page(lines.subList(8, 15));
-    //Page page3 = new Page(lines.subList(25, 31));
-    //Page page4 = new Page(lines.subList(0, 5));
-    //List<Page> expectedResult = new ArrayList<>(List.of(page1, page2, page3, page4));
-    //List<Page> rankList = PageRanker.rankPages(pages, q);
-    //Collections.reverse(rankList);
-    //assertEquals(expectedResult, rankList);
-    //} 
-    //    catch (Exception e){
-    //e.printStackTrace();
-    //}
-    //}
+    // @Test void rankPages_setOfCorrectPages_ranksAccordingToPageRankValue(){
+    //     setUpIndex("new_data/test-file-pageRanker1.txt");
+    //     Set<Page> pages = index.getPages("word1");
+    //     Query q = new Query("word2");
+    //     List<Page> rankedPages = PageRanker.rankPages(pages, q);
+    //     List<Double> result = rankedPages.stream().map(p -> PageRanker.rankPage(p, q)).toList();
+    //     List<Double> expectedResult = new ArrayList<>(result);
+    //     expectedResult.sort(null);
+    //     assertEquals(result, expectedResult);
+    // }
+
+
+    // @Test void rankPages_setOfPagesContainingSimilarWordFrequency_ranksPages(){ //
+    //     setUpIndex("new_data/test-file-pageRanker1.txt");
+    //     try {
+    //         List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-pageRanker1.txt")); 
+    //         Set<Page> pages = index.getPages("word2");
+    //         Query q = new Query("word2");
+    //         Page page1 = new Page(lines.subList(15, 25));
+    //         Page page2 = new Page(lines.subList(8, 15));
+    //         Page page3 = new Page(lines.subList(25, 31));
+    //         Page page4 = new Page(lines.subList(0, 5));
+    //         List<Page> expectedResult = new ArrayList<>(List.of(page1, page2, page3, page4));
+    //         List<Page> rankList = PageRanker.rankPages(pages, q);
+    //         Collections.reverse(rankList);
+    //         assertEquals(expectedResult, rankList);
+    //     } 
+    //     catch (Exception e){
+    //         e.printStackTrace();
+    //     }
+    // }
 }

@@ -1,20 +1,15 @@
 package searchengine;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
-import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Objects;
 
-public class PageRanker {
-    private static InvertedIndex invertedIndex;
+public final class PageRanker {
+    private static InvertedIndex database;
 
-    public static void setInvertedIndex(InvertedIndex index){
-        invertedIndex = index;
+    public static void setDatabase(InvertedIndex database){
+        PageRanker.database = database;
     }
-       
 
     private static double computeTF (Page page, String term){
         double termInDoc = page.getFrequency(term);
@@ -23,10 +18,7 @@ public class PageRanker {
     }
 
     private static double computeIDF (String term){
-        return invertedIndex.getIDF(term);
-        // double totalDocs = invertedIndex.getPageNumber(); 
-        // double docsWithTerm = invertedIndex.getPages(term).size(); 
-        // return Math.log(totalDocs/docsWithTerm); 
+        return database.getIDF(term);
     }
 
     public static double computeTFIDF (Page page, String term) { 

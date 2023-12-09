@@ -9,7 +9,13 @@ public class Main {
 
     public static void main(final String... args) throws IOException {
         String filename = Files.readString(Paths.get("config.txt")).strip();
-        new WebServer(PORT, filename);
+        try {
+            InvertedIndex database = new InvertedIndex(filename);
+            PageRanker.setDatabase(database);
+            QueryMatcher.setDatabase(database);
+            new WebServer(PORT);
+        }
+        catch (Exception e) {} // TODO Handle exception
     }
     
 }

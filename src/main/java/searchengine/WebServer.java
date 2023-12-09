@@ -16,11 +16,9 @@ import com.sun.net.httpserver.HttpServer;
 public class WebServer {
     static final int BACKLOG = 0;
     static final Charset CHARSET = StandardCharsets.UTF_8;
-    private QueryHandler queryHandler;
     private HttpServer server;
 
-    public WebServer(int port, String filename) throws IOException {
-        queryHandler = new QueryHandler(filename);
+    public WebServer(int port) throws IOException {
         setupServer(port);
         printServerAddress(port);
     }
@@ -57,7 +55,7 @@ public class WebServer {
         String searchTerm = io.getRequestURI().getRawQuery().split("=")[1];
         List<String> response = new ArrayList<String>();
         Set<Page> pages = null; 
-        pages = queryHandler.search(searchTerm);
+        pages = QueryHandler.search(searchTerm);
         
         if (pages.size() == 0) System.out.println("No web page contains the query word.");
         else for (Page p : pages) {
