@@ -128,12 +128,12 @@ public class PageRankerTest {
         
         Query q = new Query("word2");
         // assertEquals(PageRanker.rankPage(testPage1, q), (double) 2.000);
-        double result2 = PageRanker.rankPage(testPage2, q); // gives 0.978515
+        PageRanker.rankPage(testPage2, q); // gives 0.978515
         // assertTrue(result1 == 0.978515);
-        double result3 = PageRanker.rankPage(testPage3, q); // gives 0.917358
-        double result4 = PageRanker.rankPage(testPage4, q); // gives 0.815429
-        assert (result2 > result3);
-        assert (result3 > result4);
+        PageRanker.rankPage(testPage3, q); // gives 0.917358
+        PageRanker.rankPage(testPage4, q); // gives 0.815429
+        assert (testPage2.getPageRank() > testPage3.getPageRank());
+        assert (testPage3.getPageRank() > testPage4.getPageRank());
     }
 
     // @Test void rankPages_setOfCorrectPages_ranksAccordingToPageRankValue(){

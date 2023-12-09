@@ -12,7 +12,8 @@ public final class QueryHandler{
         Set<Page> result = QueryMatcher.matchQuery(q);
         Set<Page> l = new TreeSet<Page>();
         for (Page page:result){
-            page.rank(q);
+            PageRanker.rankPage(page, q);
+            //page.rank(q);
             l.add(page);
         }
         return l;

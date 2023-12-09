@@ -25,15 +25,17 @@ public final class PageRanker {
         return (computeIDF(term)*computeTF(page, term));
     }
 
-    public static double rankPage (Page page, Query query) {
+    //Also does something like this when a query is received by a queryhandler. Could this diminish effectivity?
+    public static void rankPage (Page page, Query query) {
         Set<Double> orRanks = new HashSet<>();
         for (Set<String> ANDSet : query.getORSet()){
             double queryRank = 0;
             for (String word : ANDSet) {
+                //Use setter here
                 queryRank += PageRanker.computeTFIDF(page, word); // TODO Note how to change in report
             }
             orRanks.add(queryRank);
         }
-        return Collections.max(orRanks);
+        page.setRank(Collections.max(orRanks));
     }
 }
