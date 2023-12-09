@@ -8,6 +8,36 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * This class represents our query handler.It is designed to receive more complext queries by being able to deal with queries seperated by an OR. 
+ * 
+ * @author
+ * @version 
+ * 
+ * The constructor for QueryHandler receives a String filename and throws and IOexception.
+ * @param filename 
+ * @throws IOexception
+ *
+ *
+ * The method public Set<Page> search(String searchString) Searches the database with the given search string and returns a set of ranked pages.
+ * The search string is split and processed to match against the database entries.
+ * 
+ * @param SeachString
+ * @return l 
+ * 
+ * The method public Set<Set<String>> splitSearchString Splits the input search string into a set of string sets based on OR. 
+ * @param SeachString
+ * @return returnSets 
+ * 
+ * The method private Set<String> splitString(String searchString) splits a given string into a set of strings, removing any empty strings.
+ * @param SearchString
+ * @return returnSets 
+ * 
+ * 
+ * 
+ * 
+ */
+
 public class QueryHandler{
     private Database database;
 
