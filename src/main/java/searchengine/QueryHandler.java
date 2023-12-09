@@ -21,7 +21,8 @@ public class QueryHandler{
         // result.forEach(p -> p.rank(q));
         Set<Page> l = new TreeSet<Page>();
         for (Page page:result){
-            page.rank(q);
+            PageRanker.rankPage(page, q);
+            //page.rank(q);
             l.add(page);
         }
         // l.forEach();

@@ -39,8 +39,7 @@ public class Page implements Comparable<Page> {
     public Page(String title, String URL, List<String> content){
         this.title = title;
         this.URL = URL;
-        // this.content = content;
-        this.wordMap = new HashMap<>(); // TODO implement
+        this.wordMap = new HashMap<>();
         totalTerms = setUpWordMap(content);
         
     }
@@ -70,12 +69,23 @@ public class Page implements Comparable<Page> {
         if (content == null) return totalTerms;
         for (String word : content){
             if (word.isBlank()) continue;
-            // wordMap.putIfAbsent(word, 0);
-            // wordMap.put(word, wordMap.get(word)+1);
             wordMap.merge(word, 1, Integer::sum);
             totalTerms++;
         }
         return totalTerms;
+    }
+
+
+    public void setRank(double rank) {
+        pageRank = rank;
+    }
+
+    //public void rank(Query q){
+    //    pageRank = PageRanker.rankPage(this, q);
+    //}
+
+    public int getFrequency(String word) {
+       return wordMap.get(word)==null ? 0 : wordMap.get(word);
     }
 
     public double getPageRank(){
@@ -89,12 +99,6 @@ public class Page implements Comparable<Page> {
     public Set<String> getWordSet(){
         return wordMap.keySet();
     }
-
-    public void rank(Query q){
-        pageRank = PageRanker.rankPage(this, q);
-    }
-
-    // public List<String> getContent() { return content; }
 
     public String getTitle() { return title; }
     
@@ -123,10 +127,6 @@ public class Page implements Comparable<Page> {
         } else if (!URL.equals(other.URL))
             return false;
         return true;
-    }
-
-    public int getFrequency(String word) {
-       return wordMap.get(word)==null ? 0 : wordMap.get(word);
     }
 
     public int compareTo(Page o){
