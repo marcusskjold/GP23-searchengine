@@ -1,0 +1,6 @@
+*PAGE:http://page1.com
+title1
+*PAGE:http://page2.com
+title2
+*PAGE:http://page3.com
+title3
