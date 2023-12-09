@@ -28,8 +28,13 @@ public class WebServerTest {
             Random rnd = new Random();
             while (server == null) {
                 try {
-                    server = new WebServer(rnd.nextInt(60000) + 1024, "new_data/test-file-errors1.txt");
+                    InvertedIndex database = new InvertedIndex("new_data/test-file-errors1.txt");
+                    PageRanker.setDatabase(database);
+                    QueryMatcher.setDatabase(database);
+                    
                 } catch (BindException e) {}
+                catch (Exception e){} //TODO handle exception
+                server = new WebServer(rnd.nextInt(60000) + 1024);
             }
         } catch (IOException e) {
             e.printStackTrace();
