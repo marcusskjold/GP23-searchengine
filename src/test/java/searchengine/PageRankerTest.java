@@ -29,8 +29,7 @@ public class PageRankerTest {
 
     void setUpIndex(String filename) {
         try {
-            List<String> lines = Files.readAllLines(Paths.get(filename)); 
-            index = new Database(lines);
+            index = new Database(filename);
             PageRanker.setDatabase(index);
         } 
         catch (FileNotFoundException e) {

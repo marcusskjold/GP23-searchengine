@@ -16,7 +16,6 @@ public class Database {
     private Map<String, Double> IDFindex;
     private int pageNumber;
 
-    // https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html
     public Database(String fileName) throws Exception {
         invertedIndex = new HashMap<>();
         IDFindex = new HashMap<>();
@@ -24,56 +23,15 @@ public class Database {
         List<String> pageLines = new ArrayList<>();
         try (Stream<String> lines = Files.lines(Paths.get(fileName))) {
             lines.forEach(line -> {
-                if (line.startsWith("*PAGE")){
-                    try {
-                        addToInvertedIndex(new Page(pageLines)); 
-                        pageNumber++;
-                    } catch (Exception e) { System.out.println(e.getMessage()); }
+                if (line.startsWith("*PAGE")) {
+                    addNewPage(pageLines);
                     pageLines.clear();
                 }
                 pageLines.add(line);
             });
-            try {
-                addToInvertedIndex(new Page(pageLines)); 
-                pageNumber++;
-            } catch (Exception e) { System.out.println(e.getMessage());}
+            addNewPage(pageLines);
         } catch (Exception e) {
-            // TODO: handle exception
-        }
-    }
-
-    public Database(List<String> lines) throws Exception {
-        if (lines.isEmpty()) throw new Exception("Lines are empty");
-        invertedIndex = new HashMap<>();
-        IDFindex = new HashMap<>();
-        pageNumber = 0;
-        int firstIndex = lines.indexOf(lines.stream().filter(w -> w.startsWith("*PAGE")).findFirst().orElse(null)); 
-        if (firstIndex == -1) throw new Exception("Faulty data file, no pages correctly marked as ”*PAGE”");
-        //Set first index equal to first instance of *PAGE. Returns index -1 if no instance
-        for (int i = firstIndex+1; i < lines.size(); ++i) { 
-            //Starting from the index succeeding first index of page till the end of the list.
-                if ((lines.get(i).startsWith("*PAGE")) ) { 
-                    //If it reaches a page or the end of the list.
-                    if(lines.subList(firstIndex, i).size()>2) { 
-                        // If not erroneous page
-                        Page page = new Page(lines.subList(firstIndex, i)); 
-                        //Convert part of list to a page
-                        pageNumber++;
-                        addToInvertedIndex(page); 
-                        //Add to inverted index.
-                    }
-                    firstIndex = i; //First index for conversion now at next instance of *PAGE.
-            }
-        }
-        if(lines.subList(firstIndex, lines.size()).size()>2) addToInvertedIndex(new Page(lines.subList(firstIndex, lines.size())));
-        pageNumber++;
-    }
-
-    private void addToInvertedIndex(Page page) {
-        for (String word : page.getWordSet()) { 
-            // page.getContent() returns a List<String>. 
-            invertedIndex.computeIfAbsent(
-                word.toLowerCase(), k -> new HashSet<>()).add(page);
+            throw new Exception("Error constructing database from file");
         }
     }
 
@@ -89,18 +47,28 @@ public class Database {
             new HashSet<Page>() : new HashSet<Page>(invertedIndex.get(key));
     }
 
-    public Map<String, Set<Page>> getInvertedIndex() { return invertedIndex; }
-
-    public int getPageNumber () { return pageNumber; }
-
-    public double getIDF (String term){
-        if (IDFindex.containsKey(term)) return IDFindex.get(term);
-        double docsWithTerm = getPages(term).size(); 
+    public double getIDF (String key){
+        if (IDFindex.containsKey(key)) return IDFindex.get(key);
+        double docsWithTerm = getPages(key).size(); 
         if (docsWithTerm == 0) return -1;
-        double totalDocs = getPageNumber(); 
+        double totalDocs = pageNumber; 
         double IDF = Math.log(totalDocs/docsWithTerm);
-        IDFindex.put(term, IDF);
+        IDFindex.put(key, IDF);
         return IDF;
+    }
+
+    protected Map<String, Set<Page>> getInvertedIndex() { return invertedIndex; }
+
+    private void addPage(Page page) {
+        for (String word : page.getWordSet()) { 
+            invertedIndex.computeIfAbsent(
+                word.toLowerCase(), k -> new HashSet<>()).add(page);
+        }
+        pageNumber++;
+    }
+
+    private void addNewPage(List<String> pageLines) {
+        try {addPage(new Page(pageLines));} catch (Exception e) {}
     }
 
 }
