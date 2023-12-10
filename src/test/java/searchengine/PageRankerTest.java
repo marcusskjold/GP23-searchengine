@@ -37,11 +37,6 @@ public class PageRankerTest {
         return new Page("test" + titleID, URL, content);
     }
 
-    
-    void addTestPage(String URL){
-        expectedResult.add(new Page("expectedResult", URL, null));
-    }
-
     void setUpIndex(String filename) {
             index = new TestDatabase();
             PageRanker.setDatabase(index);
