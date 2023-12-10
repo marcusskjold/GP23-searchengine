@@ -1,7 +1,7 @@
 package searchengine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -36,7 +36,8 @@ public class PageRankerTest {
         List<String> content = new ArrayList<>();
         contentID.forEach(e -> content.add("word" + e));
         String URL = "http://page" + titleID + ".com";
-        return new Page("test" + titleID, URL, content);
+        try{return new Page("test" + titleID, URL, content);}
+        catch (Exception e){fail(e); return null;}
     }
 
 

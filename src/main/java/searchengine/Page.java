@@ -25,7 +25,7 @@ public class Page implements Comparable<Page> {
      * @param content the String content of the page, each word being a String
      */
     public Page(String title, String URL, List<String> content) throws Exception{
-        this(Stream.concat((List.of(URL, title)).stream(), content.stream())
+        this(Stream.concat((List.of("*PAGE:" +URL, title)).stream(), content.stream())
                    .toList());
         // this.title = title;
         // this.URL = URL;
