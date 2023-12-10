@@ -22,7 +22,14 @@ public class PageRankerTest {
 
     // Helper methods
 
+    Page easyPage(int titleID, List<Integer> contentID){
+        List<String> content = new ArrayList<>();
+        contentID.forEach(e -> content.add("word" + e));
+        String URL = "http://page" + titleID + ".com";
+        return new Page("test" + titleID, URL, content);
+    }
 
+    
     void addTestPage(String URL){
         expectedResult.add(new Page("expectedResult", URL, null));
     }

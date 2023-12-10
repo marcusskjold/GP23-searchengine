@@ -4,8 +4,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
 
-/**
- * Main class for our Search Engine application.
+/** Main class for the search engine application.
+ * 
  * 
  * This class can be viewed as the entry point into the the search engine. It initializes necessary the database and the web server, and sets up the environment for handling search queries.
  * Run this class to start the web server and initialize the search engine.

@@ -3,31 +3,21 @@ package searchengine;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import java.util.HashSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 
 public class DatabaseTest {
     private Database databaseUnderTest;
-    private List<String> listForInvertedIndex;
     private Map<String, Set<Page>> expectedIndex;
 
     void setUpDatabase(String filename) {
