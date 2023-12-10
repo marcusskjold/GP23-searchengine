@@ -65,34 +65,42 @@ public class PageRankerTest {
         assert (testPage3.getPageRank() > testPage4.getPageRank());
     }
 
-    @Test void rankPage_differentPagesAndMultipleWordQuery_ranksInCorrectOrder() {
-        setUpIndex("new_data/test-file-pageRanker1.txt");
-        Page testPage2 = easyPage(2, List.of(1, 2, 2, 2, 2));
-        Page testPage3 = easyPage(3, List.of(1, 2, 2, 2));
-        Page testPage4 = easyPage(4, List.of(1, 2, 2));
-        Query q = new Query(Set.of(Set.of("word1", "word2")));
-        PageRanker.rankPage(testPage2, q);
-        PageRanker.rankPage(testPage3, q);
+    @Test void rankPage_differentPagesAndMultipleWordQuery_ranksCorrectValue() {
+        //Test for just TF?
+        setUpIndex("new_data/test-file-pageRanker2.txt");
+        Page testPage1 = easyPage(1, List.of(3, 6, 6, 6, 6, 6, 6, 6));
+        Page testPage4 = easyPage(4, List.of(3, 6, 6, 8));
+        Page testPage5 = easyPage(5, List.of(6, 6, 3, 9));
+        Page testPage6 = easyPage(6, List.of(3, 6, 6, 3, 6, 6, 6, 6, 7));
+        Query q = new Query(Set.of(Set.of("word3", "word6", "word9", "word8")));
+        PageRanker.rankPage(testPage1, q);
         PageRanker.rankPage(testPage4, q);
-        
+        PageRanker.rankPage(testPage5, q);
+        PageRanker.rankPage(testPage6, q);
+        assertEquals((1.0/8) + (7.0/4), testPage1.getPageRank());
+        assertEquals((1.0/4)+1.0+(1.0/4)*(8.0/3), testPage4.getPageRank());
+        assertEquals((1.0/4)+1.0+(3.0/4), testPage5.getPageRank());
+        assertEquals((2.0/9)+(4.0/3), testPage6.getPageRank());
     }
 
-    // RankPages
+    @Test void rankPage_differentPagesAndQueryWithOR_ranksCorrectValue() {
+        //Test for just TF?
+        setUpIndex("new_data/test-file-pageRanker2.txt");
+        Page testPage1 = easyPage(1, List.of(3, 6, 6, 6, 6, 6, 6, 6));
+        Page testPage4 = easyPage(4, List.of(3, 6, 6, 8));
+        Page testPage5 = easyPage(5, List.of(6, 6, 3, 9));
+        Page testPage6 = easyPage(6, List.of(3, 6, 6, 3, 6, 6, 6, 6, 7));
+        Query q = new Query(Set.of(Set.of("word3", "word8"), Set.of("word6", "word9"), Set.of("word1"), Set.of("word6", "word7")));
+        PageRanker.rankPage(testPage1, q);
+        PageRanker.rankPage(testPage4, q);
+        PageRanker.rankPage(testPage5, q);
+        PageRanker.rankPage(testPage6, q);
+        assertEquals((7.0/4), testPage1.getPageRank());
+        assertEquals(1, testPage4.getPageRank());
+        assertEquals(1.0+(3.0/4), testPage5.getPageRank());
+        assertEquals((4.0/3)+(1.0/9)*(7.0/3), testPage6.getPageRank());
+    }
 
-    // @Test void rankPages_SetOfCorrectPages_returnCorrectSortedList() {
-    //     addTestPage("http://page1.com");
-    //     addTestPage("http://page2.com");
-    //     addTestPage("http://page3.com");
-    //     addTestPage("http://page4.com");
-    //     addTestPage("http://page5.com");
-
-    //     setUpIndex("new_data/test-file-pageRanker1.txt");
-    //     Set<Page> pages = index.getPages("word1");
-    //     Query q = new Query("word2");
-    //     List<Page> results = PageRanker.rankPages(pages, q);
-
-    //     assertEquals(expectedResult, results);
-    // }
 
     // SetInvertedIndex
     // TODO
@@ -124,31 +132,9 @@ public class PageRankerTest {
     //     }
     // }
 
-    // computeIDF
-    // Not tested as it is a private method
-    // Method made private as of 2023-12-06. 
-    // All tests below passed at that point
-
-    // @Test void computeIDF_PageWithWords_returnCorrectValue() {
-    //     setUpIndex("new_data/test-file-database1.txt");
-    //     PageRanker.setInvertedIndex(index);
-    //     double pageRankUnderTest = PageRanker.computeIDF("word1");
-    //     assertEquals(0, pageRankUnderTest);
-    // }
-
-    // @Test void computeIDF_NonExistentTerm_returnCorrectvalue(){
-    //     setUpIndex("new_data/test-file-database1.txt");
-    //     PageRanker.setInvertedIndex(index); 
-    //     double pageRankUnderTest = PageRanker.computeIDF("nonWord1"); 
-    //     assertTrue (Double.isInfinite(pageRankUnderTest)); 
-    // }
 
     // computeTFIDF
     // Not tested as it is a private method
-
-    // rankPage
-
-    
 
     // @Test void rankPages_setOfCorrectPages_ranksAccordingToPageRankValue(){
     //     setUpIndex("new_data/test-file-pageRanker1.txt");
