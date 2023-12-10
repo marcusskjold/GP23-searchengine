@@ -146,15 +146,35 @@ public class DatabaseTest {
 
     // ____________________________________________________
     // getIDF
+    
     @Test void getIDF_wordInIndex_returnsCorrectValue(){
-
+        setUpDatabase("multiplePages.txt");
+        double expectedResult = Math.log((3d/2d));
+        double actualResult = databaseUnderTest.getIDF("word2");
+        assertEquals(expectedResult, actualResult);
     }
 
+    @Test void getIDF_wordInIndexCalledMultipleTimes_returnsCorrectValue(){
+        setUpDatabase("multiplePages.txt");
+        double expectedResult = Math.log((3d/2d));
+        databaseUnderTest.getIDF("word2");
+        double actualResult = databaseUnderTest.getIDF("word2");
+        assertEquals(expectedResult, actualResult);
+    }
 
+    @Test void getIDF_wordInAllPages_returnsZero(){
+        setUpDatabase("multiplePages.txt");
+        double expectedResult = 0;
+        double actualResult = databaseUnderTest.getIDF("word3");
+        assertEquals(expectedResult, actualResult);
+    }
 
-    // @Test void getIDF_wordInIndexCalledMultipleTimes_returnsCorrectValue(){}
-    // @Test void getIDF_wordInAllPages_returnsZero(){}
-    // @Test void getIDF_wordNotInIndex_returnsNegOne(){}
+    @Test void getIDF_wordNotInIndex_returnsNegOne(){
+        setUpDatabase("multiplePages.txt");
+        double expectedResult = -1;
+        double actualResult = databaseUnderTest.getIDF("unmappedWord");
+        assertEquals(expectedResult, actualResult);
+    }
 
 
 }
