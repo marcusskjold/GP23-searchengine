@@ -7,9 +7,13 @@ import java.util.HashMap;
 import java.util.stream.Stream;
 
 /** Represents a web page
- * Pages have a title, URL, a rank, a mapping of word to their frequencies in the page, and a number of terms.
- * Implements the Comparable interface since Page-objects order will be determined by their pagerank.
- * @author Marcus Skjold, Andreas Riget Bagge, Sean Weston
+ * Pages have a title, URL, a rank, a mapping of words to their frequencies in the page.
+ * Pagerank must be set and updated by the PageRanker class. 
+ * This behavior also means that the pageRank is not considered when evaluating equals or hashcode,
+ * as pageRank should only be used as a set of pages are evaluated.
+ * Otherwise identical Pages will generate identical pageRank if they are ranked simultaneously
+ * But if not, they may have different ranks while being identical in practice.
+ * Is comparable by pageRank and hashcode.
  */
 public class Page implements Comparable<Page> {
     private String title;
@@ -18,24 +22,19 @@ public class Page implements Comparable<Page> {
     private Map<String, Integer> frequencyMap;
     private int totalTerms;
 
-    /**
-     * Creates a new Page with the specified information.
+    /** Creates a new Page with the specified information.
+     * Used for testing purposes.
      * @param title the full title of the webpage
      * @param URL the full URL of the webpage, e.g. "https://google.com"
      * @param content the String content of the page, each word being a String
      */
-    public Page(String title, String URL, List<String> content) throws Exception{
+    protected Page(String title, String URL, List<String> content) throws Exception{
         this(Stream.concat((List.of("*PAGE:" +URL, title)).stream(), content.stream())
                    .toList());
-        // this.title = title;
-        // this.URL = URL;
-        // this.frequencyMap = new HashMap<>();
-        // totalTerms = setUpFrequencyMap(content);
-        
     }
 
     /** Creates a new Page object from part of a list of String objects.
-     * <p> 
+     * <p>
      * the URL must be at the first line, preceded by "*PAGE:"
      * the title as the next line 
      * and each word of the content of the webpages as a separate line.
@@ -55,11 +54,11 @@ public class Page implements Comparable<Page> {
             frequencyMap = new HashMap<String,Integer>();
             URL = lines.get(0).substring(6); 
             List<String> content = lines.subList(2,lines.size());
-            if (content.isEmpty()) throw new Exception("Failed Page creation: Entry has no content");
             totalTerms = setUpFrequencyMap(content);
+            if (totalTerms == 0) throw new Exception("Failed Page creation: Entry has no content");
     }
 
-    public void setRank(double rank) { pageRank = rank; }
+    public void setRank(double pageRank) { this.pageRank = pageRank; }
 
     public String getTitle() { return title; }
     
@@ -84,11 +83,20 @@ public class Page implements Comparable<Page> {
         return frequencyMap.keySet();
     }
 
-    /** Compares this Page to another object for their order. The order is calculated depending on the pageRank of the two objects. If the
-     * two objects have equal ranks or if their Overrides the equals
-     * method of the Object-class.
+    /** Compares this Page to another Page 
+     * Overrides the equals method of the Object class.
+     * The order is calculated depending on the pageRank of the two objects. 
+     * Comparison will only return 0 if the Pages are equal and currently have the same pageRank.
+     * This is to ensure consistent behavior with collections such as TreeSet.
+     * If pageRank is equal, comparison is made by hashcode.<p>
+     * Results are made in reverse: If this Page has a higher pageRank
+     * the comparison returns a values less than 0.
+     * This is to have the page with the highest pageRank be first 
+     * in a collection sorted by natural order.
      * 
-     * @return an integer, representing the Page-object.
+     * @return 0 if the objects are equal and have the same pageRank.
+     * A value less than zero if this object has a righer pageRank than the other.
+     * A value over zero if this object has a lower pageRank than the other.
      */
     public int compareTo(Page o){
         int rankComparison = Double.compare(o.pageRank, this.pageRank);
@@ -96,10 +104,10 @@ public class Page implements Comparable<Page> {
         return Integer.compare(this.hashCode(), o.hashCode());
     }
 
-    /** Returns the Hashcode of the Page-object. The HashCode is generated depending 
-     * on the URL-field of the Page-object. Overrides the hashCode
-     * method of the Object-class.
-     * @return an integer, representing the Page-object.
+    /** Returns the Hashcode of the Page-object. 
+     * The HashCode is generated depending on the URL-field of the Page-object. 
+     * Overrides the hashCode method of the Object-class.
+     * @return the hashcode value of this Page.
      */
     @Override
     public int hashCode() {
@@ -109,10 +117,9 @@ public class Page implements Comparable<Page> {
         return result;
     }
 
-    /** Compares this Page to another object. Returns true if the other object is a non-null Page-object with
-     * the same URL as this Page. Overrides the equals
-     * method of the Object-class.
-     * 
+    /** Compares this Page to another object. 
+     * Returns true if the other object is a non-null Page-object with the 
+     * same URL as this Page. Overrides the equals method of the Object-class.
      * @return an integer, representing the Page-object.
      */
     @Override

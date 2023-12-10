@@ -1,6 +1,7 @@
 package searchengine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
@@ -8,6 +9,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+
+import searchengine.PageRanker.RANKMETHOD;
 
 public class PageRankerTest {
 
@@ -21,8 +24,7 @@ public class PageRankerTest {
             return rarity/3;}
     }
 
-
-
+    // ____________________________________________________
     // Helper methods
 
     Page easyPage(int titleID, List<Integer> contentID){
@@ -33,14 +35,35 @@ public class PageRankerTest {
         catch (Exception e){fail(e); return null;}
     }
 
-    void setUpIndex(String filename) {
+    void setUpIndex(RANKMETHOD method) {
             database = new TestDatabase();
             PageRanker.setDatabase(database);
+            try{PageRanker.setRankMethod(method);}
+            catch (Exception e){fail(e);}
     }
 
+    // ____________________________________________________
+    // Tests
+
+    // ____________________________________________________
+    // setRankMethod
+
+    @Test void setRankMethod_TFIDFWithNoDatabase_throwsError(){
+        assertThrows(Exception.class, () -> {
+            PageRanker.setRankMethod(RANKMETHOD.TFIDF);
+        });
+
+        assertThrows(Exception.class, () -> {
+            PageRanker.setDatabase(null);
+            PageRanker.setRankMethod(RANKMETHOD.TFIDF);
+        });
+    }
+
+    // ____________________________________________________
+    // rankPage
 
     @Test void rankPage_queryNotContainedInPage_ranksZero(){
-        setUpIndex("new_data/test-file-pageRanker1.txt");
+        setUpIndex(RANKMETHOD.TFIDF);
         Page testPage2 = easyPage(2, List.of(1, 2, 2, 2, 2));
         Query q = new Query("word5");
         PageRanker.rankPage(testPage2, q);
@@ -48,7 +71,7 @@ public class PageRankerTest {
     }
 
     @Test void rankPage_differentPagesAndOneWordQuery_ranksInCorrectOrder(){
-        setUpIndex("new_data/test-file-pageRanker1.txt");
+        setUpIndex(RANKMETHOD.TFIDF);
         Page testPage2 = easyPage(2, List.of(1, 2, 2, 2, 2));
         Page testPage3 = easyPage(3, List.of(1, 2, 2, 2));
         Page testPage4 = easyPage(4, List.of(1, 2, 2));
@@ -61,8 +84,7 @@ public class PageRankerTest {
     }
 
     @Test void rankPage_differentPagesAndMultipleWordQuery_ranksCorrectValue() {
-        //Test for just TF?
-        setUpIndex("new_data/test-file-pageRanker2.txt");
+        setUpIndex(RANKMETHOD.TFIDF);
         Page testPage1 = easyPage(1, List.of(3, 6, 6, 6, 6, 6, 6, 6));
         Page testPage4 = easyPage(4, List.of(3, 6, 6, 8));
         Page testPage5 = easyPage(5, List.of(6, 6, 3, 9));
@@ -79,8 +101,7 @@ public class PageRankerTest {
     }
 
     @Test void rankPage_differentPagesAndQueryWithOR_ranksCorrectValue() {
-        //Test for just TF?
-        setUpIndex("new_data/test-file-pageRanker2.txt");
+        setUpIndex(RANKMETHOD.TFIDF);
         Page testPage1 = easyPage(1, List.of(3, 6, 6, 6, 6, 6, 6, 6));
         Page testPage4 = easyPage(4, List.of(3, 6, 6, 8));
         Page testPage5 = easyPage(5, List.of(6, 6, 3, 9));
@@ -97,14 +118,12 @@ public class PageRankerTest {
     }
 
     @Test void rankPage_computationStyleSetToTF_ranksCorrectValue() {
-        //Test for just TF?
-        setUpIndex("new_data/test-file-pageRanker2.txt");
+        setUpIndex(RANKMETHOD.TF);
         Page testPage1 = easyPage(1, List.of(3, 6, 6, 6, 6, 6, 6, 6));
         Page testPage4 = easyPage(4, List.of(3, 6, 6, 8));
         Page testPage5 = easyPage(5, List.of(6, 6, 3, 9));
         Page testPage6 = easyPage(6, List.of(3, 6, 6, 3, 6, 6, 6, 6, 7));
         Query q = new Query(Set.of(Set.of("word3", "word6", "word9", "word8")));
-        PageRanker.setComputationStyle("TF");
         PageRanker.rankPage(testPage1, q);
         PageRanker.rankPage(testPage4, q);
         PageRanker.rankPage(testPage5, q);

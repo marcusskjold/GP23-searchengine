@@ -24,9 +24,6 @@ import java.nio.file.Paths;
  * If the same URL is defined multiple times in the database folder, the database may 
  * have unintended behavior. Later occurances of pages with the same URL will only be
  * mapped to words that are not already mapped to previous occurances.
- * @author Marcus Skjold
- * @author Andreas Riget Bagge
- * @author Sean Weston
  */
 public class ImmutableDatabase implements Database {
     private Map<String, Set<Page>> invertedIndex;
