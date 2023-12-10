@@ -2,6 +2,9 @@ package searchengine;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import searchengine.PageRanker.RANKMETHOD;
+
 import java.io.IOException;
 
 /** Main class for the search engine application.
@@ -30,6 +33,7 @@ public class Main {
         try {
             Database database = new ImmutableDatabase(filename);
             PageRanker.setDatabase(database);
+            PageRanker.setRankMethod(RANKMETHOD.TFIDF);
             QueryMatcher.setDatabase(database);
             new WebServer(PORT);
         }
