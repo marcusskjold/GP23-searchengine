@@ -54,8 +54,8 @@ public class Page implements Comparable<Page> {
             frequencyMap = new HashMap<String,Integer>();
             URL = lines.get(0).substring(6); 
             List<String> content = lines.subList(2,lines.size());
-            if (content.isEmpty()) throw new Exception("Failed Page creation: Entry has no content");
             totalTerms = setUpFrequencyMap(content);
+            if (totalTerms == 0) throw new Exception("Failed Page creation: Entry has no content");
     }
 
     public void setRank(double pageRank) { this.pageRank = pageRank; }

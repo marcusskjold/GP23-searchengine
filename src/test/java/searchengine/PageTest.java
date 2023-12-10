@@ -24,7 +24,6 @@ public class PageTest {
             return rarity/3;}
     }
 
-
     Page easyPage(String fileName, int start, int end){
         try { 
             Path path = Paths.get("new_data/page/" + fileName);
@@ -51,11 +50,44 @@ public class PageTest {
         return frequencyMapUnderTest;
     }
     // ____________________________________________________
-    // TODO Constructor
+    // Constructor
+
+    @Test void Constructor_inputWithMissingURL_throwsError() {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get("new_data/page/database1.txt"));
+            assertThrows(Exception.class, () -> {
+                new Page(lines.subList(7, 11));
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test void Constructor_inputWithTooFewLines_throwsError() {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get("new_data/page/database1.txt"));
+            assertThrows(Exception.class, () -> {
+                new Page(lines.subList(11, 13));
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test void Constructor_contentOnlyEmptyLines_throwsError() {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get("new_data/page/emptyLines.txt"));
+            assertThrows(Exception.class, () -> {
+                new Page(lines.subList(0, 4));
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // ____________________________________________________
     // getTotalTerms
-    
+
     @Test void getTotalTerms_returnCorrectAmount() {
         Page page = easyPage("database1.txt", 0, 7);
         assertEquals(5, page.getTotalTerms());
@@ -154,29 +186,6 @@ public class PageTest {
         PageRanker.rankPage(page1, new Query("test1"));
         assert (page1.getPageRank() != 0);
         assertNotEquals(page1, page2);
-    }
-
-    //Maybe some error-tests?
-    @Test void Constructor_inputWithMissingURL_throwsError() {
-         try {
-            List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt"));
-            assertThrows(Exception.class, () -> {
-                new Page(lines.subList(7, 11));
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test void Constructor_inputWithTooFewLines_throwsError() {
-        try {
-            List<String> lines = Files.readAllLines(Paths.get("new_data/test-file-database1.txt"));
-            assertThrows(Exception.class, () -> {
-                new Page(lines.subList(11, 13));
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 }
