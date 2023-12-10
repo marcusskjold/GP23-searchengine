@@ -20,6 +20,14 @@ public class PageRankerTest {
     private Database index;
     private List<Page> expectedResult;
 
+    class TestDatabase implements Database{
+        TestDatabase(){}
+        public Set<Page> getPages(String word){ return null;}
+        public double getIDF(String word){
+            double rarity = Integer.parseInt(word.substring(word.length()-1));
+            return rarity/3;}
+    }
+
     // Helper methods
 
     Page easyPage(int titleID, List<Integer> contentID){
@@ -35,17 +43,8 @@ public class PageRankerTest {
     }
 
     void setUpIndex(String filename) {
-        try {
-            index = new Database(filename);
+            index = new TestDatabase();
             PageRanker.setDatabase(index);
-        } 
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return;
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
     }
 
     @BeforeEach void initializeDatabase(){ 

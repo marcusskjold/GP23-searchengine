@@ -26,7 +26,7 @@ public class WebServerTest {
             Random rnd = new Random();
             while (server == null) {
                 try {
-                    Database database = new Database("new_data/test-file-errors1.txt");
+                    Database database = new ImmutableDatabase("new_data/test-file-errors1.txt");
                     PageRanker.setDatabase(database);
                     QueryMatcher.setDatabase(database);
                     

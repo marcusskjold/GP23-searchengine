@@ -17,12 +17,12 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.NoSuchFileException;
 
 public class DatabaseTest {
-    private Database databaseUnderTest;
+    private ImmutableDatabase databaseUnderTest;
     private Map<String, Set<Page>> expectedIndex;
 
     void setUpDatabase(String filename) {
         filename = "new_data/database/" + filename;
-        try { databaseUnderTest = new Database(filename); }
+        try { databaseUnderTest = new ImmutableDatabase(filename); }
         catch (Exception e) { 
             System.out.println(e.getMessage());;
             fail(e); 
@@ -61,19 +61,19 @@ public class DatabaseTest {
 
     @Test void constructor_emptyFile_throwsError(){
         assertThrowsExactly(NoSuchElementException.class, () -> {
-            databaseUnderTest = new Database(easyFileName("empty.txt"));
+            databaseUnderTest = new ImmutableDatabase(easyFileName("empty.txt"));
         });
     }
     
     @Test void constructor_invalidFileName_throwsError(){
         assertThrowsExactly(NoSuchFileException.class, () -> {
-            new Database(easyFileName("invalidFileName"));
+            new ImmutableDatabase(easyFileName("invalidFileName"));
         });
     }
     
     @Test void constructor_firstLineOfFileIsWrong_throwsError(){
         assertThrowsExactly(InvalidDataFormatException.class, () -> {
-            new Database(easyFileName("firstLineInvalid.txt"));
+            new ImmutableDatabase(easyFileName("firstLineInvalid.txt"));
         });
     }
     
@@ -81,7 +81,7 @@ public class DatabaseTest {
     // This is because page object check for content size before removing empty lines.
     @Test void constructor_fileWithOnlyInvalidPages_throwsError(){
         assertThrowsExactly(InvalidDataFormatException.class, () -> {
-            new Database(easyFileName("onlyInvalid.txt"));
+            new ImmutableDatabase(easyFileName("onlyInvalid.txt"));
         });
     }
 

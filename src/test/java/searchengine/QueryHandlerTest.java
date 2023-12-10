@@ -19,7 +19,7 @@ public class QueryHandlerTest {
 
     void setUpDatabase(String filepath){
         try{
-        Database database = new Database(filepath);
+        Database database = new ImmutableDatabase(filepath);
         QueryMatcher.setDatabase(database);
         PageRanker.setDatabase(database);
         } catch (Exception e){

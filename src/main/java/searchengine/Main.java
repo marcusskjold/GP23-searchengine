@@ -33,7 +33,7 @@ public class Main {
 
         String filename = Files.readString(Paths.get("config.txt")).strip();
         try {
-            Database database = new Database(filename);
+            Database database = new ImmutableDatabase(filename);
             PageRanker.setDatabase(database);
             QueryMatcher.setDatabase(database);
             new WebServer(PORT);
