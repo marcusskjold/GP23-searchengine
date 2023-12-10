@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashMap;
+import java.util.stream.Stream;
 
 /** Represents a web page
  * Pages have a title, URL, a rank, a mapping of word to their frequencies in the page, and a number of terms.
@@ -23,11 +24,13 @@ public class Page implements Comparable<Page> {
      * @param URL the full URL of the webpage, e.g. "https://google.com"
      * @param content the String content of the page, each word being a String
      */
-    public Page(String title, String URL, List<String> content){
-        this.title = title;
-        this.URL = URL;
-        this.frequencyMap = new HashMap<>();
-        totalTerms = setUpFrequencyMap(content);
+    public Page(String title, String URL, List<String> content) throws Exception{
+        this(Stream.concat((List.of(URL, title)).stream(), content.stream())
+                   .toList());
+        // this.title = title;
+        // this.URL = URL;
+        // this.frequencyMap = new HashMap<>();
+        // totalTerms = setUpFrequencyMap(content);
         
     }
 
