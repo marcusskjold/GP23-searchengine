@@ -3,25 +3,24 @@ package searchengine;
 import java.util.HashSet;
 import java.util.Set;
 
-/** Matches a query with a database.
- * @author
- * @version
- * 
+/** Matches a Query with a Database.
+ * Requires a database to function. 
+ * Will give empty matches otherwise.
  */
 public class QueryMatcher {
     private static Database database;
 
-    /** This method sets the database for query matching.
-     * @param database
+    /** Sets the database for query matching.
+     * @param database the database to use for query matching.
      */
-
     public static void setDatabase(Database database){
         QueryMatcher.database = database;
     }
 
-    /** This method is designed to match a given query with the database and returns a set of pages that match the query.
-     * @param q
-     * @return set<Page> which is a HashSet.
+    /** Match a given query with the database and returns a set of pages that match the query.
+     * Can also filter result by a URL filter, but this is not implemented in the application yet
+     * @param q the query to match against.
+     * @return a unsorted set of Page objects matching the query.
      */
     public static Set<Page> matchQuery(Query q){
         if (database == null) return new HashSet<>();
@@ -35,11 +34,10 @@ public class QueryMatcher {
         return results;
     }
 
-    /** This method matches a set of words (ANDSet) with the database and returns pages that contain all the words.
-     * @param ANDSet
-     * @return The method returns a set of Page objects that match the query.
+    /** Matches a set of words (ANDSet) with the database 
+     * and returns pages that contain all the words.
+     * @return a set of Page objects that match the query.
      */
-
     private static Set<Page> matchANDSet(Set<String> ANDSet) {
         Set<Page> result = new HashSet<>();
         boolean firstWord = true;
@@ -51,8 +49,7 @@ public class QueryMatcher {
         } return result;
     }
 
-    /** This method matches a single word with the database and returns pages that contain the word.
-     * @param word
+    /** Matches a single word with the database and returns pages that contain the word.
      * @return a set of pages which contain the search word. 
      */
     private static Set<Page> matchWord(String word) {

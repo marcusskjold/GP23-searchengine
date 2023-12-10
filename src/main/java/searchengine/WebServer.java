@@ -13,14 +13,35 @@ import java.util.Set;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
+/** The webserver is the interface between the user of the application and the database.
+ * The WebServer only interacts with the QueryHandler.
+ */
 public class WebServer {
     static final int BACKLOG = 0;
     static final Charset CHARSET = StandardCharsets.UTF_8;
     private HttpServer server;
 
+    /** Opens a new server and prints it adress to the terminal
+     * @param port
+     * @throws IOException
+     */
     public WebServer(int port) throws IOException {
         setupServer(port);
         printServerAddress(port);
+    }
+
+    /** Stops the server
+     * Used for testing
+     */
+    public void stopServer(){
+        server.stop(0);
+    }
+
+    /** Used for testing
+     * @return the port adress of the server
+     */
+    protected int getAddress() {
+        return server.getAddress().getPort();
     }
 
     private void printServerAddress(int port) {
@@ -45,8 +66,7 @@ public class WebServer {
         server.start();
     }
   
-    /**
-     * Converts the io into a searchTerm. 
+    /** Converts the io into a searchTerm. 
      * Sends the searchTerm to the queryHandler.
      * Generates a response containing formatted links from the returned list of pages.
      * @param io the HttpExchange to generate a searchTerm from
@@ -89,13 +109,5 @@ public class WebServer {
         } finally {
         io.close();
         }
-    }
-
-    public void stopServer(){
-        server.stop(0);
-    }
-
-    public int getAddress() {
-        return server.getAddress().getPort();
     }
 }
