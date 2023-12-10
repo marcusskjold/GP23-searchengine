@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashMap;
+import java.util.stream.Stream;
 
 /** Represents a web page
  * Pages have a title, URL, a rank, a mapping of word to their frequencies in the page, and a number of terms.
@@ -23,11 +24,13 @@ public class Page implements Comparable<Page> {
      * @param URL the full URL of the webpage, e.g. "https://google.com"
      * @param content the String content of the page, each word being a String
      */
-    public Page(String title, String URL, List<String> content){
-        this.title = title;
-        this.URL = URL;
-        this.frequencyMap = new HashMap<>();
-        totalTerms = setUpFrequencyMap(content);
+    public Page(String title, String URL, List<String> content) throws Exception{
+        this(Stream.concat((List.of("*PAGE:" +URL, title)).stream(), content.stream())
+                   .toList());
+        // this.title = title;
+        // this.URL = URL;
+        // this.frequencyMap = new HashMap<>();
+        // totalTerms = setUpFrequencyMap(content);
         
     }
 
@@ -52,29 +55,19 @@ public class Page implements Comparable<Page> {
             frequencyMap = new HashMap<String,Integer>();
             URL = lines.get(0).substring(6); 
             List<String> content = lines.subList(2,lines.size());
+            if (content.isEmpty()) throw new Exception("Failed Page creation: Entry has no content");
             totalTerms = setUpFrequencyMap(content);
     }
 
-    private int setUpFrequencyMap(List<String> content) {
-        totalTerms = 0;
-        if (content == null) return totalTerms;
-        for (String word : content){
-            if (word.isBlank()) continue;
-            frequencyMap.merge(word, 1, Integer::sum);
-            totalTerms++;
-        }
-        return totalTerms;
-    }
+    public void setRank(double rank) { pageRank = rank; }
 
     public String getTitle() { return title; }
     
     public String getURL() { return URL; }
 
-    public double getPageRank(){return pageRank;}
+    public double getPageRank() { return pageRank; }
 
-    public void setRank(double rank) {pageRank = rank;}
-
-    public int getTotalTerms(){return totalTerms;}
+    public int getTotalTerms() { return totalTerms; }
 
     /** Gets the number of times a given word is present in the Page. 
      * @param word the word to find the frequency for
@@ -89,6 +82,18 @@ public class Page implements Comparable<Page> {
      */
     public Set<String> getWordSet(){
         return frequencyMap.keySet();
+    }
+
+    /** Compares this Page to another object for their order. The order is calculated depending on the pageRank of the two objects. If the
+     * two objects have equal ranks or if their Overrides the equals
+     * method of the Object-class.
+     * 
+     * @return an integer, representing the Page-object.
+     */
+    public int compareTo(Page o){
+        int rankComparison = Double.compare(o.pageRank, this.pageRank);
+        if (rankComparison != 0){ return rankComparison;}
+        return Integer.compare(this.hashCode(), o.hashCode());
     }
 
     /** Returns the Hashcode of the Page-object. The HashCode is generated depending 
@@ -127,15 +132,15 @@ public class Page implements Comparable<Page> {
         return true;
     }
 
-    /** Compares this Page to another object for their order. The order is calculated depending on the pageRank of the two objects. If the
-     * two objects have equal ranks or if their Overrides the equals
-     * method of the Object-class.
-     * 
-     * @return an integer, representing the Page-object.
-     */
-    public int compareTo(Page o){
-        int rankComparison = Double.compare(o.pageRank, this.pageRank);
-        if (rankComparison != 0){ return rankComparison;}
-        return Integer.compare(this.hashCode(), o.hashCode());
+    private int setUpFrequencyMap(List<String> content) {
+        totalTerms = 0;
+        if (content == null) return totalTerms;
+        for (String word : content){
+            if (word.isBlank()) continue;
+            frequencyMap.merge(word, 1, Integer::sum);
+            totalTerms++;
+        }
+        return totalTerms;
     }
+
 }

@@ -1,6 +1,9 @@
 package searchengine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.List;
 
 import java.io.IOException;
 import java.util.Set;
@@ -35,8 +38,10 @@ public class QueryMatcherTest {
     }
 
     void addExpectedResult(String URL){
-        Page page = new Page("expectedResult", URL, null);
-        expectedResults.add(page);
+        try{
+            Page page = new Page("expectedResult", URL, List.of("test"));
+            expectedResults.add(page);}
+        catch (Exception e){fail(e);}
     }
 
     @BeforeEach

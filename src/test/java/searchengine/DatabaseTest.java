@@ -46,7 +46,8 @@ public class DatabaseTest {
     // TODO make this Page constructor reject pages without content
     Page easyPage(int id){
         String URL = "http://page" + id + ".com";
-        return new Page("test", URL, List.of("test"));
+        try {return new Page("test", URL, List.of("test"));}
+        catch (Exception e) {fail(e); return null;}
     }
 
     String easyFileName(String filename) { return "new_data/database/" + filename; }
