@@ -19,7 +19,7 @@ import java.util.HashSet;
  */
 public final class PageRanker {
     private static Database database;
-    private static RANKMETHOD rankMethod = RANKMETHOD.TFIDF;
+    private static RANKMETHOD rankMethod = RANKMETHOD.TF;
 
     public enum RANKMETHOD{TF,TFIDF}
 
@@ -36,11 +36,11 @@ public final class PageRanker {
      */
     public static void setRankMethod(RANKMETHOD method) throws Exception{
         switch (method) {
-            case TF:
-                PageRanker.rankMethod = method;
-                break;
             case TFIDF:
                 if (database == null) throw new Exception("Cannot use TFIDF, there is no database");
+                PageRanker.rankMethod = method;
+                break;
+            default:
                 PageRanker.rankMethod = method;
                 break;
         }
@@ -59,11 +59,11 @@ public final class PageRanker {
             double queryRank = 0;
             for (String word : ANDSet) {
                 switch (rankMethod) {
-                    case TF:
-                        queryRank += PageRanker.computeTF(page, word);
-                        break;
                     case TFIDF:
                         queryRank += PageRanker.computeTFIDF(page, word);
+                        break;
+                    default:
+                        queryRank += PageRanker.computeTF(page, word);
                         break;
                 }
             }

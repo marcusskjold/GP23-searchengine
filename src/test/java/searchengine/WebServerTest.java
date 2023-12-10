@@ -1,9 +1,10 @@
 package searchengine;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
-import java.net.BindException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -26,12 +27,10 @@ public class WebServerTest {
             Random rnd = new Random();
             while (server == null) {
                 try {
-                    Database database = new ImmutableDatabase("new_data/test-file-errors1.txt");
+                    Database database = new ImmutableDatabase("new_data/database/multiplePages.txt");
                     PageRanker.setDatabase(database);
-                    QueryMatcher.setDatabase(database);
-                    
-                } catch (BindException e) {}
-                catch (Exception e){} //TODO handle exception
+                    QueryMatcher.setDatabase(database);  
+                } catch (Exception e) { fail(e); }
                 server = new WebServer(rnd.nextInt(60000) + 1024);
             }
         } catch (IOException e) {
@@ -45,30 +44,6 @@ public class WebServerTest {
         server = null;
     }
 
-    @Test
-    void lookupWebServer() {
-        String baseURL = String.format("http://localhost:%d/search?q=", server.getAddress());
-        assertEquals("[{\"url\": \"http://page1.com\", \"title\": \"title1\"}, {\"url\": \"http://page2.com\", \"title\": \"title2\"}]", 
-            httpGet(baseURL + "word1"));
-        assertEquals("[{\"url\": \"http://page1.com\", \"title\": \"title1\"}]",
-            httpGet(baseURL + "word2"));
-        assertEquals("[{\"url\": \"http://page2.com\", \"title\": \"title2\"}]", 
-            httpGet(baseURL + "word3"));
-        assertEquals("[]", 
-            httpGet(baseURL + "word4"));
-    }
-
-    @Test
-    void avoidEmptyPagesInWebSearch() {
-        String baseURL = String.format("http://localhost:%d/search?q=", server.getAddress());
-        assertEquals("[]", 
-            httpGet(baseURL + "titleword1"));
-        assertEquals("[]", 
-            httpGet(baseURL + "titleword2"));
-        assertEquals("[]", 
-            httpGet(baseURL + "word5"));
-    }
-
     private String httpGet(String url) {
         URI uri = URI.create(url);
         HttpClient client = HttpClient.newHttpClient();
@@ -80,4 +55,40 @@ public class WebServerTest {
             return null;
         }
     }
+
+    // ____________________________________________________
+    // Tests
+
+    @Test void lookupWebServer() {
+        String baseURL = String.format("http://localhost:%d/search?q=", server.getAddress());
+        assertEquals("[{\"url\": \"http://page1.com\", \"title\": \"title1\"}]",
+            httpGet(baseURL + "word1"));
+        assertEquals("[{\"url\": \"http://page2.com\", \"title\": \"title2\"}, {\"url\": \"http://page1.com\", \"title\": \"title1\"}]", 
+            httpGet(baseURL + "word2"));
+        assertEquals("[{\"url\": \"http://page3.com\", \"title\": \"title3\"}, {\"url\": \"http://page2.com\", \"title\": \"title2\"}, {\"url\": \"http://page1.com\", \"title\": \"title1\"}]", 
+            httpGet(baseURL + "word3"));
+        assertEquals("[]", 
+            httpGet(baseURL + "word4"));
+    }
+
+    @Test void avoidEmptyPagesInWebSearch() {
+        String baseURL = String.format("http://localhost:%d/search?q=", server.getAddress());
+        assertEquals("[]", 
+            httpGet(baseURL + "titleword1"));
+        assertEquals("[]", 
+            httpGet(baseURL + "titleword2"));
+        assertEquals("[]", 
+            httpGet(baseURL + "word5"));
+    }
+
+    @Test void browsing(){
+        String baseURL = String.format("http://localhost:%d", server.getAddress());
+        assertDoesNotThrow( () -> httpGet(baseURL + "/"));
+        assertDoesNotThrow( () -> httpGet(baseURL + "/code.js"));
+        assertDoesNotThrow( () -> httpGet(baseURL + "/favicon"));
+        assertDoesNotThrow( () -> httpGet(baseURL + "/style.css"));
+        
+        
+    }
+
 }

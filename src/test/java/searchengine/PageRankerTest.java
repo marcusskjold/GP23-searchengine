@@ -1,5 +1,6 @@
 package searchengine;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -13,8 +14,6 @@ import org.junit.jupiter.api.Test;
 import searchengine.PageRanker.RANKMETHOD;
 
 public class PageRankerTest {
-
-    private Database database;
 
     class TestDatabase implements Database{
         TestDatabase(){}
@@ -36,7 +35,7 @@ public class PageRankerTest {
     }
 
     void setUpIndex(RANKMETHOD method) {
-            database = new TestDatabase();
+            Database database = new TestDatabase();
             PageRanker.setDatabase(database);
             try{PageRanker.setRankMethod(method);}
             catch (Exception e){fail(e);}
@@ -49,12 +48,9 @@ public class PageRankerTest {
     // setRankMethod
 
     @Test void setRankMethod_TFIDFWithNoDatabase_throwsError(){
+        PageRanker.setDatabase(null);
+        assertDoesNotThrow(() -> PageRanker.setRankMethod(RANKMETHOD.TF));
         assertThrows(Exception.class, () -> {
-            PageRanker.setRankMethod(RANKMETHOD.TFIDF);
-        });
-
-        assertThrows(Exception.class, () -> {
-            PageRanker.setDatabase(null);
             PageRanker.setRankMethod(RANKMETHOD.TFIDF);
         });
     }

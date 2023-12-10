@@ -13,6 +13,7 @@ public class QueryMatcher {
     }
 
     public static Set<Page> matchQuery(Query q){
+        if (database == null) return new HashSet<>();
         Set<Page> results = new HashSet<>();
         for (Set<String> ANDSet : q.getORSet()){
             results.addAll(matchANDSet(ANDSet));
@@ -34,9 +35,8 @@ public class QueryMatcher {
         } return result;
     }
 
-    public static Set<Page> matchWord(String word) {
-        Set<Page> match = database.getPages(word);
-        return match == null ? new HashSet<>() : match;
+    private static Set<Page> matchWord(String word) {
+        return database.getPages(word);
     }
 
 }
