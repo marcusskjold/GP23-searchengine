@@ -38,16 +38,16 @@ public class QueryHandlerTest {
         }
     }
 
-    @Test void TestSplitSearchString() {
-        try {
-            setUpDatabase("new_data/test-file-database2.txt"); 
-            Set<Set<String>> split = QueryHandler.splitSearchString("Test OR Query");
-            int expectedResults = 1; 
-            assertEquals(expectedResults, split.size());
-        } catch (Exception e) {
-            e.getMessage(); 
-        }
-    }
+    // @Test void TestSplitSearchString() {
+    //     try {
+    //         setUpDatabase("new_data/test-file-database2.txt"); 
+    //         Set<Set<String>> split = QueryHandler.splitSearchString("Test OR Query");
+    //         int expectedResults = 1; 
+    //         assertEquals(expectedResults, split.size());
+    //     } catch (Exception e) {
+    //         e.getMessage(); 
+    //     }
+    // }
 
 
 }

@@ -5,12 +5,11 @@ import java.util.TreeSet;
 import java.util.Collections;
 import java.util.HashSet;
 
-/**
- * This class represents our query handler.It is designed to receive more complext queries by being able to deal with queries seperated by an OR. 
- * @author 
- * @version 
+/** This class handles queries from a web server. <p>
+ * The QueryHandler treats "%20" as the symbol for whitespace.
+ * The QueryHandler splits a string into substrings separated by "OR"
+ * and then those substrings into individual words.
  */
-
 public class QueryHandler{
 
     /**
@@ -19,42 +18,38 @@ public class QueryHandler{
      * @param searchString
      * @return a sorted Set of Page objects,ranked based on relevance to the search string
      */
-
     public static Set<Page> search(String searchString) {
         Query q = new Query(splitSearchString(searchString));
         Set<Page> result = QueryMatcher.matchQuery(q);
         Set<Page> l = new TreeSet<Page>();
         for (Page page:result){
             PageRanker.rankPage(page, q);
-            //page.rank(q);
             l.add(page);
         }
         return l;
     }
-    /**
-     * The method public Set<Set<String>> splitSearchString Splits the input search string into a set of string sets based on OR. 
+
+    /** Splits the input search string into a set of string sets based on OR. 
      * Each set represents a part of the query that is processed independently.
-     * As an example, a searchString 'denmark OR sweden' would be split into two sets containing 'denmark' and 'sweden'.
-     * @param searchString is the search string to be split.
-     * @return Set<String> where each inner set represents a part of the query
+     * As an example, a searchString 'denmark OR sweden' would be 
+     * split into two sets containing 'denmark' and 'sweden'.
+     * @param searchString the search string to be split.
+     * @return a set conatining sets representing a part of the query
      */
-    
-    public static Set<Set<String>> splitSearchString(String searchString) {
+    private static Set<Set<String>> splitSearchString(String searchString) {
         Set<Set<String>> returnSets = new HashSet<>();
         String[] s = searchString.split("^OR%20|%20OR%20|%20OR$");
         for (String string : s) returnSets.add(splitString(string));
         return returnSets;
     }
 
-    /**
-     * The method private Set<String> splitString(String searchString) splits a given string into a set of strings, removing any empty strings.
+    /** Splits a given string into a set of strings. <p>
      * Splits a given search string into a set of individual terms.
-     * This method ensures lowercase for the received string, which allows for case insensitive matching and splits it based on the provided delimiter.
-     * Empty strings resulting from the split are removed.
+     * Splits by "%20" as that is the symbol for whitespace that the web server passes.
+     * The set is case insensitive. Empty strings are removed.
      * @param searchString the search string which is being split
-     * @return Set<String> which contains individual search terms from the input string.
+     * @return a set containing the individual nonempty search terms from the input string.
      */
-
     private static Set<String> splitString(String searchString) {
         searchString = searchString.toLowerCase(); 
         Set<String> returnSets = new HashSet<>();
