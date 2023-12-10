@@ -17,7 +17,7 @@ import java.nio.file.Paths;
 
 public class PageRankerTest {
 
-    private Database index;
+    private Database database;
     private List<Page> expectedResult;
 
     class TestDatabase implements Database{
@@ -28,6 +28,8 @@ public class PageRankerTest {
             return rarity/3;}
     }
 
+
+
     // Helper methods
 
     Page easyPage(int titleID, List<Integer> contentID){
@@ -37,18 +39,42 @@ public class PageRankerTest {
         return new Page("test" + titleID, URL, content);
     }
 
-    
-    void addTestPage(String URL){
-        expectedResult.add(new Page("expectedResult", URL, null));
-    }
 
     void setUpIndex(String filename) {
-            index = new TestDatabase();
-            PageRanker.setDatabase(index);
+            database = new TestDatabase();
+            PageRanker.setDatabase(database);
     }
 
-    @BeforeEach void initializeDatabase(){ 
+    @BeforeEach void initializeDatabase(){
         expectedResult = new ArrayList<>();
+        
+    }
+
+
+
+    @Test void rankPage_differentPagesAndOneWordQuery_ranksInCorrectOrder(){
+        setUpIndex("new_data/test-file-pageRanker1.txt");
+        Page testPage2 = easyPage(2, List.of(1, 2, 2, 2, 2));
+        Page testPage3 = easyPage(3, List.of(1, 2, 2, 2));
+        Page testPage4 = easyPage(4, List.of(1, 2, 2));
+        Query q = new Query("word2");
+        PageRanker.rankPage(testPage2, q);
+        PageRanker.rankPage(testPage3, q);
+        PageRanker.rankPage(testPage4, q);
+        assert (testPage2.getPageRank() > testPage3.getPageRank());
+        assert (testPage3.getPageRank() > testPage4.getPageRank());
+    }
+
+    @Test void rankPage_differentPagesAndMultipleWordQuery_ranksInCorrectOrder() {
+        setUpIndex("new_data/test-file-pageRanker1.txt");
+        Page testPage2 = easyPage(2, List.of(1, 2, 2, 2, 2));
+        Page testPage3 = easyPage(3, List.of(1, 2, 2, 2));
+        Page testPage4 = easyPage(4, List.of(1, 2, 2));
+        Query q = new Query(Set.of(Set.of("word1", "word2")));
+        PageRanker.rankPage(testPage2, q);
+        PageRanker.rankPage(testPage3, q);
+        PageRanker.rankPage(testPage4, q);
+        
     }
 
     // RankPages
@@ -122,24 +148,7 @@ public class PageRankerTest {
 
     // rankPage
 
-    @Test void rankPage_givenPage_returnsCorrectValue(){
-        setUpIndex("new_data/test-file-pageRanker1.txt");
-        List<String> content2 = List.of("word1", "word2", "word2", "word2", "word2");
-        Page testPage2 = new Page("expectedResult2", "test2.com", content2);
-        List<String> content3 = List.of("word1", "word2", "word2", "word2");
-        Page testPage3 = new Page("expectedResult3", "test3.com", content3);
-        List<String> content4 = List.of("word1", "word2", "word2");
-        Page testPage4 = new Page("expectedResult4", "test4.com", content4);
-        
-        Query q = new Query("word2");
-        // assertEquals(PageRanker.rankPage(testPage1, q), (double) 2.000);
-        PageRanker.rankPage(testPage2, q); // gives 0.978515
-        // assertTrue(result1 == 0.978515);
-        PageRanker.rankPage(testPage3, q); // gives 0.917358
-        PageRanker.rankPage(testPage4, q); // gives 0.815429
-        assert (testPage2.getPageRank() > testPage3.getPageRank());
-        assert (testPage3.getPageRank() > testPage4.getPageRank());
-    }
+    
 
     // @Test void rankPages_setOfCorrectPages_ranksAccordingToPageRankValue(){
     //     setUpIndex("new_data/test-file-pageRanker1.txt");
