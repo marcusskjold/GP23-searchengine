@@ -12,11 +12,10 @@ import java.util.HashSet;
  */
 public class QueryHandler{
 
-    /**
-     * The method public Set<Page> search(String searchString) Searches the database with the given search string and returns a set of ranked pages.
+    /** Searches the database with the given search string and returns a set of pages sorted by rank.
      * The search string is split and processed to match against the database entries. 
-     * @param searchString
-     * @return a sorted Set of Page objects,ranked based on relevance to the search string
+     * @param searchString A string of search terms separated by "%20" or "OR".
+     * @return a sorted Set of Page objects, ranked based on relevance to the search string.
      */
     public static Set<Page> search(String searchString) {
         Query q = new Query(splitSearchString(searchString));

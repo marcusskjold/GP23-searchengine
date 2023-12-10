@@ -3,10 +3,7 @@ package searchengine;
 import java.util.HashSet;
 import java.util.Set;
 
-/** Represents the database for the search engine.
- * Keeps all the web pages, and is able to return a sublist of those pages in response to a query
- * @author Marcus Skjold, Andreas Riget Bagge, Sean Weston
- * @version 0.1
+/** Matches a query with a database.
  */
 public class QueryMatcher {
     private static Database database;
