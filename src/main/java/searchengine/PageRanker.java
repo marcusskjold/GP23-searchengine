@@ -8,8 +8,7 @@ import java.util.HashSet;
  * scores for Pages from a given computation-style. 
  * <p>
  * The default computation-style is TFIDF of type double (term frequency times inverted document frequency),
- * but it is possible to switch to TF as computationstyle, by specifying it
- * in the COMPUTATIONSTYLE field of the class (writing "TF" instead of "TFIDF"). 
+ * but it is possible to switch to TF as computationstyle, by using setComputationStyle-method("TF"). 
  * <p>
  * Term frequency (of type double) is here computed as the number of times a term i present in a document divided by the total number of terms in the document.
  * <p>
@@ -18,11 +17,14 @@ import java.util.HashSet;
  */
 public final class PageRanker {
     private static Database database;
-    private static final String COMPUTATIONSTYLE = "TFIDF";
+    private static String computationStyle = "TFIDF";
 
 
+   public static void setComputationStyle(String computationStyle) {
+        PageRanker.computationStyle = computationStyle;
+    }
 
-   /** Assigns a given database as the one to rank pages from, when invoking the PageRanker-class
+/** Assigns a given database as the one to rank pages from, when invoking the PageRanker-class
     * @param database the database to be used.
     */
     public static void setDatabase(Database database){
@@ -57,8 +59,8 @@ public final class PageRanker {
         for (Set<String> ANDSet : query.getORSet()){
             double queryRank = 0;
             for (String word : ANDSet) {
-                if(COMPUTATIONSTYLE.equals("TFIDF")) queryRank += PageRanker.computeTFIDF(page, word);
-                if(COMPUTATIONSTYLE.equals("TF")) queryRank += PageRanker.computeTF(page, word);
+                if(computationStyle.equals("TFIDF")) queryRank += PageRanker.computeTFIDF(page, word);
+                if(computationStyle.equals("TF")) queryRank += PageRanker.computeTF(page, word);
             }
             orRanks.add(queryRank);
         }
